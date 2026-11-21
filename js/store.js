@@ -192,6 +192,8 @@ window.FAM = window.FAM || {};
   /* ---------------- record conversion (used by the server sync layer) ---------------- */
   const COLL = ['floors', 'departments', 'zones', 'categories', 'statuses', 'users', 'assets', 'locations', 'history', 'finTx', 'counts', 'countLines'];
   const SINGLE = ['factory', 'settings', 'meta', 'finSettings'];
+  // Bản ghi thuộc loại dữ liệu mà phiên bản này quản lý (bản cũ không được xoá dữ liệu của bản mới)
+  S.syncKnown = (r) => (r.c === 'singleton' ? SINGLE.includes(r.id) : COLL.includes(r.c));
   S.toRecords = (src) => {
     const d = src || db;
     const out = [];

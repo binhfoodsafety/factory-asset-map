@@ -15,6 +15,7 @@ window.FAM = window.FAM || {};
   const base = String((window.FAM_CONFIG && window.FAM_CONFIG.apiBase) || '').replace(/\/+$/, '');
   const SKEY = 'fam.sync.v1';
   const POLL_MS = 20000;
+  const CLIENT_SCHEMA = 2; // tăng khi thêm loại dữ liệu mới; Worker từ chối ghi từ phiên bản cũ hơn MIN_CLIENT_SCHEMA
   let sync = { base, since: 0, hashes: {} };
   let state = { status: base ? 'connecting' : 'local', detail: '', at: null };
   let pushing = false, pushAgain = false, pushTimer = null, ready = false;
@@ -30,9 +31,12 @@ window.FAM = window.FAM || {};
     return (h >>> 0).toString(36) + ':' + str.length;
   }
   const keyOf = (r) => r.c + '/' + r.id;
+  const splitKey = (k) => { const i = k.indexOf('/'); return { c: k.slice(0, i), id: k.slice(i + 1) }; };
+  const known = (r) => S.syncKnown(r);
   const hashOf = (data) => hash(JSON.stringify(data));
   function loadSync() {
     try { const s = JSON.parse(localStorage.getItem(SKEY)); if (s && s.base === base) sync = s; } catch (e) { /* ignore */ }
+    Object.keys(sync.hashes).forEach((k) => { if (!known(splitKey(k))) delete sync.hashes[k]; });
   }
   function saveSync() { try { localStorage.setItem(SKEY, JSON.stringify(sync)); } catch (e) { /* ignore */ } }
   function setStatus(status, detail) {
@@ -40,7 +44,7 @@ window.FAM = window.FAM || {};
     U.bus.emit('sync-status', state);
   }
   async function api(path, opts = {}) {
-    const res = await fetch(base + path, { ...opts, headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) } });
+    const res = await fetch(base + path, { ...opts, headers: { 'Content-Type': 'application/json', 'X-Client-Schema': String(CLIENT_SCHEMA), ...(opts.headers || {}) } });
     let body = {};
     try { body = await res.json(); } catch (e) { /* empty */ }
     if (!res.ok) throw Object.assign(new Error(body.error || res.status + ' ' + res.statusText), { status: res.status });
@@ -60,7 +64,7 @@ window.FAM = window.FAM || {};
     setStatus('connecting');
     try {
       const res = await api('/api/changes?since=0');
-      const live = res.records.filter((r) => !r.deleted);
+      const live = res.records.filter((r) => !r.deleted && known(r));
       const firstTimeHere = !Object.keys(sync.hashes).length;
       if (!live.length) {
         // Empty server (first deployment): upload the data in this browser (demo dataset).
@@ -104,7 +108,7 @@ window.FAM = window.FAM || {};
       const res = await api('/api/changes?since=' + (force ? 0 : sync.since));
       const local = localMap();
       let changed = false;
-      res.records.forEach((r) => {
+      res.records.filter(known).forEach((r) => {
         const k = keyOf(r);
         const cur = local.get(k);
         const forced = force && force.has(k);
@@ -120,7 +124,7 @@ window.FAM = window.FAM || {};
         }
       });
       if (force) { // records the server does not have: drop local copies of rejected keys
-        const onServer = new Set(res.records.filter((r) => !r.deleted).map(keyOf));
+        const onServer = new Set(res.records.filter((r) => !r.deleted && known(r)).map(keyOf));
         force.forEach((k) => { if (!onServer.has(k) && local.has(k)) { local.delete(k); delete sync.hashes[k]; changed = true; } });
       }
       sync.since = res.now;
@@ -148,7 +152,8 @@ window.FAM = window.FAM || {};
       if (isDirty(k, rec)) ops.push({ op: 'put', c: rec.c, id: rec.id, data: rec.data, isNew: rec.c === 'assets' && !(k in sync.hashes), _h: hashOf(rec.data) });
     });
     Object.keys(sync.hashes).forEach((k) => {
-      if (!local.has(k)) { const i = k.indexOf('/'); ops.push({ op: 'del', c: k.slice(0, i), id: k.slice(i + 1) }); }
+      const r = splitKey(k);
+      if (!local.has(k) && known(r)) ops.push({ op: 'del', c: r.c, id: r.id });
     });
     if (!ops.length) return;
     pushing = true;
@@ -216,7 +221,7 @@ window.FAM = window.FAM || {};
   async function reloadAll() {
     try {
       const res = await api('/api/changes?since=0');
-      const live = res.records.filter((r) => !r.deleted);
+      const live = res.records.filter((r) => !r.deleted && known(r));
       sync.hashes = {};
       live.forEach((r) => (sync.hashes[keyOf(r)] = hashOf(r.data)));
       sync.since = res.now;

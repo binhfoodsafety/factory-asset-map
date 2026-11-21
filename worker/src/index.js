@@ -16,6 +16,7 @@
  *     together with its location / registration records in the same request.
  */
 const COLLECTIONS = new Set(['singleton', 'floors', 'departments', 'zones', 'categories', 'statuses', 'users', 'assets', 'locations', 'history', 'finTx', 'counts', 'countLines']);
+const MIN_CLIENT_SCHEMA = 2; // client gửi header X-Client-Schema
 const MAX_RECORD = 1_900_000; // D1 row size safety margin (bytes)
 const MAX_BODY = 20_000_000;
 
@@ -26,7 +27,7 @@ function cors(req, env) {
   return {
     'Access-Control-Allow-Origin': ok ? origin || '*' : allowed[0] || '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key, X-Client-Schema',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
   };
@@ -52,9 +53,18 @@ export default {
         const { results } = await env.DB.prepare('SELECT c, id, data, deleted, updated_at FROM records WHERE updated_at >= ?1 ORDER BY updated_at').bind(since).all();
         return json({ now: ts, records: results.map((r) => ({ c: r.c, id: r.id, deleted: !!r.deleted, updated_at: r.updated_at, data: r.data ? JSON.parse(r.data) : null })) }, 200, h);
       }
-      if (url.pathname === '/api/changes' && req.method === 'POST') return json(await applyChanges(await readBody(req), env), 200, h);
+      if (url.pathname === '/api/changes' && req.method === 'POST') {
+        // Phiên bản ứng dụng cũ (chưa có module kế toán / kiểm kê) không được ghi, tránh xoá nhầm dữ liệu mới
+        if (Number(req.headers.get('X-Client-Schema') || 1) < MIN_CLIENT_SCHEMA) {
+          const body = await readBody(req);
+          const ops = Array.isArray(body && body.ops) ? body.ops : [];
+          return json({ now: now(), applied: 0, rejected: ops.map((o) => ({ c: o.c, id: o.id, reason: 'Ứng dụng đã có phiên bản mới — hãy tải lại trang (Ctrl+F5)' })) }, 200, h);
+        }
+        return json(await applyChanges(await readBody(req), env), 200, h);
+      }
       if (url.pathname === '/api/replace' && req.method === 'POST') {
         if (env.ADMIN_KEY && req.headers.get('X-Admin-Key') !== env.ADMIN_KEY) return json({ error: 'Sai hoặc thiếu admin key.' }, 403, h);
+        if (Number(req.headers.get('X-Client-Schema') || 1) < MIN_CLIENT_SCHEMA && req.headers.get('X-Admin-Tool') !== '1') return json({ error: 'Ứng dụng đã có phiên bản mới — hãy tải lại trang (Ctrl+F5).' }, 409, h);
         return json(await replaceAll(await readBody(req), env), 200, h);
       }
       if (url.pathname === '/' || url.pathname === '/api') return json({ app: 'Factory Asset Map API', endpoints: ['/api/health', '/api/changes', '/api/replace'] }, 200, h);
