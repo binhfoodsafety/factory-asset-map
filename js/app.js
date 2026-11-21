@@ -108,7 +108,7 @@ window.FAM = window.FAM || {};
   function renderSync(st) {
     const el = U.$('#syncInfo');
     if (!el) return;
-    const t = st.at ? st.at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+    const t = st.at ? st.at.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : '';
     const map = {
       local: ['#94a3b8', 'Chỉ lưu trên trình duyệt này'],
       connecting: ['#fbbf24', 'Đang kết nối máy chủ…'],
