@@ -8,6 +8,8 @@ window.FAM = window.FAM || {};
     dashboard: { title: 'Dashboard – Tổng quan', view: () => F.views.dashboard },
     map: { title: 'Sơ đồ nhà máy tương tác', view: () => F.views.map },
     register: { title: 'Sổ tài sản (Asset Register)', view: () => F.views.register },
+    fa: { title: 'Kế toán TSCĐ', view: () => F.views.fa },
+    inventory: { title: 'Kiểm kê tài sản', view: () => F.views.inventory },
     zones: { title: 'Khu vực nhà máy', view: () => F.views.zones },
     history: { title: 'Lịch sử vị trí', view: () => F.views.history },
     qr: { title: 'Quản lý mã QR', view: () => F.views.qr },
@@ -26,7 +28,15 @@ window.FAM = window.FAM || {};
 
   function route() {
     lastHash = location.hash;
-    const { name, params } = parseHash();
+    let { name, params } = parseHash();
+    // Quét QR bằng camera điện thoại khi máy này đang tham gia một đợt kiểm kê → ghi nhận vào đợt
+    const act = F.inv && F.inv.active();
+    if (name === 'map' && params.asset && act) {
+      params = { id: act.id, scan: params.asset };
+      name = 'inventory';
+      history.replaceState(null, '', '#/inventory?id=' + encodeURIComponent(act.id));
+      lastHash = location.hash;
+    }
     const prev = current;
     if (prev && prev !== name) { const pv = ROUTES[prev].view(); pv && pv.hide && pv.hide(); }
     current = name;

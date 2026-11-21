@@ -397,3 +397,52 @@ table.tbl { width: 100%; border-collapse: separate; border-spacing: 0; font-size
   .map-top .search { max-width: none; }
   .demo-banner { padding: 6px 12px; }
 }
+
+/* ---------- Kế toán TSCĐ / Kiểm kê ---------- */
+.money { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl tfoot td { font-weight: 700; background: var(--surface-2); border-top: 2px solid var(--line-2); position: sticky; bottom: 0; }
+.tabs-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+.tabs-row button { border: 0; background: transparent; font: inherit; font-weight: 600; color: var(--muted); padding: 9px 12px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs-row button:hover { color: var(--text); }
+.tabs-row button.on { color: var(--primary); border-bottom-color: var(--primary); }
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.stat { padding: 12px 14px; }
+.stat .l { font-size: 12px; color: var(--muted); font-weight: 500; }
+.stat .v { font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.lock-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: #fef3c7; color: #92400e; }
+.preview-box { background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; font-size: 13px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 6px 14px; }
+.preview-box b { font-variant-numeric: tabular-nums; }
+.progress { height: 10px; background: #eef2f7; border-radius: 5px; overflow: hidden; display: flex; }
+.progress span { height: 100%; background: var(--c); }
+.inv-result { display: inline-flex; gap: 4px; flex-wrap: nowrap; }
+.inv-result button { white-space: nowrap; border: 1px solid var(--line-2); background: #fff; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 600; padding: 4px 8px; cursor: pointer; color: var(--text-2); min-height: 30px; }
+.inv-result button.on { color: #fff; background: var(--c); border-color: var(--c); }
+.scan-box { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.scan-box input { flex: 1 1 240px; font-size: 16px; min-height: 44px; }
+.scan-last { margin-top: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); font-size: 14px; }
+.scan-last.ok { border-color: #99f6e4; background: #f0fdfa; }
+.scan-last.warn { border-color: #fcd34d; background: #fffbeb; }
+.scan-last.err { border-color: #fecaca; background: #fef2f2; }
+
+/* chứng từ in A4 */
+@page wide { size: A4 landscape; margin: 10mm; }
+@media print {
+  body.printing-doc #printArea { display: block !important; }
+  .doc { font-family: "Times New Roman", Times, serif; font-size: 11.5pt; color: #000; }
+  .doc.landscape { page: wide; }
+  .doc-top { display: flex; justify-content: space-between; gap: 10mm; font-size: 10pt; margin-bottom: 4mm; }
+  .doc-form { text-align: center; font-size: 9pt; font-style: italic; }
+  .doc-title { text-align: center; font-size: 15pt; font-weight: 700; margin: 4mm 0 1mm; text-transform: uppercase; }
+  .doc-sub { text-align: center; font-style: italic; margin-bottom: 4mm; }
+  .doc p { margin: 1.5mm 0; }
+  .doc table.grid { width: 100%; border-collapse: collapse; margin: 3mm 0; font-size: 10pt; }
+  .doc table.grid th, .doc table.grid td { border: 0.3mm solid #000; padding: 1.2mm 1.5mm; vertical-align: top; }
+  .doc table.grid th { text-align: center; font-weight: 700; }
+  .doc table.grid td.r { text-align: right; white-space: nowrap; }
+  .doc table.grid tr.t td { font-weight: 700; }
+  .doc-date { text-align: right; font-style: italic; margin-top: 5mm; }
+  .doc table.doc-sign { width: 100%; margin-top: 2mm; text-align: center; }
+  .doc table.doc-sign td { width: 25%; padding-bottom: 22mm; vertical-align: top; }
+  .doc-demo { margin-top: 6mm; text-align: center; font-size: 9pt; color: #555; border-top: 0.3mm dashed #999; padding-top: 2mm; }
+  .doc .pb { break-after: page; }
+}

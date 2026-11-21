@@ -113,6 +113,7 @@ window.FAM = window.FAM || {};
   }
   function passes(v) {
     const f = st.filters;
+    if (S.isDisposed(v)) return false; // đã ghi giảm / thanh lý: không còn trên mặt bằng
     if (v.floorId !== st.floorId) return false;
     if (f.zone && v.zoneId !== f.zone) return false;
     if (f.dept && v.departmentId !== f.dept) return false;
@@ -144,7 +145,7 @@ window.FAM = window.FAM || {};
   function renderFloorTabs() {
     const el = U.$('#floorTabs');
     el.innerHTML = S.floors().map((f) => {
-      const n = S.raw().locations.filter((l) => l.floorId === f.id).length;
+      const n = S.raw().locations.filter((l) => l.floorId === f.id && !S.isDisposed(S.asset(l.assetId))).length;
       return `<button role="tab" data-f="${U.esc(f.id)}" class="${f.id === st.floorId ? 'on' : ''}" title="${U.esc(f.name)}">${U.esc(f.code)} <span class="muted small">${U.esc(f.name.replace(/^(Floor|Tầng)\s*\d+\s*[–-]\s*/i, ''))}</span> <span class="chip">${n}</span></button>`;
     }).join('');
     U.$$('button', el).forEach((b) => b.addEventListener('click', () => M.setFloor(b.dataset.f)));
@@ -181,7 +182,7 @@ window.FAM = window.FAM || {};
   }
 
   function renderMarkers() {
-    const views = S.views();
+    const views = S.views().filter((v) => !S.isDisposed(v));
     const visible = views.filter(passes);
     const sel = st.selected && views.find((v) => v.id === st.selected && v.floorId === st.floorId);
     if (sel && !visible.includes(sel)) visible.push(sel);
@@ -247,6 +248,24 @@ window.FAM = window.FAM || {};
       <span class="row"><svg width="16" height="12"><rect x="1" y="1" width="14" height="10" fill="#2563eb" fill-opacity=".1" stroke="#2563eb" stroke-dasharray="3 2"/></svg>Khu vực</span>`;
   }
 
+  // Giá trị kế toán trong bảng chi tiết
+  function finKv(v) {
+    const FIN = F.fin;
+    const a = S.asset(v.id);
+    if (!FIN || !a) return '';
+    if (!FIN.has(a)) return `<div class="kv-section">Giá trị tài sản</div><div>Kế toán</div><div><button class="btn btn-sm" id="dFin">Khai báo nguyên giá</button></div>`;
+    const ym = FIN.nowYm();
+    const s = FIN.stateAt(a, ym);
+    const [sn, sc] = FIN.STATUS[s.status] || FIN.STATUS.NONE;
+    return `<div class="kv-section">Giá trị tài sản (kỳ ${FIN.ymLabel(ym)})</div>
+      ${kv('Loại / Mã TS', `${FIN.typeShort(a.fin.assetType)} · <span class="mono">${U.esc(a.fin.accCode || '—')}</span>`)}
+      ${kv('Nguyên giá', `<b>${FIN.fmt(s.cost)}</b>`)}
+      ${kv('HM luỹ kế', FIN.fmt(s.accum))}
+      ${kv('Giá trị còn lại', `<b>${FIN.fmt(s.nbv)}</b>`)}
+      ${kv('KH tháng này', FIN.fmt(s.dep))}
+      ${kv('Tình trạng KT', `<span class="badge" style="--c:${sc}"><i></i>${sn}</span> <a href="#" id="dFin" class="small">Chi tiết</a>`)}`;
+  }
+
   function kv(label, val) { return `<div>${U.esc(label)}</div><div>${val}</div>`; }
   function renderDetail() {
     const v = st.selected && S.view(st.selected);
@@ -289,6 +308,7 @@ window.FAM = window.FAM || {};
         ${kv('Tọa độ X', `${v.x} %`)}
         ${kv('Tọa độ Y', `${v.y} %`)}
         ${kv('Cập nhật vị trí', U.fmtDateTime(v.locationUpdatedAt))}
+        ${finKv(v)}
         <div class="kv-section">Thông số kỹ thuật</div>
         ${kv('Nhà sản xuất', U.esc(v.manufacturer || '—'))}
         ${kv('Model', U.esc(v.model || '—'))}
@@ -309,6 +329,7 @@ window.FAM = window.FAM || {};
     U.$('#dEdit', detailEl).addEventListener('click', () => F.views.assetForm.open(v.id));
     U.$('#dZoom', detailEl).addEventListener('click', () => M.locate(v.id));
     U.$('#dQr', detailEl).addEventListener('click', () => F.views.qr.showFor(v.id));
+    const df = U.$('#dFin', detailEl); if (df) df.addEventListener('click', (e) => { e.preventDefault(); F.views.fa.finForm(v.id); });
   }
 
   /* ---------------- view box / zoom / pan ---------------- */

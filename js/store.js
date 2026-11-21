@@ -40,6 +40,10 @@ window.FAM = window.FAM || {};
       assets: [],
       locations: [],
       history: [],
+      finSettings: clone(d.finSettings || {}),
+      finTx: [],
+      counts: [],
+      countLines: [],
     };
     db = out;
     const movesByAsset = {};
@@ -49,7 +53,8 @@ window.FAM = window.FAM || {};
     d.assets.forEach((a) => {
       const { floorId, zoneId, x, y, updatedAt, ...master } = a;
       const current = { floorId, zoneId, x, y };
-      out.assets.push({ ...master, photo: '', createdAt: d.registeredAt, updatedAt: updatedAt || d.registeredAt });
+      const fin = d.fin && d.fin[a.id] ? clone(d.fin[a.id]) : undefined;
+      out.assets.push({ ...master, photo: '', ...(fin ? { fin } : {}), createdAt: d.registeredAt, updatedAt: updatedAt || d.registeredAt });
       const moves = movesByAsset[a.id] || [];
       const origin = moves.length ? moves[0].from : current;
       out.history.push(histRecord('REGISTER', a.id, a.name, null, origin, 'Quản trị viên', 'Đăng ký ban đầu (dữ liệu demo)', d.registeredAt));
@@ -61,7 +66,19 @@ window.FAM = window.FAM || {};
       out.locations.push({ assetId: a.id, ...current, code: locationCode(current), updatedAt: lastMove ? lastMove.at : d.registeredAt });
     });
     out.history.sort((a, b) => a.at.localeCompare(b.at));
+    // accounting transactions & inventory counts of the demo (js/finance.js, js/views/inventory.js)
+    if (F.fin && F.fin.seedDemo) F.fin.seedDemo(out, d);
+    if (F.inv && F.inv.seedDemo) F.inv.seedDemo(out, d);
     return out;
+  }
+
+  // Older saved data (before accounting module) gets the new collections
+  function normalize(x) {
+    x.finTx = x.finTx || [];
+    x.counts = x.counts || [];
+    x.countLines = x.countLines || [];
+    x.finSettings = Object.assign({}, clone((F.DEMO && F.DEMO.finSettings) || {}), { lockedUntil: '' }, x.finSettings || {});
+    return x;
   }
 
   function load() {
@@ -70,7 +87,7 @@ window.FAM = window.FAM || {};
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && parsed.schemaVersion === SCHEMA && Array.isArray(parsed.assets)) {
-          db = parsed;
+          db = normalize(parsed);
           return 'loaded';
         }
       }
@@ -116,6 +133,8 @@ window.FAM = window.FAM || {};
       users: keep.users,
       settings: keep.settings,
       assets: [], locations: [], history: [],
+      finSettings: { ...keep.finSettings, lockedUntil: '' },
+      finTx: [], counts: [], countLines: [],
     };
     commit('reset');
   };
@@ -132,12 +151,15 @@ window.FAM = window.FAM || {};
       ids.add(a.id);
     });
     const { app, exportedAt, ...rest } = obj;
-    db = { users: [], settings: clone(F.DEMO.settings), factory: clone(F.DEMO.factory), ...rest };
+    db = normalize({ users: [], settings: clone(F.DEMO.settings), factory: clone(F.DEMO.factory), ...rest });
     commit('reset');
   };
 
   /* ---------------- getters ---------------- */
   S.raw = () => db;
+  S.commitExt = (what) => commit(what || 'data');
+  S.persistOnly = () => persist();
+  S.isDisposed = (a) => !!(a && a.fin && a.fin.disposedDate);
   S.factory = () => db.factory;
   S.settings = () => db.settings;
   S.isDemo = () => !!(db.meta && db.meta.demo);
@@ -168,8 +190,8 @@ window.FAM = window.FAM || {};
   };
 
   /* ---------------- record conversion (used by the server sync layer) ---------------- */
-  const COLL = ['floors', 'departments', 'zones', 'categories', 'statuses', 'users', 'assets', 'locations', 'history'];
-  const SINGLE = ['factory', 'settings', 'meta'];
+  const COLL = ['floors', 'departments', 'zones', 'categories', 'statuses', 'users', 'assets', 'locations', 'history', 'finTx', 'counts', 'countLines'];
+  const SINGLE = ['factory', 'settings', 'meta', 'finSettings'];
   S.toRecords = (src) => {
     const d = src || db;
     const out = [];
@@ -186,7 +208,7 @@ window.FAM = window.FAM || {};
     });
     next.history.sort((a, b) => String(a.at).localeCompare(String(b.at)));
     next.schemaVersion = SCHEMA;
-    db = next;
+    db = normalize(next);
     persist();
     U.bus.emit('change', 'remote');
   };
@@ -329,6 +351,7 @@ window.FAM = window.FAM || {};
       photo: a.photo || '',
       lastInspection: a.lastInspection || '',
       remarks: String(a.remarks || '').trim(),
+      ...(a.fin !== undefined ? { fin: a.fin } : {}), // accounting data (js/finance.js)
     };
   }
   function cleanLoc(l) {
@@ -392,6 +415,7 @@ window.FAM = window.FAM || {};
   S.deleteAsset = (id, opts = {}) => {
     const a = S.asset(id);
     if (!a) return;
+    if (a.fin && a.fin.cost) throw new Error('Tài sản đã khai báo kế toán (nguyên giá, khấu hao). Hãy ghi giảm / thanh lý trong tab Kế toán TSCĐ thay vì xoá.');
     const cur = S.location(id);
     db.history.push(histRecord('REMOVE', id, a.name, cur, null, opts.by, opts.reason || 'Xoá khỏi sổ tài sản'));
     db.assets = db.assets.filter((x) => x.id !== id);

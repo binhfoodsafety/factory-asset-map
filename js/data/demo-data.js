@@ -108,11 +108,13 @@ window.FAM.DEMO = {
     { id: 'AST-EQP-0021', name: 'Xe nâng tay PT-02', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (giả định)', model: 'PT-20M', serial: 'SN-PT20-1202', status: 'OOS', lastInspection: '2026-02-18', remarks: 'Rò rỉ thuỷ lực, đã treo thẻ khoá. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-WHS', x: 92, y: 66, updatedAt: '2026-10-30T09:45:00.000Z' },
     { id: 'AST-FUR-0002', name: 'Kệ pallet dãy A', categoryId: 'FUR', departmentId: 'LG', manufacturer: 'StoreRack (giả định)', model: 'SR-4L', serial: 'SN-SR-A-001', status: 'ACTIVE', lastInspection: '2026-07-01', remarks: 'Kệ chọn lọc 4 tầng. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-WHS', x: 84, y: 80, updatedAt: '2026-07-01T08:00:00.000Z' },
 
+    { id: 'AST-EQP-0022', name: 'Máy chiết hũ cũ FL-00', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'PackLogic Automation (giả định)', model: 'PL-J60', serial: 'SN-PLJ-2014-0003', status: 'OOS', lastInspection: '2025-12-10', remarks: 'Đã thanh lý 08/2026. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-WHS', x: 95, y: 92, updatedAt: '2026-08-20T09:00:00.000Z' },
+
     // ---- Floor 2 · Laboratory
     { id: 'AST-LAB-0001', name: 'Tủ ấm vi sinh INC-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Labthermo Instruments (giả định)', model: 'LT-INC150', serial: 'SN-LTI-150-2290', status: 'ACTIVE', lastInspection: '2026-10-14', remarks: 'Ủ TPC ở 30 °C. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 9, y: 12.7, updatedAt: '2026-10-14T08:00:00.000Z' },
     { id: 'AST-LAB-0002', name: 'Cân phân tích BAL-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (giả định)', model: 'MX-220A', serial: 'SN-MX220-1145', status: 'ACTIVE', lastInspection: '2026-11-04', remarks: 'Độ đọc 0,1 mg. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 18, y: 29.5, updatedAt: '2026-11-04T10:00:00.000Z' },
     { id: 'AST-LAB-0003', name: 'Cân phân tích BAL-02', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (giả định)', model: 'MX-220A', serial: 'SN-MX220-1146', status: 'INSP', lastInspection: '2026-05-04', remarks: 'Đến hạn hiệu chuẩn bên ngoài. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 26, y: 29.5, updatedAt: '2026-11-15T09:20:00.000Z' },
-    { id: 'AST-LAB-0004', name: 'Máy đo độ ẩm MA-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (giả định)', model: 'MX-MA50', serial: 'SN-MXMA-0420', status: 'ACTIVE', lastInspection: '2026-09-12', remarks: 'DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 32.5, y: 12.7, updatedAt: '2026-09-12T08:00:00.000Z' },
+    { id: 'AST-LAB-0004', name: 'Máy đo độ ẩm MA-01', categoryId: 'LAB', departmentId: 'PR', manufacturer: 'Metrix Scales (giả định)', model: 'MX-MA50', serial: 'SN-MXMA-0420', status: 'ACTIVE', lastInspection: '2026-09-12', remarks: 'DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 32.5, y: 12.7, updatedAt: '2026-09-12T08:00:00.000Z' },
     { id: 'AST-LAB-0005', name: 'Tủ cấy vô trùng LF-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Labthermo Instruments (giả định)', model: 'LT-LFC4', serial: 'SN-LTL-0877', status: 'OOS', lastInspection: '2026-01-28', remarks: 'Chờ thay lọc HEPA. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 9.5, y: 46.3, updatedAt: '2026-11-08T14:00:00.000Z' },
     { id: 'AST-FUR-0003', name: 'Bàn thí nghiệm LB-01', categoryId: 'FUR', departmentId: 'QA', manufacturer: 'Hàng phổ thông (giả định)', model: 'EP-2400', serial: 'SN-LB-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: 'Mặt bàn epoxy. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 24.5, y: 47.8, updatedAt: '2026-06-01T08:00:00.000Z' },
 
@@ -130,5 +132,93 @@ window.FAM.DEMO = {
     { assetId: 'AST-EQP-0020', at: '2026-11-16T10:55:00.000Z', by: 'Giám sát kho', reason: 'Trả về từ khu đóng gói sau ca làm việc', from: { floorId: 'F1', zoneId: 'Z-PCK', x: 22, y: 76 } },
     { assetId: 'AST-EQP-0016', at: '2026-11-19T08:50:00.000Z', by: 'Kế hoạch bảo trì', reason: 'Bố trí lại dây chuyền: dời máy dò kim loại sau khi nối dài băng tải FL-01', from: { floorId: 'F1', zoneId: 'Z-PCK', x: 28, y: 68 } },
     { assetId: 'AST-EQP-0019', at: '2026-11-20T16:05:00.000Z', by: 'Giám sát kho', reason: 'Đỗ tại trạm sạc chờ kiểm định', from: { floorId: 'F1', zoneId: 'Z-WHS', x: 74, y: 70 } },
+  ],
+
+  /* ---------------- KẾ TOÁN TSCĐ (DEMO – số liệu giả định) ---------------- */
+  finSettings: {
+    regime: 'TT 99/2025/TT-BTC',
+    prorateByDay: true,
+    lockedUntil: '2026-09',
+    fundSources: ['Vốn chủ sở hữu', 'Vốn vay', 'Quỹ đầu tư phát triển', 'Nguồn khác'],
+    accounts: [
+      { code: '2111', name: 'Nhà cửa, vật kiến trúc', kind: 'asset' },
+      { code: '2112', name: 'Máy móc, thiết bị', kind: 'asset' },
+      { code: '2113', name: 'Phương tiện vận tải, truyền dẫn', kind: 'asset' },
+      { code: '2114', name: 'Thiết bị, dụng cụ quản lý', kind: 'asset' },
+      { code: '2118', name: 'TSCĐ hữu hình khác', kind: 'asset' },
+      { code: '2131', name: 'Quyền sử dụng đất', kind: 'asset' },
+      { code: '2135', name: 'Chương trình phần mềm', kind: 'asset' },
+      { code: '2141', name: 'Hao mòn TSCĐ hữu hình', kind: 'dep' },
+      { code: '2143', name: 'Hao mòn TSCĐ vô hình', kind: 'dep' },
+      { code: '242', name: 'Chi phí chờ phân bổ (CCDC)', kind: 'dep' },
+      { code: '6273', name: 'Chi phí dụng cụ sản xuất', kind: 'exp' },
+      { code: '6274', name: 'Chi phí khấu hao TSCĐ (sản xuất chung)', kind: 'exp' },
+      { code: '6413', name: 'Chi phí dụng cụ, đồ dùng (bán hàng)', kind: 'exp' },
+      { code: '6414', name: 'Chi phí khấu hao TSCĐ (bán hàng)', kind: 'exp' },
+      { code: '6423', name: 'Chi phí đồ dùng văn phòng', kind: 'exp' },
+      { code: '6424', name: 'Chi phí khấu hao TSCĐ (quản lý)', kind: 'exp' },
+      { code: '711', name: 'Thu nhập khác', kind: 'other' },
+      { code: '811', name: 'Chi phí khác', kind: 'other' },
+    ],
+  },
+
+  // Thông tin kế toán theo Asset ID (nguyên giá VND, thời gian tháng). Số liệu GIẢ ĐỊNH.
+  fin: (function () {
+    const T = (cost, inc, life, o) => Object.assign({ assetType: 'TSHH', cost, increaseDate: inc, depStartDate: inc, usefulLifeMonths: life, remainingMonths: life, openingAccum: 0, method: 'SL', assetAccount: '2112', depAccount: '2141', expenseAccount: '6274', fundSource: 'Vốn chủ sở hữu' }, o || {});
+    const C = (cost, inc, life, exp) => ({ assetType: 'CCDC', cost, increaseDate: inc, depStartDate: inc, usefulLifeMonths: life, remainingMonths: life, openingAccum: 0, method: 'SL', assetAccount: '', depAccount: '242', expenseAccount: exp || '6273', fundSource: 'Vốn chủ sở hữu' });
+    return {
+      'AST-EQP-0001': T(2850000000, '2021-03-15', 120, { accCode: 'TS-SX-001', supplier: 'Brewtek Process Systems (giả định)', invoiceNo: '0001245', invoiceDate: '2021-03-10' }),
+      'AST-EQP-0002': T(2850000000, '2021-03-15', 120, { accCode: 'TS-SX-002', supplier: 'Brewtek Process Systems (giả định)', invoiceNo: '0001245', invoiceDate: '2021-03-10' }),
+      'AST-EQP-0003': T(2980000000, '2022-06-01', 96, { accCode: 'TS-SX-003', method: 'DB', supplier: 'Brewtek Process Systems (giả định)', invoiceNo: '0002310', fundSource: 'Vốn vay' }),
+      'AST-EQP-0004': T(1250000000, '2021-05-10', 96, { accCode: 'TS-SX-004', supplier: 'Separa Dynamics (giả định)' }),
+      'AST-EQP-0005': T(1320000000, '2022-02-18', 96, { accCode: 'TS-SX-005', supplier: 'Separa Dynamics (giả định)' }),
+      // khai báo số dư đầu kỳ: bắt đầu tính KH trong hệ thống từ 01/2025
+      'AST-EQP-0006': T(4600000000, '2020-09-01', 144, { accCode: 'TS-SX-006', depStartDate: '2025-01-01', openingAccum: 1661111111, remainingMonths: 92, supplier: 'ThermaVap Engineering (giả định)' }),
+      'AST-EQP-0007': T(780000000, '2020-09-01', 120, { accCode: 'TS-SX-007' }),
+      'AST-EQP-0008': T(780000000, '2020-09-01', 120, { accCode: 'TS-SX-008' }),
+      'AST-EQP-0009': T(920000000, '2021-01-20', 96, { accCode: 'TS-SX-009' }),
+      'AST-EQP-0010': T(6200000000, '2019-11-05', 120, { accCode: 'TS-SX-010', supplier: 'Cryonova Systems (giả định)', fundSource: 'Vốn vay' }),
+      'AST-EQP-0011': T(6450000000, '2021-08-16', 120, { accCode: 'TS-SX-011', supplier: 'Cryonova Systems (giả định)', fundSource: 'Vốn vay' }),
+      'AST-EQP-0012': T(380000000, '2023-04-03', 84, { accCode: 'TS-SX-012' }),
+      'AST-EQP-0013': T(560000000, '2022-10-10', 84, { accCode: 'TS-SX-013' }),
+      'AST-UTL-0001': T(640000000, '2020-07-01', 96, { accCode: 'TS-PT-001' }),
+      'AST-UTL-0002': T(640000000, '2020-07-01', 96, { accCode: 'TS-PT-002' }),
+      'AST-UTL-0003': T(1480000000, '2021-08-16', 120, { accCode: 'TS-PT-003' }),
+      'AST-UTL-0004': T(520000000, '2022-03-01', 96, { accCode: 'TS-PT-004' }),
+      'AST-EQP-0014': T(3400000000, '2023-01-09', 120, { accCode: 'TS-DG-001', supplier: 'PackLogic Automation (giả định)', invoiceNo: '0000871', invoiceDate: '2023-01-05' }),
+      'AST-EQP-0015': T(2750000000, '2024-05-20', 120, { accCode: 'TS-DG-002', supplier: 'PackLogic Automation (giả định)', invoiceNo: '0001502', invoiceDate: '2024-05-15' }),
+      'AST-EQP-0016': T(320000000, '2023-01-09', 84, { accCode: 'TS-DG-003' }),
+      'AST-EQP-0017': T(335000000, '2024-05-20', 84, { accCode: 'TS-DG-004' }),
+      'AST-FUR-0001': C(22000000, '2025-03-01', 24),
+      'AST-EQP-0018': T(690000000, '2022-07-01', 96, { accCode: 'TS-VT-001', assetAccount: '2113' }),
+      'AST-EQP-0019': T(715000000, '2023-09-11', 96, { accCode: 'TS-VT-002', assetAccount: '2113' }),
+      'AST-EQP-0020': C(12500000, '2025-06-02', 36),
+      'AST-EQP-0021': C(12500000, '2024-01-15', 36),
+      'AST-FUR-0002': T(185000000, '2021-04-01', 120, { accCode: 'TS-KH-001', assetAccount: '2118' }),
+      'AST-LAB-0001': T(148000000, '2022-08-08', 84, { accCode: 'TS-QA-001' }),
+      'AST-LAB-0002': T(86000000, '2023-02-14', 60, { accCode: 'TS-QA-002' }),
+      'AST-LAB-0003': T(86000000, '2023-02-14', 60, { accCode: 'TS-QA-003' }),
+      'AST-LAB-0004': T(124000000, '2023-06-20', 60, { accCode: 'TS-QA-004' }),
+      'AST-LAB-0005': T(95000000, '2021-11-01', 72, { accCode: 'TS-QA-005' }),
+      'AST-FUR-0003': T(45000000, '2022-08-08', 60, { accCode: 'TS-QA-006', assetAccount: '2114' }),
+      'AST-FUR-0004': C(26000000, '2025-01-06', 24, '6423'),
+      'AST-FUR-0005': C(18000000, '2024-09-01', 24),
+      'AST-EQP-0022': T(900000000, '2014-04-01', 120, { accCode: 'TS-DG-000' }),
+    };
+  })(),
+
+  // Nghiệp vụ phát sinh (ghi tăng được tạo tự động). Số liệu GIẢ ĐỊNH.
+  finTx: [
+    { type: 'TRANSFER', assetId: 'AST-LAB-0004', date: '2026-02-02', toDept: 'QA', toExpense: '6274', receiver: 'Nhân viên QA', desc: 'Điều chuyển máy đo độ ẩm từ Sản xuất sang phòng QA', by: 'Kế toán TSCĐ' },
+    { type: 'UPGRADE', assetId: 'AST-EQP-0010', date: '2026-05-12', amount: 450000000, extraMonths: 12, refDoc: 'HĐ 0003318', desc: 'Nâng cấp hệ thống điều khiển máy sấy thăng hoa FD-01', by: 'Kế toán TSCĐ' },
+    { type: 'DISPOSE', assetId: 'AST-EQP-0022', date: '2026-08-20', proceeds: 35000000, expenses: 3000000, reason: 'Đã khấu hao hết, hư hỏng, thay thế bằng dây chuyền FL-01', buyer: 'Công ty thu mua phế liệu (giả định)', desc: 'Thanh lý máy chiết hũ cũ FL-00', by: 'Kế toán TSCĐ' },
+  ],
+
+  // Đợt kiểm kê (DEMO)
+  counts: [
+    { id: 'KK-DEMO-1', code: 'KK-2026-06', name: 'Kiểm kê TSCĐ giữa năm 2026', date: '2026-06-30', floorIds: [], status: 'CLOSED', members: 'Kế toán TSCĐ; Giám sát kho; Kế hoạch bảo trì',
+      results: { 'AST-EQP-0021': { result: 'WRONG_LOC', foundZoneId: 'Z-PCK', note: 'Đang dùng tại khu đóng gói' }, 'AST-LAB-0005': { result: 'DAMAGED', note: 'Quạt hút hỏng' } } },
+    { id: 'KK-DEMO-2', code: 'KK-2026-12', name: 'Kiểm kê cuối năm 2026 – Tầng 1', date: '2026-11-20', floorIds: ['F1'], status: 'OPEN', members: 'Kế toán TSCĐ; Giám sát kho',
+      results: { 'AST-EQP-0001': {}, 'AST-EQP-0002': {}, 'AST-EQP-0003': {}, 'AST-EQP-0004': {}, 'AST-EQP-0005': { result: 'DAMAGED', note: 'Đang chờ phụ tùng' }, 'AST-EQP-0006': {}, 'AST-EQP-0007': {}, 'AST-EQP-0018': {}, 'AST-EQP-0020': { result: 'WRONG_LOC', foundZoneId: 'Z-PCK' } } },
   ],
 };

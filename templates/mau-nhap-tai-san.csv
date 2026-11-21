@@ -1,3 +1,3 @@
-﻿Asset ID,Tên tài sản,Nhóm tài sản,Bộ phận quản lý,Tầng,Khu vực,X,Y,Nhà sản xuất,Model,Serial Number,Trạng thái,Kiểm định gần nhất,Link ảnh,Ghi chú
-AST-EQP-9001,VÍ DỤ - Bình trích ly cà phê EX-09,Thiết bị,Sản xuất,F1,EXT,12.5,20,Hãng ví dụ,MOD-100,SN-0000-0001,Đang hoạt động,2026-01-31,,DÒNG VÍ DỤ - xoá trước khi nhập
-AST-UTL-9001,VÍ DỤ - Máy nén khí AC-09,UTL,EN,F1,Phụ trợ,88,20,Hãng ví dụ,AC-50,SN-0000-0002,Đến hạn kiểm định,,,DÒNG VÍ DỤ - xoá trước khi nhập
+﻿Asset ID,Tên tài sản,Nhóm tài sản,Bộ phận quản lý,Tầng,Khu vực,X,Y,Nhà sản xuất,Model,Serial Number,Trạng thái,Kiểm định gần nhất,Link ảnh,Ghi chú,Loại TS (KT),Mã TS (KT),Nguyên giá,Ngày ghi tăng,Ngày bắt đầu KH,Thời gian SD (tháng),Thời gian còn lại (tháng),HM luỹ kế ban đầu,PP khấu hao,TK nguyên giá,TK khấu hao,TK chi phí,Nguồn vốn
+AST-EQP-9001,VÍ DỤ – Bình trích ly cà phê EX-09,Thiết bị,Sản xuất,F1,EXT,12.5,20,Hãng ví dụ,MOD-100,SN-0000-0001,Đang hoạt động,2026-01-31,,DÒNG VÍ DỤ – xoá trước khi nhập,TSHH,TS-SX-901,1250000000,2026-01-15,,96,,0,SL,2112,2141,6274,Vốn chủ sở hữu
+AST-UTL-9001,VÍ DỤ – Máy nén khí AC-09,UTL,EN,F1,Phụ trợ,88,20,Hãng ví dụ,AC-50,SN-0000-0002,Đến hạn kiểm định,,,DÒNG VÍ DỤ – xoá trước khi nhập,TSHH,TS-PT-901,640000000,2020-07-01,2025-01-01,96,42,360000000,SL,2112,2141,6274,Vốn chủ sở hữu

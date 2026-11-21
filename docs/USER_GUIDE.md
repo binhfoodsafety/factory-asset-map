@@ -77,3 +77,42 @@ Hệ thống thêm một dòng lịch sử (vị trí cũ → mới, người c�
 * Nhóm tài sản (mã dùng trong Asset ID mới, hình dạng điểm đánh dấu), trạng thái (tên, màu), người dùng, kích thước điểm đánh dấu, tuỳ chọn sơ đồ.
 * **Tải bản sao lưu JSON** định kỳ. **Khôi phục**, **Khôi phục dữ liệu demo** và **Xoá toàn bộ dữ liệu** thay dữ liệu cho mọi người dùng và cần admin key khi dùng máy chủ Cloudflare.
 * Thanh bên trái hiển thị trạng thái đồng bộ: *Đã đồng bộ Cloudflare*, *Đang lưu…*, hoặc *Mất kết nối — thay đổi lưu tạm trên máy* (tự tải lên khi có kết nối lại).
+
+## Kế toán TSCĐ
+
+Tab **Kế toán TSCĐ** dành cho bộ phận tài chính – kế toán.
+
+| Màn hình | Chức năng |
+|---|---|
+| Danh sách TSCĐ & CCDC | Nguyên giá, khấu hao kỳ, hao mòn luỹ kế, giá trị còn lại, thời gian còn lại, tình trạng (đang khấu hao / đã khấu hao hết / đã ghi giảm). In Thẻ TSCĐ. Xuất Excel cho MISA. |
+| Nghiệp vụ tăng / giảm | Ghi tăng (tự tạo khi khai báo), nâng cấp / sửa chữa lớn, đánh giá lại, điều chuyển bộ phận, thanh lý / nhượng bán. In biên bản giao nhận, điều chuyển, thanh lý. |
+| Khấu hao & phân bổ | Bảng tính khấu hao chi tiết và bảng phân bổ (TK Nợ – TK Có – bộ phận) cho một hoặc nhiều kỳ. Xuất Excel gồm sheet bút toán để nhập vào MISA. |
+| Sổ TSCĐ / CCDC | Sổ theo năm: ghi tăng – khấu hao – ghi giảm. In / xuất Excel. |
+| Khoá sổ & tài khoản | Khoá sổ đến kỳ, danh mục tài khoản, nguồn vốn, cách tính khấu hao theo ngày hoặc tròn tháng. |
+
+### Cách tính
+
+* **Đường thẳng:** mức khấu hao tháng = (nguyên giá − hao mòn luỹ kế) / số tháng còn lại. Tính lại khi nâng cấp hoặc đánh giá lại.
+* **Số dư giảm dần có điều chỉnh:** mức năm = giá trị còn lại × hệ số (1,5 nếu ≤ 4 năm; 2,0 nếu 4–6 năm; 2,5 nếu > 6 năm) / số năm sử dụng; chuyển sang chia đều cho số năm còn lại khi mức này thấp hơn.
+* **CCDC:** phân bổ đều qua TK 242 theo số kỳ.
+* **Theo ngày (mặc định):** tháng ghi tăng chỉ tính số ngày sử dụng; tháng ghi giảm tính đến ngày trước ngày ghi giảm; tháng cuối lấy phần còn lại để tổng khấu hao đúng bằng nguyên giá.
+
+### Khoá sổ
+
+Sau khi khoá sổ đến một kỳ, không thể thêm hoặc xoá nghiệp vụ trong kỳ đó, và không sửa được nguyên giá / thời gian / tài khoản của tài sản bắt đầu khấu hao trong kỳ đã khoá. Ứng dụng không có đăng nhập, nên mọi người dùng đều có thể mở khoá — cần quy trình nội bộ.
+
+### Lưu ý
+
+* Danh mục tài khoản mặc định cần được đối chiếu với hệ thống tài khoản chi tiết của đơn vị theo chế độ kế toán đang áp dụng (TT 99/2025/TT-BTC).
+* Mẫu chứng từ in là **mẫu tham khảo**; đối chiếu với mẫu biểu đơn vị đang dùng.
+* File "Xuất Excel cho MISA" và sheet bút toán theo cấu trúc khai báo / nghiệp vụ khác; trước khi nhập khẩu cần đối chiếu tên và thứ tự cột với file mẫu tải từ phiên bản MISA đang dùng.
+* Tài sản đã khai báo kế toán không xoá được; hãy ghi giảm (thanh lý). Tài sản đã ghi giảm không còn hiển thị trên sơ đồ.
+
+## Kiểm kê
+
+1. **Tạo đợt kiểm kê:** tab Kiểm kê → Tạo đợt kiểm kê; chọn tầng / khu vực. Danh sách tài sản theo sổ được chốt khi tạo.
+2. **Quét:** máy quét cầm tay (gõ vào ô quét), nút Camera (trình duyệt hỗ trợ BarcodeDetector), hoặc bật *Ghi nhận khi quét QR bằng camera điện thoại* rồi quét nhãn bằng ứng dụng camera — mỗi lần quét mở trang và ghi nhận vào đợt.
+3. **Khu vực đang kiểm:** chọn khu vực mình đang đứng; tài sản quét được nhưng theo sổ ở khu khác sẽ ghi "sai vị trí".
+4. **Đánh dấu tay:** Có / Sai vị trí / Hỏng / Không thấy, kèm ghi chú.
+5. **Kết thúc:** tài sản chưa kiểm ghi nhận "Không tìm thấy"; tuỳ chọn cập nhật vị trí theo thực tế (ghi Lịch sử vị trí) và chuyển tài sản hỏng sang "Ngừng hoạt động".
+6. **Biên bản kiểm kê:** in hoặc xuất Excel với các cột theo sổ kế toán – theo kiểm kê – chênh lệch (số lượng, nguyên giá, giá trị còn lại).

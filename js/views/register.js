@@ -22,7 +22,7 @@ window.FAM = window.FAM || {};
     { k: 'manufacturer', h: 'Nhà sản xuất', fmt: (v) => U.esc(v.manufacturer) },
     { k: 'model', h: 'Model', fmt: (v) => U.esc(v.model) },
     { k: 'serial', h: 'Serial Number', fmt: (v) => `<span class="mono">${U.esc(v.serial)}</span>` },
-    { k: 'statusName', h: 'Trạng thái', fmt: (v) => UI.statusBadge(v.status) },
+    { k: 'statusName', h: 'Trạng thái', fmt: (v) => UI.statusBadge(v.status) + (S.isDisposed(v) ? ' <span class="badge" style="--c:#dc2626"><i></i>Đã ghi giảm</span>' : '') },
     { k: 'lastInspection', h: 'Kiểm định', fmt: (v) => `<span class="nowrap">${U.fmtDate(v.lastInspection)}</span>` },
     { k: 'photo', h: 'Ảnh', fmt: (v) => (v.photo ? `<span class="photo-thumb" style="width:34px;height:26px;background-image:url('${U.esc(v.photo)}')"></span>` : '<span class="muted">—</span>') },
     { k: 'remarks', h: 'Ghi chú', fmt: (v) => `<span class="muted small" title="${U.esc(v.remarks)}">${U.esc((v.remarks || '').slice(0, 40))}${(v.remarks || '').length > 40 ? '…' : ''}</span>` },
@@ -130,7 +130,7 @@ window.FAM = window.FAM || {};
     else if (act === 'delete') {
       const v = S.view(id);
       const ok = await UI.confirm(`Xoá <b>${U.esc(v.id)}</b> – ${U.esc(v.name)} khỏi sổ tài sản?<br><br><span class="small muted">Lịch sử vị trí vẫn được giữ (thêm một dòng "REMOVE"). Asset ID sẽ không được dùng lại.</span>`, { title: 'Xoá tài sản', okLabel: 'Xoá tài sản', danger: true });
-      if (ok) { S.deleteAsset(id, { by: S.currentUser() }); UI.toast(`Đã xoá ${id}.`, 'success'); }
+      if (ok) try { S.deleteAsset(id, { by: S.currentUser() }); UI.toast(`Đã xoá ${id}.`, 'success'); } catch (err) { UI.toast(err.message, 'error', 7000); }
     }
   }
 
@@ -141,7 +141,7 @@ window.FAM = window.FAM || {};
       <div class="callout">${U.icon('info', 16)}<div>
         Chấp nhận: <b>.csv</b> (dấu phẩy hoặc chấm phẩy) hoặc <b>.xlsx / .xls</b> (sheet đầu tiên, hoặc sheet tên "Assets").
         Cột bắt buộc: Asset ID, Tên tài sản, Nhóm, Bộ phận, Tầng, Khu vực, X, Y, Trạng thái (tiêu đề tiếng Việt hoặc tiếng Anh đều được).
-        Nhóm / Bộ phận / Tầng / Khu vực / Trạng thái có thể ghi theo mã hoặc tên. Location Code được tính tự động.
+        Nhóm / Bộ phận / Tầng / Khu vực / Trạng thái có thể ghi theo mã hoặc tên. Location Code được tính tự động. Các cột kế toán (Loại TS, Nguyên giá, Ngày ghi tăng, Thời gian SD, TK…) là tuỳ chọn: nếu có Nguyên giá, hệ thống khai báo kế toán và tạo chứng từ ghi tăng.
         <div class="btn-row" style="margin-top:8px"><button class="btn btn-sm" id="imTplCsv">${U.icon('download', 14)}Mẫu CSV</button><button class="btn btn-sm" id="imTplXlsx">${U.icon('download', 14)}Mẫu Excel</button></div>
       </div></div>
       <div class="form-grid" style="margin-top:14px">
@@ -191,7 +191,7 @@ window.FAM = window.FAM || {};
           if (!analysis || !(analysis.creates.length + analysis.updates.length)) { UI.toast('Hãy chọn tệp có ít nhất một dòng hợp lệ.', 'error'); return false; }
           try {
             const r = IO.apply(analysis, { by: S.currentUser(), reason: 'Nhập hàng loạt: ' + fileName });
-            UI.toast(`Đã nhập: ${r.created} mới, ${r.updated} cập nhật (${r.moved} đổi vị trí). Bỏ qua ${analysis.errors.length} dòng.`, 'success', 5000);
+            UI.toast(`Đã nhập: ${r.created} mới, ${r.updated} cập nhật (${r.moved} đổi vị trí, ${r.finSaved} khai báo kế toán). Bỏ qua ${analysis.errors.length} dòng.`, 'success', 6000);
           } catch (e) { UI.toast(e.message, 'error', 6000); return false; }
         } },
       ],

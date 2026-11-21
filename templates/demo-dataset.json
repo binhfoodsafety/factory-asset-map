@@ -1,5 +1,5 @@
 {
-  "_notice": "DỮ LIỆU DEMO MINH HỌA - nhà máy cà phê giả định, không phải hồ sơ thực tế. Tọa độ là % bản vẽ mẫu (gốc góc trên bên trái, X sang phải, Y xuống dưới).",
+  "_notice": "DỮ LIỆU DEMO MINH HỌA - nhà máy cà phê giả định, không phải hồ sơ thực tế. Tọa độ là % bản vẽ mẫu; nguyên giá và nghiệp vụ kế toán là số liệu giả định.",
   "factory": {
     "id": "FAC1",
     "code": "DCF",
@@ -697,6 +697,23 @@
       "updatedAt": "2026-07-01T08:00:00.000Z"
     },
     {
+      "id": "AST-EQP-0022",
+      "name": "Máy chiết hũ cũ FL-00",
+      "categoryId": "EQP",
+      "departmentId": "PR",
+      "manufacturer": "PackLogic Automation (giả định)",
+      "model": "PL-J60",
+      "serial": "SN-PLJ-2014-0003",
+      "status": "OOS",
+      "lastInspection": "2025-12-10",
+      "remarks": "Đã thanh lý 08/2026. DỮ LIỆU DEMO.",
+      "floorId": "F1",
+      "zoneId": "Z-WHS",
+      "x": 95,
+      "y": 92,
+      "updatedAt": "2026-08-20T09:00:00.000Z"
+    },
+    {
       "id": "AST-LAB-0001",
       "name": "Tủ ấm vi sinh INC-01",
       "categoryId": "LAB",
@@ -751,7 +768,7 @@
       "id": "AST-LAB-0004",
       "name": "Máy đo độ ẩm MA-01",
       "categoryId": "LAB",
-      "departmentId": "QA",
+      "departmentId": "PR",
       "manufacturer": "Metrix Scales (giả định)",
       "model": "MX-MA50",
       "serial": "SN-MXMA-0420",
@@ -904,6 +921,748 @@
         "zoneId": "Z-WHS",
         "x": 74,
         "y": 70
+      }
+    }
+  ],
+  "finSettings": {
+    "regime": "TT 99/2025/TT-BTC",
+    "prorateByDay": true,
+    "lockedUntil": "2026-09",
+    "fundSources": [
+      "Vốn chủ sở hữu",
+      "Vốn vay",
+      "Quỹ đầu tư phát triển",
+      "Nguồn khác"
+    ],
+    "accounts": [
+      {
+        "code": "2111",
+        "name": "Nhà cửa, vật kiến trúc",
+        "kind": "asset"
+      },
+      {
+        "code": "2112",
+        "name": "Máy móc, thiết bị",
+        "kind": "asset"
+      },
+      {
+        "code": "2113",
+        "name": "Phương tiện vận tải, truyền dẫn",
+        "kind": "asset"
+      },
+      {
+        "code": "2114",
+        "name": "Thiết bị, dụng cụ quản lý",
+        "kind": "asset"
+      },
+      {
+        "code": "2118",
+        "name": "TSCĐ hữu hình khác",
+        "kind": "asset"
+      },
+      {
+        "code": "2131",
+        "name": "Quyền sử dụng đất",
+        "kind": "asset"
+      },
+      {
+        "code": "2135",
+        "name": "Chương trình phần mềm",
+        "kind": "asset"
+      },
+      {
+        "code": "2141",
+        "name": "Hao mòn TSCĐ hữu hình",
+        "kind": "dep"
+      },
+      {
+        "code": "2143",
+        "name": "Hao mòn TSCĐ vô hình",
+        "kind": "dep"
+      },
+      {
+        "code": "242",
+        "name": "Chi phí chờ phân bổ (CCDC)",
+        "kind": "dep"
+      },
+      {
+        "code": "6273",
+        "name": "Chi phí dụng cụ sản xuất",
+        "kind": "exp"
+      },
+      {
+        "code": "6274",
+        "name": "Chi phí khấu hao TSCĐ (sản xuất chung)",
+        "kind": "exp"
+      },
+      {
+        "code": "6413",
+        "name": "Chi phí dụng cụ, đồ dùng (bán hàng)",
+        "kind": "exp"
+      },
+      {
+        "code": "6414",
+        "name": "Chi phí khấu hao TSCĐ (bán hàng)",
+        "kind": "exp"
+      },
+      {
+        "code": "6423",
+        "name": "Chi phí đồ dùng văn phòng",
+        "kind": "exp"
+      },
+      {
+        "code": "6424",
+        "name": "Chi phí khấu hao TSCĐ (quản lý)",
+        "kind": "exp"
+      },
+      {
+        "code": "711",
+        "name": "Thu nhập khác",
+        "kind": "other"
+      },
+      {
+        "code": "811",
+        "name": "Chi phí khác",
+        "kind": "other"
+      }
+    ]
+  },
+  "fin": {
+    "AST-EQP-0001": {
+      "assetType": "TSHH",
+      "cost": 2850000000,
+      "increaseDate": "2021-03-15",
+      "depStartDate": "2021-03-15",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-001",
+      "supplier": "Brewtek Process Systems (giả định)",
+      "invoiceNo": "0001245",
+      "invoiceDate": "2021-03-10"
+    },
+    "AST-EQP-0002": {
+      "assetType": "TSHH",
+      "cost": 2850000000,
+      "increaseDate": "2021-03-15",
+      "depStartDate": "2021-03-15",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-002",
+      "supplier": "Brewtek Process Systems (giả định)",
+      "invoiceNo": "0001245",
+      "invoiceDate": "2021-03-10"
+    },
+    "AST-EQP-0003": {
+      "assetType": "TSHH",
+      "cost": 2980000000,
+      "increaseDate": "2022-06-01",
+      "depStartDate": "2022-06-01",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "DB",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn vay",
+      "accCode": "TS-SX-003",
+      "supplier": "Brewtek Process Systems (giả định)",
+      "invoiceNo": "0002310"
+    },
+    "AST-EQP-0004": {
+      "assetType": "TSHH",
+      "cost": 1250000000,
+      "increaseDate": "2021-05-10",
+      "depStartDate": "2021-05-10",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-004",
+      "supplier": "Separa Dynamics (giả định)"
+    },
+    "AST-EQP-0005": {
+      "assetType": "TSHH",
+      "cost": 1320000000,
+      "increaseDate": "2022-02-18",
+      "depStartDate": "2022-02-18",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-005",
+      "supplier": "Separa Dynamics (giả định)"
+    },
+    "AST-EQP-0006": {
+      "assetType": "TSHH",
+      "cost": 4600000000,
+      "increaseDate": "2020-09-01",
+      "depStartDate": "2025-01-01",
+      "usefulLifeMonths": 144,
+      "remainingMonths": 92,
+      "openingAccum": 1661111111,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-006",
+      "supplier": "ThermaVap Engineering (giả định)"
+    },
+    "AST-EQP-0007": {
+      "assetType": "TSHH",
+      "cost": 780000000,
+      "increaseDate": "2020-09-01",
+      "depStartDate": "2020-09-01",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-007"
+    },
+    "AST-EQP-0008": {
+      "assetType": "TSHH",
+      "cost": 780000000,
+      "increaseDate": "2020-09-01",
+      "depStartDate": "2020-09-01",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-008"
+    },
+    "AST-EQP-0009": {
+      "assetType": "TSHH",
+      "cost": 920000000,
+      "increaseDate": "2021-01-20",
+      "depStartDate": "2021-01-20",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-009"
+    },
+    "AST-EQP-0010": {
+      "assetType": "TSHH",
+      "cost": 6200000000,
+      "increaseDate": "2019-11-05",
+      "depStartDate": "2019-11-05",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn vay",
+      "accCode": "TS-SX-010",
+      "supplier": "Cryonova Systems (giả định)"
+    },
+    "AST-EQP-0011": {
+      "assetType": "TSHH",
+      "cost": 6450000000,
+      "increaseDate": "2021-08-16",
+      "depStartDate": "2021-08-16",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn vay",
+      "accCode": "TS-SX-011",
+      "supplier": "Cryonova Systems (giả định)"
+    },
+    "AST-EQP-0012": {
+      "assetType": "TSHH",
+      "cost": 380000000,
+      "increaseDate": "2023-04-03",
+      "depStartDate": "2023-04-03",
+      "usefulLifeMonths": 84,
+      "remainingMonths": 84,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-012"
+    },
+    "AST-EQP-0013": {
+      "assetType": "TSHH",
+      "cost": 560000000,
+      "increaseDate": "2022-10-10",
+      "depStartDate": "2022-10-10",
+      "usefulLifeMonths": 84,
+      "remainingMonths": 84,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-SX-013"
+    },
+    "AST-UTL-0001": {
+      "assetType": "TSHH",
+      "cost": 640000000,
+      "increaseDate": "2020-07-01",
+      "depStartDate": "2020-07-01",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-PT-001"
+    },
+    "AST-UTL-0002": {
+      "assetType": "TSHH",
+      "cost": 640000000,
+      "increaseDate": "2020-07-01",
+      "depStartDate": "2020-07-01",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-PT-002"
+    },
+    "AST-UTL-0003": {
+      "assetType": "TSHH",
+      "cost": 1480000000,
+      "increaseDate": "2021-08-16",
+      "depStartDate": "2021-08-16",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-PT-003"
+    },
+    "AST-UTL-0004": {
+      "assetType": "TSHH",
+      "cost": 520000000,
+      "increaseDate": "2022-03-01",
+      "depStartDate": "2022-03-01",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-PT-004"
+    },
+    "AST-EQP-0014": {
+      "assetType": "TSHH",
+      "cost": 3400000000,
+      "increaseDate": "2023-01-09",
+      "depStartDate": "2023-01-09",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-DG-001",
+      "supplier": "PackLogic Automation (giả định)",
+      "invoiceNo": "0000871",
+      "invoiceDate": "2023-01-05"
+    },
+    "AST-EQP-0015": {
+      "assetType": "TSHH",
+      "cost": 2750000000,
+      "increaseDate": "2024-05-20",
+      "depStartDate": "2024-05-20",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-DG-002",
+      "supplier": "PackLogic Automation (giả định)",
+      "invoiceNo": "0001502",
+      "invoiceDate": "2024-05-15"
+    },
+    "AST-EQP-0016": {
+      "assetType": "TSHH",
+      "cost": 320000000,
+      "increaseDate": "2023-01-09",
+      "depStartDate": "2023-01-09",
+      "usefulLifeMonths": 84,
+      "remainingMonths": 84,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-DG-003"
+    },
+    "AST-EQP-0017": {
+      "assetType": "TSHH",
+      "cost": 335000000,
+      "increaseDate": "2024-05-20",
+      "depStartDate": "2024-05-20",
+      "usefulLifeMonths": 84,
+      "remainingMonths": 84,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-DG-004"
+    },
+    "AST-FUR-0001": {
+      "assetType": "CCDC",
+      "cost": 22000000,
+      "increaseDate": "2025-03-01",
+      "depStartDate": "2025-03-01",
+      "usefulLifeMonths": 24,
+      "remainingMonths": 24,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "",
+      "depAccount": "242",
+      "expenseAccount": "6273",
+      "fundSource": "Vốn chủ sở hữu"
+    },
+    "AST-EQP-0018": {
+      "assetType": "TSHH",
+      "cost": 690000000,
+      "increaseDate": "2022-07-01",
+      "depStartDate": "2022-07-01",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2113",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-VT-001"
+    },
+    "AST-EQP-0019": {
+      "assetType": "TSHH",
+      "cost": 715000000,
+      "increaseDate": "2023-09-11",
+      "depStartDate": "2023-09-11",
+      "usefulLifeMonths": 96,
+      "remainingMonths": 96,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2113",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-VT-002"
+    },
+    "AST-EQP-0020": {
+      "assetType": "CCDC",
+      "cost": 12500000,
+      "increaseDate": "2025-06-02",
+      "depStartDate": "2025-06-02",
+      "usefulLifeMonths": 36,
+      "remainingMonths": 36,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "",
+      "depAccount": "242",
+      "expenseAccount": "6273",
+      "fundSource": "Vốn chủ sở hữu"
+    },
+    "AST-EQP-0021": {
+      "assetType": "CCDC",
+      "cost": 12500000,
+      "increaseDate": "2024-01-15",
+      "depStartDate": "2024-01-15",
+      "usefulLifeMonths": 36,
+      "remainingMonths": 36,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "",
+      "depAccount": "242",
+      "expenseAccount": "6273",
+      "fundSource": "Vốn chủ sở hữu"
+    },
+    "AST-FUR-0002": {
+      "assetType": "TSHH",
+      "cost": 185000000,
+      "increaseDate": "2021-04-01",
+      "depStartDate": "2021-04-01",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2118",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-KH-001"
+    },
+    "AST-LAB-0001": {
+      "assetType": "TSHH",
+      "cost": 148000000,
+      "increaseDate": "2022-08-08",
+      "depStartDate": "2022-08-08",
+      "usefulLifeMonths": 84,
+      "remainingMonths": 84,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-QA-001"
+    },
+    "AST-LAB-0002": {
+      "assetType": "TSHH",
+      "cost": 86000000,
+      "increaseDate": "2023-02-14",
+      "depStartDate": "2023-02-14",
+      "usefulLifeMonths": 60,
+      "remainingMonths": 60,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-QA-002"
+    },
+    "AST-LAB-0003": {
+      "assetType": "TSHH",
+      "cost": 86000000,
+      "increaseDate": "2023-02-14",
+      "depStartDate": "2023-02-14",
+      "usefulLifeMonths": 60,
+      "remainingMonths": 60,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-QA-003"
+    },
+    "AST-LAB-0004": {
+      "assetType": "TSHH",
+      "cost": 124000000,
+      "increaseDate": "2023-06-20",
+      "depStartDate": "2023-06-20",
+      "usefulLifeMonths": 60,
+      "remainingMonths": 60,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-QA-004"
+    },
+    "AST-LAB-0005": {
+      "assetType": "TSHH",
+      "cost": 95000000,
+      "increaseDate": "2021-11-01",
+      "depStartDate": "2021-11-01",
+      "usefulLifeMonths": 72,
+      "remainingMonths": 72,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-QA-005"
+    },
+    "AST-FUR-0003": {
+      "assetType": "TSHH",
+      "cost": 45000000,
+      "increaseDate": "2022-08-08",
+      "depStartDate": "2022-08-08",
+      "usefulLifeMonths": 60,
+      "remainingMonths": 60,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2114",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-QA-006"
+    },
+    "AST-FUR-0004": {
+      "assetType": "CCDC",
+      "cost": 26000000,
+      "increaseDate": "2025-01-06",
+      "depStartDate": "2025-01-06",
+      "usefulLifeMonths": 24,
+      "remainingMonths": 24,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "",
+      "depAccount": "242",
+      "expenseAccount": "6423",
+      "fundSource": "Vốn chủ sở hữu"
+    },
+    "AST-FUR-0005": {
+      "assetType": "CCDC",
+      "cost": 18000000,
+      "increaseDate": "2024-09-01",
+      "depStartDate": "2024-09-01",
+      "usefulLifeMonths": 24,
+      "remainingMonths": 24,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "",
+      "depAccount": "242",
+      "expenseAccount": "6273",
+      "fundSource": "Vốn chủ sở hữu"
+    },
+    "AST-EQP-0022": {
+      "assetType": "TSHH",
+      "cost": 900000000,
+      "increaseDate": "2014-04-01",
+      "depStartDate": "2014-04-01",
+      "usefulLifeMonths": 120,
+      "remainingMonths": 120,
+      "openingAccum": 0,
+      "method": "SL",
+      "assetAccount": "2112",
+      "depAccount": "2141",
+      "expenseAccount": "6274",
+      "fundSource": "Vốn chủ sở hữu",
+      "accCode": "TS-DG-000"
+    }
+  },
+  "finTx": [
+    {
+      "type": "TRANSFER",
+      "assetId": "AST-LAB-0004",
+      "date": "2026-02-02",
+      "toDept": "QA",
+      "toExpense": "6274",
+      "receiver": "Nhân viên QA",
+      "desc": "Điều chuyển máy đo độ ẩm từ Sản xuất sang phòng QA",
+      "by": "Kế toán TSCĐ"
+    },
+    {
+      "type": "UPGRADE",
+      "assetId": "AST-EQP-0010",
+      "date": "2026-05-12",
+      "amount": 450000000,
+      "extraMonths": 12,
+      "refDoc": "HĐ 0003318",
+      "desc": "Nâng cấp hệ thống điều khiển máy sấy thăng hoa FD-01",
+      "by": "Kế toán TSCĐ"
+    },
+    {
+      "type": "DISPOSE",
+      "assetId": "AST-EQP-0022",
+      "date": "2026-08-20",
+      "proceeds": 35000000,
+      "expenses": 3000000,
+      "reason": "Đã khấu hao hết, hư hỏng, thay thế bằng dây chuyền FL-01",
+      "buyer": "Công ty thu mua phế liệu (giả định)",
+      "desc": "Thanh lý máy chiết hũ cũ FL-00",
+      "by": "Kế toán TSCĐ"
+    }
+  ],
+  "counts": [
+    {
+      "id": "KK-DEMO-1",
+      "code": "KK-2026-06",
+      "name": "Kiểm kê TSCĐ giữa năm 2026",
+      "date": "2026-06-30",
+      "floorIds": [],
+      "status": "CLOSED",
+      "members": "Kế toán TSCĐ; Giám sát kho; Kế hoạch bảo trì",
+      "results": {
+        "AST-EQP-0021": {
+          "result": "WRONG_LOC",
+          "foundZoneId": "Z-PCK",
+          "note": "Đang dùng tại khu đóng gói"
+        },
+        "AST-LAB-0005": {
+          "result": "DAMAGED",
+          "note": "Quạt hút hỏng"
+        }
+      }
+    },
+    {
+      "id": "KK-DEMO-2",
+      "code": "KK-2026-12",
+      "name": "Kiểm kê cuối năm 2026 – Tầng 1",
+      "date": "2026-11-20",
+      "floorIds": [
+        "F1"
+      ],
+      "status": "OPEN",
+      "members": "Kế toán TSCĐ; Giám sát kho",
+      "results": {
+        "AST-EQP-0001": {},
+        "AST-EQP-0002": {},
+        "AST-EQP-0003": {},
+        "AST-EQP-0004": {},
+        "AST-EQP-0005": {
+          "result": "DAMAGED",
+          "note": "Đang chờ phụ tùng"
+        },
+        "AST-EQP-0006": {},
+        "AST-EQP-0007": {},
+        "AST-EQP-0018": {},
+        "AST-EQP-0020": {
+          "result": "WRONG_LOC",
+          "foundZoneId": "Z-PCK"
+        }
       }
     }
   ]

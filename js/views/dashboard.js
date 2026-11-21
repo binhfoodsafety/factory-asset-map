@@ -35,9 +35,29 @@ window.FAM = window.FAM || {};
       <text x="60" y="75" text-anchor="middle" font-size="10" fill="#64748b">tài sản</text></svg>`;
   }
 
+  // Tóm tắt giá trị tài sản cho bộ phận tài chính – kế toán
+  function finCard() {
+    const FIN = F.fin;
+    if (!FIN) return '';
+    const ym = FIN.nowYm();
+    const list = S.assets().filter(FIN.has).map((a) => FIN.stateAt(a, ym)).filter((s) => !['DISPOSED', 'NOTYET'].includes(s.status));
+    const sum = (k) => list.reduce((t, s) => t + (s[k] || 0), 0);
+    const full = list.filter((s) => s.status === 'FULL').length;
+    const none = S.assets().filter((a) => !FIN.has(a) && !S.isDisposed(a)).length;
+    return `<div class="card" style="margin-bottom:16px"><div class="card-head"><h3>Giá trị tài sản – kỳ ${FIN.ymLabel(ym)}</h3><a href="#/fa" class="small">Kế toán TSCĐ →</a></div>
+      <div class="card-body stat-row" style="margin:0">
+        <div><div class="muted small">Tổng nguyên giá</div><div class="kpi-value" style="font-size:20px">${FIN.fmt(sum('cost'))}</div></div>
+        <div><div class="muted small">Hao mòn luỹ kế</div><div class="kpi-value" style="font-size:20px">${FIN.fmt(sum('accum'))}</div></div>
+        <div><div class="muted small">Giá trị còn lại</div><div class="kpi-value" style="font-size:20px">${FIN.fmt(sum('nbv'))}</div></div>
+        <div><div class="muted small">Khấu hao / phân bổ tháng này</div><div class="kpi-value" style="font-size:20px">${FIN.fmt(sum('dep'))}</div></div>
+        <div><div class="muted small">Đã khấu hao hết, còn sử dụng</div><div class="kpi-value" style="font-size:20px">${full}</div></div>
+        <div><div class="muted small">Chưa khai báo kế toán</div><div class="kpi-value" style="font-size:20px">${none}</div></div>
+      </div></div>`;
+  }
+
   D.show = () => {
     const root = U.$('#view-dashboard');
-    const views = S.views();
+    const views = S.views().filter((v) => !S.isDisposed(v));
     const total = views.length;
     const by = (fn) => views.filter(fn).length;
     const statuses = S.statuses();
@@ -68,6 +88,7 @@ window.FAM = window.FAM || {};
         <div class="card kpi" style="--c:${core.OOS.color}" data-go="register" data-status="OOS"><span class="kpi-label"><i class="dot" style="--c:${core.OOS.color}"></i>${U.esc(core.OOS.name)}</span><span class="kpi-value">${stCount('OOS')}</span><span class="kpi-sub">${pct(stCount('OOS'))}% tổng tài sản</span></div>
         <div class="card kpi" style="--c:var(--navy-600)" data-go="zones"><span class="kpi-label">${U.icon('layers', 15)}Khu vực nhà máy</span><span class="kpi-value">${zones.length}</span><span class="kpi-sub">trên ${S.floors().length} tầng</span></div>
       </div>
+      ${finCard()}
       <div class="grid grid-3">
         <div class="card"><div class="card-head"><h3>Tài sản theo trạng thái</h3></div><div class="card-body donut-wrap">${donut(statuses.map((s) => ({ label: s.name, color: s.color, value: stCount(s.id) })), total)}
           <div class="bars" style="flex:1;min-width:150px">${statuses.map((s) => `<div class="bar-row" style="grid-template-columns:1fr 34px"><span class="lbl"><i class="dot" style="--c:${s.color}"></i> ${U.esc(s.name)}</span><span class="val">${stCount(s.id)}</span></div>`).join('')}</div></div></div>

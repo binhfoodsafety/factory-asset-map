@@ -156,6 +156,19 @@ window.FAM = window.FAM || {};
           <h4>Quản lý khu vực</h4>
           <ul><li>Khu vực nhà máy → Thêm khu vực → <b>Vẽ ranh giới trên sơ đồ</b> (kéo hình chữ nhật). Mỗi khu vực thuộc một tầng và một bộ phận.</li>
             <li>Bấm khu vực trong cây cơ cấu hoặc nút "Sơ đồ" để xem trên sơ đồ.</li></ul>
+          <h4>Kế toán TSCĐ</h4>
+          <ul><li><b>Khai báo:</b> Kế toán TSCĐ → Khai báo TSCĐ / CCDC (hoặc nút "Khai báo nguyên giá" trên sơ đồ): loại tài sản, nguyên giá, ngày ghi tăng, thời gian sử dụng, tài khoản nguyên giá / khấu hao / chi phí. Hệ thống tự tạo chứng từ ghi tăng.</li>
+            <li><b>Tài sản đã dùng trước khi đưa vào hệ thống:</b> nhập ngày bắt đầu tính khấu hao, hao mòn luỹ kế và thời gian còn lại tại ngày đó (giống khai báo đầu kỳ trên MISA).</li>
+            <li><b>Khai báo hàng loạt:</b> dùng file Excel của Sổ tài sản với các cột kế toán (Loại TS, Mã TS, Nguyên giá, Ngày ghi tăng, Thời gian SD, TK…).</li>
+            <li><b>Khấu hao:</b> đường thẳng hoặc số dư giảm dần có điều chỉnh; CCDC phân bổ đều qua TK 242. Mặc định tính theo số ngày sử dụng trong tháng ghi tăng / ghi giảm.</li>
+            <li><b>Nghiệp vụ:</b> nâng cấp, đánh giá lại, điều chuyển bộ phận, thanh lý. Sau khi ghi có thể in biên bản; Thẻ TSCĐ in từ danh sách.</li>
+            <li><b>Cuối kỳ:</b> Khấu hao &amp; phân bổ → chọn kỳ → Xuất Excel (có sheet bút toán để nhập vào MISA) → Khoá sổ kỳ đã chốt.</li>
+            <li>Xuất Excel cho MISA tạo dữ liệu theo cấu trúc khai báo TSCĐ / CCDC; cần đối chiếu cột với mẫu nhập khẩu của phiên bản MISA đang dùng.</li></ul>
+          <h4>Kiểm kê</h4>
+          <ol><li>Kiểm kê → Tạo đợt kiểm kê (chọn tầng / khu vực). Danh sách tài sản theo sổ được chốt lúc tạo.</li>
+            <li>Quét QR bằng máy quét cầm tay, camera trong trình duyệt, hoặc bật "Ghi nhận khi quét QR bằng camera điện thoại" rồi quét nhãn bằng ứng dụng camera.</li>
+            <li>Chọn "Khu vực đang kiểm" để tự phát hiện tài sản sai vị trí; đánh dấu Hỏng / Không thấy trực tiếp trên danh sách.</li>
+            <li>Kết thúc kiểm kê: tài sản chưa kiểm ghi nhận "Không tìm thấy"; có thể tự cập nhật vị trí và trạng thái hỏng. In / xuất biên bản kiểm kê có cột theo sổ – theo kiểm kê – chênh lệch.</li></ol>
           <h4>In nhãn QR</h4>
           <ul><li>Mã QR → đánh dấu tài sản → chọn khổ nhãn → <b>In nhãn</b>. Trong hộp thoại in chọn tỉ lệ 100 % / "Actual size". Tải từng ảnh PNG ở phần xem trước.</li>
             <li>Đặt <b>QR base URL</b> (Thông tin chung) thành địa chỉ web trước, để mọi điện thoại quét nhãn đều mở được ứng dụng.</li></ul></div>`)}

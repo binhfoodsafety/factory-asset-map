@@ -25,6 +25,20 @@ window.FAM = window.FAM || {};
     { h: 'Kiểm định gần nhất', key: 'lastInspection', get: (v) => v.lastInspection },
     { h: 'Link ảnh', key: 'photo', get: (v) => (v.photo && /^https?:/i.test(v.photo) ? v.photo : v.photo ? '(ảnh nhúng – không xuất)' : '') },
     { h: 'Ghi chú', key: 'remarks', get: (v) => v.remarks },
+    // ---- thông tin kế toán (tuỳ chọn; để trống nếu chưa khai báo) ----
+    { h: 'Loại TS (KT)', key: 'finType', fin: true, get: (v) => (v.fin ? v.fin.assetType : '') },
+    { h: 'Mã TS (KT)', key: 'accCode', fin: true, get: (v) => (v.fin ? v.fin.accCode : '') },
+    { h: 'Nguyên giá', key: 'cost', fin: true, get: (v) => (v.fin ? v.fin.cost : '') },
+    { h: 'Ngày ghi tăng', key: 'increaseDate', fin: true, get: (v) => (v.fin ? v.fin.increaseDate : '') },
+    { h: 'Ngày bắt đầu KH', key: 'depStartDate', fin: true, get: (v) => (v.fin ? v.fin.depStartDate : '') },
+    { h: 'Thời gian SD (tháng)', key: 'usefulLifeMonths', fin: true, get: (v) => (v.fin ? v.fin.usefulLifeMonths : '') },
+    { h: 'Thời gian còn lại (tháng)', key: 'remainingMonths', fin: true, get: (v) => (v.fin ? v.fin.remainingMonths : '') },
+    { h: 'HM luỹ kế ban đầu', key: 'openingAccum', fin: true, get: (v) => (v.fin ? v.fin.openingAccum : '') },
+    { h: 'PP khấu hao', key: 'method', fin: true, get: (v) => (v.fin ? v.fin.method : '') },
+    { h: 'TK nguyên giá', key: 'assetAccount', fin: true, get: (v) => (v.fin ? v.fin.assetAccount : '') },
+    { h: 'TK khấu hao', key: 'depAccount', fin: true, get: (v) => (v.fin ? v.fin.depAccount : '') },
+    { h: 'TK chi phí', key: 'expenseAccount', fin: true, get: (v) => (v.fin ? v.fin.expenseAccount : '') },
+    { h: 'Nguồn vốn', key: 'fundSource', fin: true, get: (v) => (v.fin ? v.fin.fundSource : '') },
   ];
   const ALIASES = {
     assetid: 'id', id: 'id', assetcode: 'id', assetno: 'id',
@@ -58,6 +72,17 @@ window.FAM = window.FAM || {};
     linkanh: 'photo', anh: 'photo', hinhanh: 'photo',
     ghichu: 'remarks',
     mavitri: 'locationCode',
+    loaitskt: 'finType', loaits: 'finType', loaitaisanketoan: 'finType', assettype: 'finType',
+    matskt: 'accCode', mataisanketoan: 'accCode', matscd: 'accCode', mataisanmisa: 'accCode', accountingcode: 'accCode',
+    nguyengia: 'cost', cost: 'cost',
+    ngayghitang: 'increaseDate',
+    ngaybatdaukh: 'depStartDate', ngaybatdautinhkh: 'depStartDate', ngaybatdautinhkhauhao: 'depStartDate',
+    thoigiansdthang: 'usefulLifeMonths', thoigiansudungthang: 'usefulLifeMonths', thoigiansudung: 'usefulLifeMonths', sokyphanbo: 'usefulLifeMonths',
+    thoigianconlaithang: 'remainingMonths', thoigiansudungconlaithang: 'remainingMonths', thoigianconlai: 'remainingMonths', sokyphanboconlai: 'remainingMonths',
+    hmluykebandau: 'openingAccum', haomonluyke: 'openingAccum', haomonluykebandau: 'openingAccum', giatridaphanbo: 'openingAccum',
+    ppkhauhao: 'method', phuongphapkhauhao: 'method',
+    tknguyengia: 'assetAccount', tkkhauhao: 'depAccount', tkchophanbo: 'depAccount', tkchiphi: 'expenseAccount',
+    nguonvon: 'fundSource',
   };
   const normHeader = (h) => String(h || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9%]/g, '');
 
@@ -114,8 +139,10 @@ window.FAM = window.FAM || {};
 
   IO.templateRows = () => [
     IO.ASSET_COLUMNS.filter((c) => c.key !== 'locationCode').map((c) => c.h),
-    ['AST-EQP-9001', 'VÍ DỤ – Bình trích ly cà phê EX-09', 'Thiết bị', 'Sản xuất', 'F1', 'EXT', '12.5', '20', 'Hãng ví dụ', 'MOD-100', 'SN-0000-0001', 'Đang hoạt động', '2026-01-31', '', 'DÒNG VÍ DỤ – xoá trước khi nhập'],
-    ['AST-UTL-9001', 'VÍ DỤ – Máy nén khí AC-09', 'UTL', 'EN', 'F1', 'Phụ trợ', '88', '20', 'Hãng ví dụ', 'AC-50', 'SN-0000-0002', 'Đến hạn kiểm định', '', '', 'DÒNG VÍ DỤ – xoá trước khi nhập'],
+    ['AST-EQP-9001', 'VÍ DỤ – Bình trích ly cà phê EX-09', 'Thiết bị', 'Sản xuất', 'F1', 'EXT', '12.5', '20', 'Hãng ví dụ', 'MOD-100', 'SN-0000-0001', 'Đang hoạt động', '2026-01-31', '', 'DÒNG VÍ DỤ – xoá trước khi nhập',
+      'TSHH', 'TS-SX-901', '1250000000', '2026-01-15', '', '96', '', '0', 'SL', '2112', '2141', '6274', 'Vốn chủ sở hữu'],
+    ['AST-UTL-9001', 'VÍ DỤ – Máy nén khí AC-09', 'UTL', 'EN', 'F1', 'Phụ trợ', '88', '20', 'Hãng ví dụ', 'AC-50', 'SN-0000-0002', 'Đến hạn kiểm định', '', '', 'DÒNG VÍ DỤ – xoá trước khi nhập',
+      'TSHH', 'TS-PT-901', '640000000', '2020-07-01', '2025-01-01', '96', '42', '360000000', 'SL', '2112', '2141', '6274', 'Vốn chủ sở hữu'],
   ];
   IO.downloadTemplate = (format) => {
     const rows = IO.templateRows();
@@ -199,31 +226,68 @@ window.FAM = window.FAM || {};
       if (!existing && id && S.history().some((h) => h.assetId === id && h.action === 'REMOVE')) fail('id', `Asset ID "${id}" thuộc tài sản đã xoá — không được dùng lại`);
       const v = S.validateAsset(master, loc, false);
       Object.entries(v).forEach(([k, m]) => { if (!covered.has(k)) errs.push(m); });
+      // thông tin kế toán (nếu có cột Nguyên giá)
+      let fin = null;
+      if (F.fin && String(o.cost ?? '').trim() !== '') {
+        const FIN = F.fin;
+        const t = String(o.finType || '').trim().toUpperCase();
+        const type = FIN.TYPES.find((x) => x.id === t || x.name.toUpperCase() === t || x.short.toUpperCase() === t) || (t === 'CCDC' ? { id: 'CCDC' } : t ? null : { id: 'TSHH' });
+        const mt = String(o.method || '').trim().toUpperCase();
+        const method = !mt ? 'SL' : (FIN.METHODS.find((x) => x.id === mt || x.name.toUpperCase() === mt) || {}).id;
+        if (!type) errs.push(`Loại TS (KT) "${o.finType}" không hợp lệ (TSHH / TSVH / CCDC)`);
+        if (mt && !method) errs.push(`PP khấu hao "${o.method}" không hợp lệ (SL / DB / NONE)`);
+        const num = (x) => (String(x ?? '').trim() === '' ? '' : U.num(x));
+        const raw = {
+          assetType: type ? type.id : '', accCode: o.accCode, cost: num(o.cost), increaseDate: U.isoDate(o.increaseDate), depStartDate: U.isoDate(o.depStartDate),
+          usefulLifeMonths: num(o.usefulLifeMonths), remainingMonths: num(o.remainingMonths), openingAccum: num(o.openingAccum) || 0, method: method || 'SL',
+          assetAccount: String(o.assetAccount || '').trim(), depAccount: String(o.depAccount || '').trim() || (type ? FIN.DEFAULT_DEP_ACC[type.id] : ''),
+          expenseAccount: String(o.expenseAccount || '').trim(), fundSource: o.fundSource,
+        };
+        raw.remainingMonths = raw.remainingMonths || raw.usefulLifeMonths;
+        // giữ các trường đã khai báo mà file không có cột / để trống (nhà cung cấp, hoá đơn…)
+        Object.keys(raw).forEach((k) => { if (raw[k] === undefined || (raw[k] === '' && k !== 'depStartDate')) delete raw[k]; });
+        if (existing && existing.fin) Object.keys(existing.fin).forEach((k) => { if (!(k in raw) && k !== 'disposedDate') raw[k] = existing.fin[k]; });
+        raw.openingAccum = raw.openingAccum || 0;
+        if (type) {
+          const fv = FIN.validateFin(raw, existing || null);
+          const labels = { assetType: 'Loại TS', cost: 'Nguyên giá', increaseDate: 'Ngày ghi tăng', depStartDate: 'Ngày bắt đầu KH', usefulLifeMonths: 'Thời gian SD', remainingMonths: 'Thời gian còn lại', openingAccum: 'HM luỹ kế', assetAccount: 'TK nguyên giá', depAccount: 'TK khấu hao', expenseAccount: 'TK chi phí', _lock: 'Khoá sổ' };
+          Object.entries(fv.errors).forEach(([k, msg]) => errs.push(`${labels[k] || k}: ${msg}`));
+          ['assetAccount', 'depAccount', 'expenseAccount'].forEach((k) => { if (raw[k] && !FIN.accounts().some((a) => a.code === raw[k])) errs.push(`${labels[k]} "${raw[k]}" chưa có trong danh mục tài khoản`); });
+          fin = raw;
+          const canon = (o) => JSON.stringify(Object.keys(o).sort().map((k) => [k, o[k]]));
+          if (existing && existing.fin && canon(FIN.cleanFin(raw, existing.fin.disposedDate ? { disposedDate: existing.fin.disposedDate } : {})) === canon(existing.fin)) fin = null; // không đổi
+        }
+      }
       if (errs.length) { res.errors.push({ line, id, errs }); return; }
       if (existing) {
         if (master.photo === undefined) master.photo = existing.photo; // keep embedded photo
-        res.updates.push({ line, master, loc });
+        res.updates.push({ line, master, loc, fin });
       } else {
         if (master.photo === undefined) master.photo = '';
-        res.creates.push({ line, master, loc });
+        res.creates.push({ line, master, loc, fin });
       }
     });
     return res;
   };
 
   IO.apply = (analysis, { by, reason }) => {
-    let created = 0, updated = 0, moved = 0;
+    let created = 0, updated = 0, moved = 0, finSaved = 0;
     S.batch(() => {
-      analysis.creates.forEach(({ master, loc }) => { S.createAsset(master, loc, { by, reason: 'Đăng ký ban đầu (' + reason + ')', silent: true }); created++; });
-      analysis.updates.forEach(({ master, loc }) => {
+      analysis.creates.forEach(({ master, loc, fin }) => {
+        S.createAsset(master, loc, { by, reason: 'Đăng ký ban đầu (' + reason + ')', silent: true });
+        if (fin) { F.fin.saveFin(master.id, fin, { silent: true, by }); finSaved++; }
+        created++;
+      });
+      analysis.updates.forEach(({ master, loc, fin }) => {
         const before = { ...S.location(master.id) };
         S.updateAsset(master.id, master, loc, { by, reason, silent: true });
+        if (fin) { F.fin.saveFin(master.id, fin, { silent: true, by }); finSaved++; }
         const after = S.location(master.id);
         if (before.code !== after.code || before.x !== after.x || before.y !== after.y) moved++;
         updated++;
       });
     });
-    return { created, updated, moved };
+    return { created, updated, moved, finSaved };
   };
 
   /* ---------------- JSON backup ---------------- */

@@ -15,7 +15,7 @@
  *   - Asset IDs are unique and never reused: a new asset whose ID exists (or existed) is rejected,
  *     together with its location / registration records in the same request.
  */
-const COLLECTIONS = new Set(['singleton', 'floors', 'departments', 'zones', 'categories', 'statuses', 'users', 'assets', 'locations', 'history']);
+const COLLECTIONS = new Set(['singleton', 'floors', 'departments', 'zones', 'categories', 'statuses', 'users', 'assets', 'locations', 'history', 'finTx', 'counts', 'countLines']);
 const MAX_RECORD = 1_900_000; // D1 row size safety margin (bytes)
 const MAX_BODY = 20_000_000;
 
