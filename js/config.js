@@ -4,5 +4,5 @@
  *   ''  → local-only mode: data stays in this browser's LocalStorage.
  */
 window.FAM_CONFIG = {
-  apiBase: '',
+  apiBase: 'https://factory-asset-map-api.dangthanhbinh53.workers.dev',
 };

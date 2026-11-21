@@ -9,7 +9,7 @@ ALLOWED_ORIGINS = "https://binhfoodsafety.github.io"
 [[d1_databases]]
 binding = "DB"
 database_name = "factory-asset-map"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "f2b1abca-fd52-4e70-9307-8722ffaf6a22"
 
 # Secret (not stored here):  npx wrangler secret put ADMIN_KEY
 # Required only for "replace all data" operations (reset demo / restore backup / clear all).
