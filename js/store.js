@@ -52,7 +52,7 @@ window.FAM = window.FAM || {};
       out.assets.push({ ...master, photo: '', createdAt: d.registeredAt, updatedAt: updatedAt || d.registeredAt });
       const moves = movesByAsset[a.id] || [];
       const origin = moves.length ? moves[0].from : current;
-      out.history.push(histRecord('REGISTER', a.id, a.name, null, origin, 'Demo Admin', 'Initial registration (demo data)', d.registeredAt));
+      out.history.push(histRecord('REGISTER', a.id, a.name, null, origin, 'Quản trị viên', 'Đăng ký ban đầu (dữ liệu demo)', d.registeredAt));
       moves.forEach((m, i) => {
         const next = i + 1 < moves.length ? moves[i + 1].from : current;
         out.history.push(histRecord('MOVE', a.id, a.name, m.from, next, m.by, m.reason, m.at));
@@ -88,7 +88,7 @@ window.FAM = window.FAM || {};
       return true;
     } catch (e) {
       console.error(e);
-      U.bus.emit('store:error', 'Browser storage is full or unavailable — changes may not be saved. Export a JSON backup and remove large photos / floor plan images.');
+      U.bus.emit('store:error', 'Bộ nhớ trình duyệt đã đầy hoặc không khả dụng — thay đổi có thể chưa được lưu. Hãy tải bản sao lưu JSON và xoá bớt ảnh / bản vẽ dung lượng lớn.');
       return false;
     }
   }
@@ -107,8 +107,8 @@ window.FAM = window.FAM || {};
     db = {
       schemaVersion: SCHEMA,
       meta: { demo: false, clearedAt: U.nowIso() },
-      factory: { ...keep.factory, name: 'My Factory' },
-      floors: [{ id: 'F1', code: 'F1', name: 'Floor 1', level: 1, plan: { type: 'blank' } }],
+      factory: { ...keep.factory, name: 'Nhà máy của tôi' },
+      floors: [{ id: 'F1', code: 'F1', name: 'Tầng 1', level: 1, plan: { type: 'blank' } }],
       departments: keep.departments,
       zones: [],
       categories: keep.categories,
@@ -122,13 +122,13 @@ window.FAM = window.FAM || {};
   S.storageBytes = () => { try { return (localStorage.getItem(KEY) || '').length * 2; } catch (e) { return 0; } };
   S.exportJSON = () => ({ app: 'Factory Asset Map', exportedAt: U.nowIso(), ...clone(db) });
   S.importJSON = (obj) => {
-    if (!obj || obj.schemaVersion !== SCHEMA) throw new Error('Not a Factory Asset Map backup (schemaVersion ' + (obj && obj.schemaVersion) + ').');
+    if (!obj || obj.schemaVersion !== SCHEMA) throw new Error('File không phải bản sao lưu của Bản đồ tài sản (schemaVersion ' + (obj && obj.schemaVersion) + ').');
     const req = ['floors', 'departments', 'zones', 'categories', 'statuses', 'assets', 'locations', 'history'];
-    req.forEach((k) => { if (!Array.isArray(obj[k])) throw new Error('Backup is missing "' + k + '".'); });
+    req.forEach((k) => { if (!Array.isArray(obj[k])) throw new Error('Bản sao lưu thiếu mục "' + k + '".'); });
     const ids = new Set();
     obj.assets.forEach((a) => {
-      if (!a.id) throw new Error('Backup contains an asset without ID.');
-      if (ids.has(a.id)) throw new Error('Backup contains duplicate Asset ID ' + a.id);
+      if (!a.id) throw new Error('Bản sao lưu có tài sản không có Asset ID.');
+      if (ids.has(a.id)) throw new Error('Bản sao lưu có Asset ID trùng: ' + a.id);
       ids.add(a.id);
     });
     const { app, exportedAt, ...rest } = obj;
@@ -160,7 +160,7 @@ window.FAM = window.FAM || {};
   S.currentUser = () => {
     let u = null;
     try { u = localStorage.getItem('fam.user'); } catch (e) { /* ignore */ }
-    return u || (db.settings && db.settings.currentUser) || 'Unknown user';
+    return u || (db.settings && db.settings.currentUser) || 'Không rõ';
   };
   S.setCurrentUser = (name) => {
     try { localStorage.setItem('fam.user', name); } catch (e) { /* ignore */ }
@@ -200,8 +200,12 @@ window.FAM = window.FAM || {};
   }
   S.findFloor = (v) => findBy(db.floors, v);
   S.findDept = (v) => findBy(db.departments, v);
-  S.findCategory = (v) => findBy(db.categories, v);
-  S.findStatus = (v) => findBy(db.statuses, v);
+  // English names are still accepted in imports (older files / English templates)
+  const EN_CAT = { equipment: 'EQP', utility: 'UTL', lab: 'LAB', laboratory: 'LAB', furniture: 'FUR' };
+  const EN_STATUS = { active: 'ACTIVE', 'inspection due': 'INSP', 'out of service': 'OOS' };
+  const enKey = (v) => String(v || '').trim().toLowerCase();
+  S.findCategory = (v) => findBy(db.categories, v) || findBy(db.categories, EN_CAT[enKey(v)]);
+  S.findStatus = (v) => findBy(db.statuses, v) || findBy(db.statuses, EN_STATUS[enKey(v)]);
   S.findZone = (v, floorId) => findBy(db.zones.filter((z) => !floorId || z.floorId === floorId), v);
 
   /* Joined, read-only view of an asset for the UI */
@@ -288,27 +292,27 @@ window.FAM = window.FAM || {};
 
   S.validateLocation = (loc) => {
     const e = {};
-    if (!loc.floorId || !S.floor(loc.floorId)) e.floorId = 'Floor is required';
-    if (!loc.zoneId || !S.zone(loc.zoneId)) e.zoneId = 'Zone is required';
-    else if (S.zone(loc.zoneId).floorId !== loc.floorId) e.zoneId = 'Zone does not belong to the selected floor';
+    if (!loc.floorId || !S.floor(loc.floorId)) e.floorId = 'Bắt buộc chọn tầng';
+    if (!loc.zoneId || !S.zone(loc.zoneId)) e.zoneId = 'Bắt buộc chọn khu vực';
+    else if (S.zone(loc.zoneId).floorId !== loc.floorId) e.zoneId = 'Khu vực không thuộc tầng đã chọn';
     const x = Number(loc.x), y = Number(loc.y);
-    if (loc.x === '' || loc.x === null || isNaN(x) || x < 0 || x > 100) e.x = 'X must be a number 0–100';
-    if (loc.y === '' || loc.y === null || isNaN(y) || y < 0 || y > 100) e.y = 'Y must be a number 0–100';
+    if (loc.x === '' || loc.x === null || isNaN(x) || x < 0 || x > 100) e.x = 'X phải là số từ 0 đến 100';
+    if (loc.y === '' || loc.y === null || isNaN(y) || y < 0 || y > 100) e.y = 'Y phải là số từ 0 đến 100';
     return e;
   };
 
   S.validateAsset = (a, loc, isNew) => {
     const e = {};
     const id = String(a.id || '').trim();
-    if (!id) e.id = 'Asset ID is required';
-    else if (!S.ID_PATTERN.test(id)) e.id = 'Use 2–40 characters: A–Z, 0–9, - _ . /';
+    if (!id) e.id = 'Bắt buộc nhập Asset ID';
+    else if (!S.ID_PATTERN.test(id)) e.id = 'Dùng 2–40 ký tự: A–Z, 0–9, - _ . /';
     else if (isNew && (S.asset(id) || db.history.some((h) => h.assetId === id && h.action === 'REMOVE')))
-      e.id = S.asset(id) ? 'Asset ID already exists' : 'Asset ID was used by a deleted asset — IDs are never reused';
-    if (!String(a.name || '').trim()) e.name = 'Asset name is required';
-    if (!a.categoryId || !S.category(a.categoryId)) e.categoryId = 'Category is required';
-    if (!a.departmentId || !S.dept(a.departmentId)) e.departmentId = 'Department is required';
-    if (!a.status || !db.statuses.find((s) => s.id === a.status)) e.status = 'Status is required';
-    if (a.lastInspection && !/^\d{4}-\d{2}-\d{2}$/.test(a.lastInspection)) e.lastInspection = 'Use YYYY-MM-DD';
+      e.id = S.asset(id) ? 'Asset ID đã tồn tại' : 'Asset ID đã dùng cho tài sản đã xoá — không được dùng lại';
+    if (!String(a.name || '').trim()) e.name = 'Bắt buộc nhập tên tài sản';
+    if (!a.categoryId || !S.category(a.categoryId)) e.categoryId = 'Bắt buộc chọn nhóm tài sản';
+    if (!a.departmentId || !S.dept(a.departmentId)) e.departmentId = 'Bắt buộc chọn bộ phận';
+    if (!a.status || !db.statuses.find((s) => s.id === a.status)) e.status = 'Bắt buộc chọn trạng thái';
+    if (a.lastInspection && !/^\d{4}-\d{2}-\d{2}$/.test(a.lastInspection)) e.lastInspection = 'Định dạng YYYY-MM-DD';
     return Object.assign(e, S.validateLocation(loc));
   };
 
@@ -346,7 +350,7 @@ window.FAM = window.FAM || {};
     const l = cleanLoc(loc);
     db.assets.push(a);
     db.locations.push({ assetId: a.id, ...l, code: locationCode(l), updatedAt: now });
-    db.history.push(histRecord('REGISTER', a.id, a.name, null, l, opts.by, opts.reason || 'Initial registration', now));
+    db.history.push(histRecord('REGISTER', a.id, a.name, null, l, opts.by, opts.reason || 'Đăng ký ban đầu', now));
     if (!opts.silent) commit('asset');
     return a;
   };
@@ -354,12 +358,12 @@ window.FAM = window.FAM || {};
   // Updates master data; if location differs it is recorded as a move (reason required).
   S.updateAsset = (id, master, loc, opts = {}) => {
     const a = S.asset(id);
-    if (!a) throw new Error('Asset not found: ' + id);
+    if (!a) throw new Error('Không tìm thấy tài sản: ' + id);
     const errs = S.validateAsset({ ...master, id }, loc, false);
     if (Object.keys(errs).length) throw new ValidationError(errs);
     const cur = S.location(id);
     const moving = !sameLoc(cur, cleanLoc(loc));
-    if (moving && !String(opts.reason || '').trim()) throw new ValidationError({ reason: 'Reason for change is required when the location changes' });
+    if (moving && !String(opts.reason || '').trim()) throw new ValidationError({ reason: 'Bắt buộc nhập lý do khi thay đổi vị trí' });
     const clean = cleanMaster({ ...master, id }); // Asset ID is immutable
     Object.assign(a, clean, { updatedAt: U.nowIso() });
     if (moving) S.moveAsset(id, loc, { ...opts, silent: true });
@@ -369,9 +373,9 @@ window.FAM = window.FAM || {};
 
   S.moveAsset = (id, loc, opts = {}) => {
     const a = S.asset(id);
-    if (!a) throw new Error('Asset not found: ' + id);
+    if (!a) throw new Error('Không tìm thấy tài sản: ' + id);
     const errs = S.validateLocation(loc);
-    if (!String(opts.reason || '').trim()) errs.reason = 'Reason for change is required';
+    if (!String(opts.reason || '').trim()) errs.reason = 'Bắt buộc nhập lý do thay đổi';
     if (Object.keys(errs).length) throw new ValidationError(errs);
     const cur = S.location(id);
     const next = cleanLoc(loc);
@@ -389,7 +393,7 @@ window.FAM = window.FAM || {};
     const a = S.asset(id);
     if (!a) return;
     const cur = S.location(id);
-    db.history.push(histRecord('REMOVE', id, a.name, cur, null, opts.by, opts.reason || 'Deleted from asset register'));
+    db.history.push(histRecord('REMOVE', id, a.name, cur, null, opts.by, opts.reason || 'Xoá khỏi sổ tài sản'));
     db.assets = db.assets.filter((x) => x.id !== id);
     db.locations = db.locations.filter((x) => x.assetId !== id);
     commit('asset');
@@ -400,21 +404,21 @@ window.FAM = window.FAM || {};
   /* ---------------- structure mutations ---------------- */
   const CODE_RE = /^[A-Z0-9]{1,6}$/;
   function requireCode(code, list, selfId, label) {
-    if (!CODE_RE.test(code || '')) throw new Error(label + ' code must be 1–6 characters A–Z / 0–9');
-    if (list.some((x) => x.code === code && x.id !== selfId)) throw new Error(label + ' code "' + code + '" already exists');
+    if (!CODE_RE.test(code || '')) throw new Error('Mã ' + label + ' phải gồm 1–6 ký tự A–Z / 0–9');
+    if (list.some((x) => x.code === code && x.id !== selfId)) throw new Error('Mã ' + label + ' "' + code + '" đã tồn tại');
   }
 
   S.saveZone = (z) => {
-    requireCode(z.code, db.zones.filter((x) => x.floorId === z.floorId), z.id, 'Zone');
-    if (!String(z.name || '').trim()) throw new Error('Zone name is required');
-    if (!S.floor(z.floorId)) throw new Error('Floor is required');
-    if (!S.dept(z.departmentId)) throw new Error('Department is required');
-    ['x', 'y', 'w', 'h'].forEach((k) => { z[k] = U.round1(Number(z[k])); if (isNaN(z[k])) throw new Error('Zone bounds must be numbers'); });
-    if (z.x < 0 || z.y < 0 || z.w <= 0 || z.h <= 0 || z.x + z.w > 100.01 || z.y + z.h > 100.01) throw new Error('Zone bounds must stay within 0–100 %');
+    requireCode(z.code, db.zones.filter((x) => x.floorId === z.floorId), z.id, 'khu vực');
+    if (!String(z.name || '').trim()) throw new Error('Bắt buộc nhập tên khu vực');
+    if (!S.floor(z.floorId)) throw new Error('Bắt buộc chọn tầng');
+    if (!S.dept(z.departmentId)) throw new Error('Bắt buộc chọn bộ phận');
+    ['x', 'y', 'w', 'h'].forEach((k) => { z[k] = U.round1(Number(z[k])); if (isNaN(z[k])) throw new Error('Ranh giới khu vực phải là số'); });
+    if (z.x < 0 || z.y < 0 || z.w <= 0 || z.h <= 0 || z.x + z.w > 100.01 || z.y + z.h > 100.01) throw new Error('Ranh giới khu vực phải nằm trong 0–100 %');
     const existing = z.id && S.zone(z.id);
     if (existing) {
       if (existing.floorId !== z.floorId && db.locations.some((l) => l.zoneId === z.id))
-        throw new Error('Cannot move a zone that contains assets to another floor. Move the assets first.');
+        throw new Error('Không thể chuyển khu vực đang có tài sản sang tầng khác. Hãy di chuyển tài sản trước.');
       Object.assign(existing, z);
     } else db.zones.push({ ...z, id: z.id || U.uid('Z') });
     S.recomputeCodes();
@@ -422,13 +426,13 @@ window.FAM = window.FAM || {};
   };
   S.deleteZone = (id) => {
     const n = db.locations.filter((l) => l.zoneId === id).length;
-    if (n) throw new Error(`Zone has ${n} asset(s). Move them to another zone first.`);
+    if (n) throw new Error(`Khu vực đang có ${n} tài sản. Hãy chuyển sang khu vực khác trước.`);
     db.zones = db.zones.filter((z) => z.id !== id);
     commit('structure');
   };
   S.saveFloor = (f) => {
-    requireCode(f.code, db.floors, f.id, 'Floor');
-    if (!String(f.name || '').trim()) throw new Error('Floor name is required');
+    requireCode(f.code, db.floors, f.id, 'tầng');
+    if (!String(f.name || '').trim()) throw new Error('Bắt buộc nhập tên tầng');
     const existing = f.id && S.floor(f.id);
     if (existing) Object.assign(existing, { code: f.code, name: f.name, level: Number(f.level) || 0 });
     else db.floors.push({ id: U.uid('FL'), code: f.code, name: f.name, level: Number(f.level) || 0, plan: { type: 'blank' } });
@@ -436,17 +440,17 @@ window.FAM = window.FAM || {};
     commit('structure');
   };
   S.deleteFloor = (id) => {
-    if (db.zones.some((z) => z.floorId === id)) throw new Error('Floor still has zones. Delete or reassign them first.');
-    if (db.floors.length <= 1) throw new Error('At least one floor is required.');
+    if (db.zones.some((z) => z.floorId === id)) throw new Error('Tầng vẫn còn khu vực. Hãy xoá hoặc chuyển các khu vực trước.');
+    if (db.floors.length <= 1) throw new Error('Cần ít nhất một tầng.');
     db.floors = db.floors.filter((f) => f.id !== id);
     commit('structure');
   };
   S.setFloorPlan = (id, plan) => {
     const f = S.floor(id);
-    if (!f) throw new Error('Floor not found');
+    if (!f) throw new Error('Không tìm thấy tầng');
     const before = f.plan;
     f.plan = plan;
-    if (!persist()) { f.plan = before; throw new Error('Not enough browser storage for this drawing. Use a smaller/optimised SVG or a compressed PNG/JPG.'); }
+    if (!persist()) { f.plan = before; throw new Error('Không đủ bộ nhớ trình duyệt cho bản vẽ này. Dùng SVG nhỏ/tối ưu hơn hoặc PNG/JPG nén.'); }
     U.bus.emit('change', 'structure');
     U.bus.emit('local-commit', 'structure');
   };
@@ -456,17 +460,17 @@ window.FAM = window.FAM || {};
     if (p.type === 'builtin' && F.FLOORPLANS && F.FLOORPLANS[p.key]) {
       const svg = F.FLOORPLANS[p.key];
       const sz = U.svgSize(svg) || { w: 1000, h: 600 };
-      return { href: U.svgToDataUrl(svg), w: sz.w, h: sz.h, label: 'Sample plan (demo)', svg };
+      return { href: U.svgToDataUrl(svg), w: sz.w, h: sz.h, label: 'Bản vẽ mẫu (demo)', svg };
     }
-    if (p.type === 'svg') return { href: U.svgToDataUrl(p.data), w: p.w, h: p.h, label: p.name || 'Imported SVG', svg: p.data };
-    if (p.type === 'image') return { href: p.data, w: p.w, h: p.h, label: p.name || 'Imported image' };
-    const blank = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><defs><pattern id="g" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="#e2e8f0"/></pattern></defs><rect width="1000" height="600" fill="#fff"/><rect width="1000" height="600" fill="url(#g)"/><rect x="2" y="2" width="996" height="596" fill="none" stroke="#94a3b8" stroke-width="4" stroke-dasharray="12 8"/><text x="500" y="300" font-family="Arial" font-size="22" fill="#94a3b8" text-anchor="middle">No floor plan imported — Factory Zones → Floors → Import plan</text></svg>`;
-    return { href: U.svgToDataUrl(blank), w: 1000, h: 600, label: 'No plan', svg: blank };
+    if (p.type === 'svg') return { href: U.svgToDataUrl(p.data), w: p.w, h: p.h, label: p.name || 'SVG đã nhập', svg: p.data };
+    if (p.type === 'image') return { href: p.data, w: p.w, h: p.h, label: p.name || 'Ảnh đã nhập' };
+    const blank = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600"><defs><pattern id="g" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M50 0H0V50" fill="none" stroke="#e2e8f0"/></pattern></defs><rect width="1000" height="600" fill="#fff"/><rect width="1000" height="600" fill="url(#g)"/><rect x="2" y="2" width="996" height="596" fill="none" stroke="#94a3b8" stroke-width="4" stroke-dasharray="12 8"/><text x="500" y="300" font-family="Arial" font-size="22" fill="#94a3b8" text-anchor="middle">Chưa có bản vẽ — Khu vực nhà máy → Tầng → Nhập bản vẽ</text></svg>`;
+    return { href: U.svgToDataUrl(blank), w: 1000, h: 600, label: 'Chưa có bản vẽ', svg: blank };
   };
 
   S.saveDepartment = (d) => {
-    requireCode(d.code, db.departments, d.id, 'Department');
-    if (!String(d.name || '').trim()) throw new Error('Department name is required');
+    requireCode(d.code, db.departments, d.id, 'bộ phận');
+    if (!String(d.name || '').trim()) throw new Error('Bắt buộc nhập tên bộ phận');
     const existing = d.id && S.dept(d.id);
     if (existing) Object.assign(existing, { code: d.code, name: d.name });
     else db.departments.push({ id: d.code, code: d.code, name: d.name });
@@ -474,46 +478,46 @@ window.FAM = window.FAM || {};
     commit('structure');
   };
   S.deleteDepartment = (id) => {
-    if (db.zones.some((z) => z.departmentId === id)) throw new Error('Department is assigned to zones.');
-    if (db.assets.some((a) => a.departmentId === id)) throw new Error('Department is responsible for assets.');
+    if (db.zones.some((z) => z.departmentId === id)) throw new Error('Bộ phận đang được gán cho khu vực.');
+    if (db.assets.some((a) => a.departmentId === id)) throw new Error('Bộ phận đang quản lý tài sản.');
     db.departments = db.departments.filter((d) => d.id !== id);
     commit('structure');
   };
 
   S.saveCategory = (c) => {
-    requireCode(c.code, db.categories, c.id, 'Category');
-    if (!String(c.name || '').trim()) throw new Error('Category name is required');
+    requireCode(c.code, db.categories, c.id, 'nhóm');
+    if (!String(c.name || '').trim()) throw new Error('Bắt buộc nhập tên nhóm');
     const existing = c.id && S.category(c.id);
     if (existing) Object.assign(existing, { name: c.name, shape: c.shape || 'circle' }); // code is fixed once used in IDs
     else db.categories.push({ id: c.code, code: c.code, name: c.name, shape: c.shape || 'circle' });
     commit('config');
   };
   S.deleteCategory = (id) => {
-    if (db.assets.some((a) => a.categoryId === id)) throw new Error('Category is used by assets.');
+    if (db.assets.some((a) => a.categoryId === id)) throw new Error('Nhóm đang được dùng cho tài sản.');
     db.categories = db.categories.filter((c) => c.id !== id);
     commit('config');
   };
   S.saveStatus = (s) => {
-    if (!String(s.name || '').trim()) throw new Error('Status name is required');
-    if (!/^#[0-9a-f]{6}$/i.test(s.color || '')) throw new Error('Colour must be #RRGGBB');
+    if (!String(s.name || '').trim()) throw new Error('Bắt buộc nhập tên trạng thái');
+    if (!/^#[0-9a-f]{6}$/i.test(s.color || '')) throw new Error('Màu phải có dạng #RRGGBB');
     const existing = s.id && db.statuses.find((x) => x.id === s.id);
     if (existing) Object.assign(existing, { name: s.name, color: s.color });
     else {
       const id = s.name.toUpperCase().replace(/[^A-Z0-9]+/g, '_').slice(0, 12) || U.uid('ST');
-      if (db.statuses.some((x) => x.id === id)) throw new Error('Status already exists');
+      if (db.statuses.some((x) => x.id === id)) throw new Error('Trạng thái đã tồn tại');
       db.statuses.push({ id, name: s.name, color: s.color, core: false });
     }
     commit('config');
   };
   S.deleteStatus = (id) => {
     const st = db.statuses.find((s) => s.id === id);
-    if (st && st.core) throw new Error('Core statuses cannot be deleted (rename them instead).');
-    if (db.assets.some((a) => a.status === id)) throw new Error('Status is used by assets.');
+    if (st && st.core) throw new Error('Không xoá được trạng thái gốc (chỉ đổi tên).');
+    if (db.assets.some((a) => a.status === id)) throw new Error('Trạng thái đang được dùng cho tài sản.');
     db.statuses = db.statuses.filter((s) => s.id !== id);
     commit('config');
   };
   S.saveUser = (u) => {
-    if (!String(u.name || '').trim()) throw new Error('User name is required');
+    if (!String(u.name || '').trim()) throw new Error('Bắt buộc nhập tên người dùng');
     db.users = db.users || [];
     const existing = u.id && db.users.find((x) => x.id === u.id);
     if (existing) Object.assign(existing, { name: u.name, role: u.role || '' });

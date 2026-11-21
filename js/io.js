@@ -10,21 +10,21 @@ window.FAM = window.FAM || {};
   /* Column layout shared by export, template and import */
   IO.ASSET_COLUMNS = [
     { h: 'Asset ID', key: 'id', req: true, get: (v) => v.id },
-    { h: 'Asset Name', key: 'name', req: true, get: (v) => v.name },
-    { h: 'Category', key: 'category', req: true, get: (v) => v.categoryName },
-    { h: 'Department', key: 'department', req: true, get: (v) => v.deptName },
-    { h: 'Floor', key: 'floor', req: true, get: (v) => v.floorCode },
-    { h: 'Zone', key: 'zone', req: true, get: (v) => v.zoneCode },
+    { h: 'Tên tài sản', key: 'name', req: true, get: (v) => v.name },
+    { h: 'Nhóm tài sản', key: 'category', req: true, get: (v) => v.categoryName },
+    { h: 'Bộ phận quản lý', key: 'department', req: true, get: (v) => v.deptName },
+    { h: 'Tầng', key: 'floor', req: true, get: (v) => v.floorCode },
+    { h: 'Khu vực', key: 'zone', req: true, get: (v) => v.zoneCode },
     { h: 'X', key: 'x', req: true, get: (v) => v.x },
     { h: 'Y', key: 'y', req: true, get: (v) => v.y },
     { h: 'Location Code', key: 'locationCode', get: (v) => v.locationCode },
-    { h: 'Manufacturer', key: 'manufacturer', get: (v) => v.manufacturer },
+    { h: 'Nhà sản xuất', key: 'manufacturer', get: (v) => v.manufacturer },
     { h: 'Model', key: 'model', get: (v) => v.model },
     { h: 'Serial Number', key: 'serial', get: (v) => v.serial },
-    { h: 'Status', key: 'status', req: true, get: (v) => v.statusName },
-    { h: 'Last Inspection', key: 'lastInspection', get: (v) => v.lastInspection },
-    { h: 'Photo URL', key: 'photo', get: (v) => (v.photo && /^https?:/i.test(v.photo) ? v.photo : v.photo ? '(embedded image – not exported)' : '') },
-    { h: 'Remarks', key: 'remarks', get: (v) => v.remarks },
+    { h: 'Trạng thái', key: 'status', req: true, get: (v) => v.statusName },
+    { h: 'Kiểm định gần nhất', key: 'lastInspection', get: (v) => v.lastInspection },
+    { h: 'Link ảnh', key: 'photo', get: (v) => (v.photo && /^https?:/i.test(v.photo) ? v.photo : v.photo ? '(ảnh nhúng – không xuất)' : '') },
+    { h: 'Ghi chú', key: 'remarks', get: (v) => v.remarks },
   ];
   const ALIASES = {
     assetid: 'id', id: 'id', assetcode: 'id', assetno: 'id',
@@ -43,14 +43,29 @@ window.FAM = window.FAM || {};
     lastinspection: 'lastInspection', lastinspectiondate: 'lastInspection', inspectiondate: 'lastInspection',
     photo: 'photo', photourl: 'photo', image: 'photo', imageurl: 'photo',
     remarks: 'remarks', remark: 'remarks', notes: 'remarks', comment: 'remarks',
+    // Vietnamese headers (normalised without diacritics)
+    mataisan: 'id', masotaisan: 'id',
+    tentaisan: 'name', ten: 'name', motataisan: 'name',
+    nhomtaisan: 'category', nhom: 'category', loaitaisan: 'category',
+    bophanquanly: 'department', bophan: 'department', phongban: 'department',
+    tang: 'floor',
+    khuvuc: 'zone',
+    toadox: 'x', toadoy: 'y',
+    nhasanxuat: 'manufacturer', hangsanxuat: 'manufacturer',
+    sosori: 'serial', soserial: 'serial',
+    trangthai: 'status',
+    kiemdinhganhat: 'lastInspection', ngaykiemdinh: 'lastInspection', ngaykiemdinhganhat: 'lastInspection',
+    linkanh: 'photo', anh: 'photo', hinhanh: 'photo',
+    ghichu: 'remarks',
+    mavitri: 'locationCode',
   };
-  const normHeader = (h) => String(h || '').toLowerCase().replace(/[^a-z0-9%]/g, '');
+  const normHeader = (h) => String(h || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9%]/g, '');
 
   /* ---------------- export ---------------- */
   IO.assetRows = (views) => [IO.ASSET_COLUMNS.map((c) => c.h), ...views.map((v) => IO.ASSET_COLUMNS.map((c) => c.get(v) ?? ''))];
 
   IO.historyRows = (list) => [
-    ['Date Time', 'Action', 'Asset ID', 'Asset Name', 'Previous Floor', 'Previous Zone', 'Previous X', 'Previous Y', 'Previous Location Code', 'New Floor', 'New Zone', 'New X', 'New Y', 'New Location Code', 'Updated By', 'Reason'],
+    ['Thời gian', 'Hành động', 'Asset ID', 'Tên tài sản', 'Tầng cũ', 'Khu vực cũ', 'X cũ', 'Y cũ', 'Location Code cũ', 'Tầng mới', 'Khu vực mới', 'X mới', 'Y mới', 'Location Code mới', 'Người cập nhật', 'Lý do'],
     ...list.map((h) => [
       h.at, h.action, h.assetId, h.assetName,
       h.prev ? h.prev.floorCode : '', h.prev ? h.prev.zoneCode : '', h.prev ? h.prev.x : '', h.prev ? h.prev.y : '', h.prev ? h.prev.code : '',
@@ -59,7 +74,7 @@ window.FAM = window.FAM || {};
     ]),
   ];
   IO.zoneRows = () => [
-    ['Zone Code', 'Zone Name', 'Floor', 'Department', 'X', 'Y', 'Width', 'Height', 'Asset Count'],
+    ['Mã khu vực', 'Tên khu vực', 'Tầng', 'Bộ phận', 'X', 'Y', 'Rộng', 'Cao', 'Số tài sản'],
     ...S.zones().map((z) => [z.code, z.name, (S.floor(z.floorId) || {}).code, (S.dept(z.departmentId) || {}).code, z.x, z.y, z.w, z.h, S.raw().locations.filter((l) => l.zoneId === z.id).length]),
   ];
 
@@ -67,7 +82,7 @@ window.FAM = window.FAM || {};
 
   IO.downloadXLSX = (sheets, name) => {
     if (!IO.hasXLSX()) {
-      F.ui.toast('Excel library not loaded (offline?). Use CSV export instead — it opens in Excel too.', 'error', 5000);
+      F.ui.toast('Chưa tải được thư viện Excel (mất mạng?). Hãy xuất CSV — Excel vẫn mở được.', 'error', 5000);
       return false;
     }
     const wb = XLSX.utils.book_new();
@@ -83,44 +98,44 @@ window.FAM = window.FAM || {};
   IO.exportAssets = (format, views) => {
     views = views || S.views();
     const rows = IO.assetRows(views);
-    const base = `factory-assets-${U.stamp()}`;
+    const base = `so-tai-san-${U.stamp()}`;
     if (format === 'xlsx') {
-      const notice = [['Factory Asset Map export'], ['Exported', new Date().toLocaleString()], ['Factory', S.factory().name],
-        ['Coordinates', 'Normalized % of floor drawing (0–100). Origin top-left, X → right, Y ↓ down.']];
-      if (S.isDemo()) notice.push(['NOTE', 'DEMO DATA — illustrative only, not actual factory records.']);
+      const notice = [['Xuất từ Bản đồ tài sản nhà máy'], ['Thời gian xuất', new Date().toLocaleString('vi-VN')], ['Nhà máy', S.factory().name],
+        ['Tọa độ', '% chuẩn hoá theo bản vẽ (0–100). Gốc ở góc trên bên trái, X → sang phải, Y ↓ xuống dưới.']];
+      if (S.isDemo()) notice.push(['LƯU Ý', 'DỮ LIỆU DEMO — chỉ mang tính minh họa, không phải hồ sơ thực tế của nhà máy.']);
       IO.downloadXLSX([
-        { name: 'Assets', rows, widths: [15, 32, 12, 22, 7, 7, 6, 6, 24, 30, 12, 18, 15, 14, 20, 40] },
-        { name: 'Zones', rows: IO.zoneRows() },
-        { name: 'Location History', rows: IO.historyRows(S.history().slice().reverse()) },
-        { name: 'About', rows: notice, widths: [14, 80] },
+        { name: 'Tài sản', rows, widths: [15, 34, 14, 24, 7, 9, 6, 6, 24, 32, 12, 18, 18, 16, 20, 40] },
+        { name: 'Khu vực', rows: IO.zoneRows() },
+        { name: 'Lịch sử vị trí', rows: IO.historyRows(S.history().slice().reverse()) },
+        { name: 'Thông tin', rows: notice, widths: [16, 80] },
       ], base + '.xlsx');
     } else IO.downloadCSV(rows, base + '.csv');
   };
 
   IO.templateRows = () => [
     IO.ASSET_COLUMNS.filter((c) => c.key !== 'locationCode').map((c) => c.h),
-    ['AST-EQP-9001', 'EXAMPLE – Coffee Extractor EX-09', 'Equipment', 'Production', 'F1', 'EXT', '12.5', '20', 'Example Maker', 'MOD-100', 'SN-0000-0001', 'Active', '2026-01-31', '', 'EXAMPLE ROW – delete before importing'],
-    ['AST-UTL-9001', 'EXAMPLE – Air Compressor AC-09', 'Utility', 'EN', 'F1', 'Utility', '88', '20', 'Example Maker', 'AC-50', 'SN-0000-0002', 'Inspection Due', '', '', 'EXAMPLE ROW – delete before importing'],
+    ['AST-EQP-9001', 'VÍ DỤ – Bình trích ly cà phê EX-09', 'Thiết bị', 'Sản xuất', 'F1', 'EXT', '12.5', '20', 'Hãng ví dụ', 'MOD-100', 'SN-0000-0001', 'Đang hoạt động', '2026-01-31', '', 'DÒNG VÍ DỤ – xoá trước khi nhập'],
+    ['AST-UTL-9001', 'VÍ DỤ – Máy nén khí AC-09', 'UTL', 'EN', 'F1', 'Phụ trợ', '88', '20', 'Hãng ví dụ', 'AC-50', 'SN-0000-0002', 'Đến hạn kiểm định', '', '', 'DÒNG VÍ DỤ – xoá trước khi nhập'],
   ];
   IO.downloadTemplate = (format) => {
     const rows = IO.templateRows();
     if (format === 'xlsx') {
       const help = [
-        ['Column', 'Required', 'Rules'],
-        ['Asset ID', 'Yes', 'Unique, never reused. Recommended format AST-<CAT>-0001. A–Z 0–9 - _ . /'],
-        ['Asset Name', 'Yes', 'Free text'],
-        ['Category', 'Yes', 'Category code or name: ' + S.categories().map((c) => c.code + ' = ' + c.name).join(', ')],
-        ['Department', 'Yes', 'Responsible department code or name: ' + S.departments().map((d) => d.code).join(', ')],
-        ['Floor', 'Yes', 'Floor code or name: ' + S.floors().map((f) => f.code).join(', ')],
-        ['Zone', 'Yes', 'Zone code or name on that floor: ' + S.zones().map((z) => (S.floor(z.floorId) || {}).code + '/' + z.code).join(', ')],
-        ['X / Y', 'Yes', 'Number 0–100 = % of drawing width/height. Origin top-left, X right, Y down.'],
-        ['Status', 'Yes', S.statuses().map((s) => s.name).join(' / ')],
-        ['Last Inspection', 'No', 'YYYY-MM-DD (DD/MM/YYYY also accepted)'],
-        ['Photo URL', 'No', 'http(s) link to an image (optional)'],
-        ['Location Code', '—', 'Not imported: calculated automatically'],
+        ['Cột', 'Bắt buộc', 'Quy tắc'],
+        ['Asset ID', 'Có', 'Duy nhất, không dùng lại. Định dạng khuyến nghị AST-<NHÓM>-0001. Ký tự A–Z 0–9 - _ . /'],
+        ['Tên tài sản', 'Có', 'Văn bản tự do'],
+        ['Nhóm tài sản', 'Có', 'Mã hoặc tên nhóm: ' + S.categories().map((c) => c.code + ' = ' + c.name).join(', ')],
+        ['Bộ phận quản lý', 'Có', 'Mã hoặc tên bộ phận: ' + S.departments().map((d) => d.code + ' = ' + d.name).join(', ')],
+        ['Tầng', 'Có', 'Mã hoặc tên tầng: ' + S.floors().map((f) => f.code).join(', ')],
+        ['Khu vực', 'Có', 'Mã hoặc tên khu vực trên tầng đó: ' + S.zones().map((z) => (S.floor(z.floorId) || {}).code + '/' + z.code).join(', ')],
+        ['X / Y', 'Có', 'Số 0–100 = % chiều rộng/cao bản vẽ. Gốc ở góc trên bên trái, X sang phải, Y xuống dưới.'],
+        ['Trạng thái', 'Có', S.statuses().map((s) => s.name).join(' / ')],
+        ['Kiểm định gần nhất', 'Không', 'YYYY-MM-DD (chấp nhận DD/MM/YYYY)'],
+        ['Link ảnh', 'Không', 'Đường dẫn http(s) tới ảnh (tuỳ chọn)'],
+        ['Location Code', '—', 'Không cần nhập: hệ thống tự tính'],
       ];
-      IO.downloadXLSX([{ name: 'Assets', rows, widths: [15, 32, 12, 14, 7, 9, 6, 6, 16, 12, 16, 15, 14, 20, 36] }, { name: 'Instructions', rows: help, widths: [16, 10, 90] }], 'asset-import-template.xlsx');
-    } else IO.downloadCSV(rows, 'asset-import-template.csv');
+      IO.downloadXLSX([{ name: 'Tài sản', rows, widths: [15, 36, 14, 18, 7, 9, 6, 6, 16, 12, 16, 18, 16, 20, 36] }, { name: 'Hướng dẫn', rows: help, widths: [18, 10, 90] }], 'mau-nhap-tai-san.xlsx');
+    } else IO.downloadCSV(rows, 'mau-nhap-tai-san.csv');
   };
 
   /* ---------------- import ---------------- */
@@ -128,12 +143,12 @@ window.FAM = window.FAM || {};
     const name = file.name.toLowerCase();
     if (name.endsWith('.csv') || name.endsWith('.txt')) return U.csv.parse(await U.readFile(file, 'text'));
     if (name.endsWith('.xlsx') || name.endsWith('.xls') || name.endsWith('.ods')) {
-      if (!IO.hasXLSX()) throw new Error('Excel library not loaded (offline?). Save the sheet as CSV and import the CSV instead.');
+      if (!IO.hasXLSX()) throw new Error('Chưa tải được thư viện Excel (mất mạng?). Hãy lưu sheet thành CSV rồi nhập file CSV.');
       const wb = XLSX.read(await U.readFile(file, 'arrayBuffer'), { type: 'array', cellDates: false });
-      const ws = wb.Sheets[wb.SheetNames.includes('Assets') ? 'Assets' : wb.SheetNames[0]];
+      const ws = wb.Sheets[['Tài sản', 'Assets'].find((n) => wb.SheetNames.includes(n)) || wb.SheetNames[0]];
       return XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: '' }).filter((r) => r.some((v) => String(v).trim() !== ''));
     }
-    throw new Error('Unsupported file type. Use .csv, .xlsx or .xls');
+    throw new Error('Định dạng tệp không hỗ trợ. Dùng .csv, .xlsx hoặc .xls');
   };
 
   /*
@@ -142,12 +157,12 @@ window.FAM = window.FAM || {};
    */
   IO.analyse = (rows, mode) => {
     const res = { creates: [], updates: [], errors: [], skipped: [], headerErrors: [] };
-    if (!rows.length) { res.headerErrors.push('The file is empty.'); return res; }
+    if (!rows.length) { res.headerErrors.push('Tệp không có dữ liệu.'); return res; }
     const header = rows[0].map((h) => ALIASES[normHeader(h)] || null);
     const required = IO.ASSET_COLUMNS.filter((c) => c.req).map((c) => c.key);
     const missing = required.filter((k) => !header.includes(k));
     if (missing.length) {
-      res.headerErrors.push('Missing required column(s): ' + missing.map((k) => IO.ASSET_COLUMNS.find((c) => c.key === k).h).join(', '));
+      res.headerErrors.push('Thiếu cột bắt buộc: ' + missing.map((k) => IO.ASSET_COLUMNS.find((c) => c.key === k).h).join(', '));
       return res;
     }
     const seen = new Set();
@@ -159,29 +174,29 @@ window.FAM = window.FAM || {};
       const covered = new Set(); // fields that already have a specific message
       const fail = (key, msg) => { errs.push(msg); covered.add(key); };
       const id = String(o.id || '').trim().toUpperCase();
-      if (id && seen.has(id)) fail('id', `Duplicate Asset ID "${id}" within the file`);
+      if (id && seen.has(id)) fail('id', `Asset ID "${id}" bị trùng trong tệp`);
       seen.add(id);
       const cat = S.findCategory(o.category);
       const dept = S.findDept(o.department);
       const floor = S.findFloor(o.floor);
       const zone = floor ? S.findZone(o.zone, floor.id) : null;
       const st = S.findStatus(o.status);
-      if (String(o.category).trim() && !cat) fail('categoryId', `Unknown category "${o.category}"`);
-      if (String(o.department).trim() && !dept) fail('departmentId', `Unknown department "${o.department}"`);
-      if (String(o.floor).trim() && !floor) { fail('floorId', `Unknown floor "${o.floor}"`); covered.add('zoneId'); }
-      if (floor && String(o.zone).trim() && !zone) fail('zoneId', `Zone "${o.zone}" not found on floor ${floor.code}`);
-      if (String(o.status).trim() && !st) fail('status', `Unknown status "${o.status}"`);
+      if (String(o.category).trim() && !cat) fail('categoryId', `Không có nhóm "${o.category}"`);
+      if (String(o.department).trim() && !dept) fail('departmentId', `Không có bộ phận "${o.department}"`);
+      if (String(o.floor).trim() && !floor) { fail('floorId', `Không có tầng "${o.floor}"`); covered.add('zoneId'); }
+      if (floor && String(o.zone).trim() && !zone) fail('zoneId', `Không có khu vực "${o.zone}" trên tầng ${floor.code}`);
+      if (String(o.status).trim() && !st) fail('status', `Không có trạng thái "${o.status}"`);
       const master = {
         id, name: String(o.name || '').trim(), categoryId: cat && cat.id, departmentId: dept && dept.id,
         manufacturer: o.manufacturer, model: o.model, serial: o.serial, status: st && st.id,
         lastInspection: U.isoDate(o.lastInspection), remarks: o.remarks,
         photo: /^https?:\/\//i.test(String(o.photo || '').trim()) ? String(o.photo).trim() : undefined,
       };
-      if (String(o.lastInspection || '').trim() && !master.lastInspection) fail('lastInspection', `Invalid date "${o.lastInspection}"`);
+      if (String(o.lastInspection || '').trim() && !master.lastInspection) fail('lastInspection', `Ngày không hợp lệ "${o.lastInspection}"`);
       const loc = { floorId: floor && floor.id, zoneId: zone && zone.id, x: U.num(o.x), y: U.num(o.y) };
       const existing = id && S.asset(id);
-      if (existing && mode === 'add') fail('id', `Asset ID "${id}" already exists (mode: add new only)`);
-      if (!existing && id && S.history().some((h) => h.assetId === id && h.action === 'REMOVE')) fail('id', `Asset ID "${id}" belonged to a deleted asset — IDs are never reused`);
+      if (existing && mode === 'add') fail('id', `Asset ID "${id}" đã tồn tại (chế độ: chỉ thêm mới)`);
+      if (!existing && id && S.history().some((h) => h.assetId === id && h.action === 'REMOVE')) fail('id', `Asset ID "${id}" thuộc tài sản đã xoá — không được dùng lại`);
       const v = S.validateAsset(master, loc, false);
       Object.entries(v).forEach(([k, m]) => { if (!covered.has(k)) errs.push(m); });
       if (errs.length) { res.errors.push({ line, id, errs }); return; }
@@ -199,7 +214,7 @@ window.FAM = window.FAM || {};
   IO.apply = (analysis, { by, reason }) => {
     let created = 0, updated = 0, moved = 0;
     S.batch(() => {
-      analysis.creates.forEach(({ master, loc }) => { S.createAsset(master, loc, { by, reason: 'Initial registration (' + reason + ')', silent: true }); created++; });
+      analysis.creates.forEach(({ master, loc }) => { S.createAsset(master, loc, { by, reason: 'Đăng ký ban đầu (' + reason + ')', silent: true }); created++; });
       analysis.updates.forEach(({ master, loc }) => {
         const before = { ...S.location(master.id) };
         S.updateAsset(master.id, master, loc, { by, reason, silent: true });
@@ -214,16 +229,16 @@ window.FAM = window.FAM || {};
   /* ---------------- JSON backup ---------------- */
   IO.backup = () => {
     const data = S.exportJSON();
-    U.download(`factory-asset-map-backup-${U.stamp()}.json`, JSON.stringify(data, null, 1), 'application/json');
+    U.download(`sao-luu-ban-do-tai-san-${U.stamp()}.json`, JSON.stringify(data, null, 1), 'application/json');
   };
   IO.restore = async () => {
     const file = await U.pickFile('.json,application/json');
     if (!file) return;
     let obj;
-    try { obj = JSON.parse(await U.readFile(file, 'text')); } catch (e) { F.ui.toast('Not a valid JSON file.', 'error'); return; }
+    try { obj = JSON.parse(await U.readFile(file, 'text')); } catch (e) { F.ui.toast('Tệp JSON không hợp lệ.', 'error'); return; }
     const n = obj && Array.isArray(obj.assets) ? obj.assets.length : 0;
-    const ok = await F.ui.confirm(`Restore <b>${U.esc(file.name)}</b> with ${n} assets? This replaces <b>all</b> current data in this browser.`, { okLabel: 'Restore backup', danger: true });
+    const ok = await F.ui.confirm(`Khôi phục <b>${U.esc(file.name)}</b> gồm ${n} tài sản? Thao tác này thay <b>toàn bộ</b> dữ liệu hiện tại.`, { okLabel: 'Khôi phục', danger: true });
     if (!ok) return;
-    try { S.importJSON(obj); F.ui.toast('Backup restored.', 'success'); } catch (e) { F.ui.toast(e.message, 'error', 6000); }
+    try { S.importJSON(obj); if (!F.remote.enabled()) F.ui.toast('Đã khôi phục bản sao lưu.', 'success'); } catch (e) { F.ui.toast(e.message, 'error', 6000); }
   };
 })(window.FAM);

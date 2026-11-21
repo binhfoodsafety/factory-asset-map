@@ -25,7 +25,7 @@ window.FAM = window.FAM || {};
     const el = U.h(`
       <div class="modal-backdrop">
         <div class="modal ${size}" role="dialog" aria-modal="true" aria-label="${U.esc(title)}">
-          <header class="modal-head"><h3>${U.esc(title)}</h3><button class="icon-btn" data-close title="Close">${U.icon('x')}</button></header>
+          <header class="modal-head"><h3>${U.esc(title)}</h3><button class="icon-btn" data-close title="Đóng">${U.icon('x')}</button></header>
           <div class="modal-body"></div>
           <footer class="modal-foot"></footer>
         </div>
@@ -67,14 +67,14 @@ window.FAM = window.FAM || {};
     return api;
   };
 
-  UI.confirm = (message, { title = 'Please confirm', okLabel = 'Confirm', danger = false } = {}) =>
+  UI.confirm = (message, { title = 'Xác nhận', okLabel = 'Đồng ý', danger = false } = {}) =>
     new Promise((resolve) => {
       let answered = false;
       UI.modal({
         title, size: 'modal-sm',
         body: `<p class="confirm-msg">${message}</p>`,
         actions: [
-          { label: 'Cancel', onClick: () => { answered = true; resolve(false); } },
+          { label: 'Hủy', onClick: () => { answered = true; resolve(false); } },
           { label: okLabel, primary: !danger, danger, onClick: () => { answered = true; resolve(true); } },
         ],
         onClose: () => { if (!answered) resolve(false); },

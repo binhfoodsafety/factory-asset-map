@@ -166,7 +166,7 @@ window.FAM = window.FAM || {};
       pushing = false;
       if (res.rejected.length) {
         const msgs = [...new Set(res.rejected.filter((r) => r.reason !== 'Asset rejected').map((r) => r.reason))];
-        UI.toast('Server rejected some changes: ' + msgs.join('; ') + '. Reloaded the server version.', 'error', 8000);
+        UI.toast('Máy chủ từ chối một số thay đổi: ' + msgs.join('; ') + '. Đã tải lại dữ liệu từ máy chủ.', 'error', 8000);
         await R.pull(rej);
       } else setStatus('online');
     } catch (e) {
@@ -182,12 +182,12 @@ window.FAM = window.FAM || {};
       let key = null;
       try { key = sessionStorage.getItem('fam.adminKey'); } catch (e) { /* ignore */ }
       if (key) return resolve(key);
-      const form = U.h(`<form><p class="small">This replaces <b>all shared data on the server</b> for every user. Enter the admin key (set on the Cloudflare Worker) to continue.</p>
+      const form = U.h(`<form><p class="small">Thao tác này thay <b>toàn bộ dữ liệu dùng chung trên máy chủ</b> cho mọi người dùng. Nhập admin key (đặt trên Cloudflare Worker) để tiếp tục.</p>
         <div class="field"><label>Admin key</label><input name="k" type="password" autocomplete="off"></div></form>`);
       let done = false;
       UI.modal({
-        title: 'Admin key required', size: 'modal-sm', body: form,
-        actions: [{ label: 'Cancel' }, { label: 'Continue', primary: true, onClick: () => { done = true; resolve(U.$('[name=k]', form).value.trim()); } }],
+        title: 'Cần admin key', size: 'modal-sm', body: form,
+        actions: [{ label: 'Hủy' }, { label: 'Tiếp tục', primary: true, onClick: () => { done = true; resolve(U.$('[name=k]', form).value.trim()); } }],
         onClose: () => { if (!done) resolve(null); },
       });
     });
@@ -195,7 +195,7 @@ window.FAM = window.FAM || {};
   U.bus.on('local-replace', async () => {
     if (!base) return;
     const key = await askAdminKey();
-    if (!key) { UI.toast('Cancelled — server data unchanged. Reloading server data.', 'info'); return reloadAll(); }
+    if (!key) { UI.toast('Đã hủy — dữ liệu máy chủ không đổi. Đang tải lại dữ liệu từ máy chủ.', 'info'); return reloadAll(); }
     setStatus('saving');
     try {
       const records = S.toRecords();
@@ -206,10 +206,10 @@ window.FAM = window.FAM || {};
       sync.since = res.now;
       saveSync();
       setStatus('online');
-      UI.toast('Server data replaced for all users.', 'success');
+      UI.toast('Đã thay dữ liệu máy chủ cho tất cả người dùng.', 'success');
     } catch (e) {
       try { sessionStorage.removeItem('fam.adminKey'); } catch (err) { /* ignore */ }
-      UI.toast('Server data NOT changed: ' + e.message + ' — reloading server data.', 'error', 7000);
+      UI.toast('Dữ liệu máy chủ KHÔNG thay đổi: ' + e.message + ' — đang tải lại dữ liệu từ máy chủ.', 'error', 7000);
       reloadAll();
     }
   });

@@ -14,7 +14,7 @@
 
   <!-- corridor -->
   <rect x="20" y="360" width="960" height="48" fill="#f6f8fb"/>
-  <text x="500" y="389" font-size="11" fill="#a0aec0" text-anchor="middle" letter-spacing="4">CORRIDOR</text>
+  <text x="500" y="389" font-size="11" fill="#a0aec0" text-anchor="middle" letter-spacing="4">HÀNH LANG</text>
 
   <!-- furniture / benches (illustrative) -->
   <g fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5">
@@ -55,15 +55,15 @@
 
   <!-- room labels -->
   <g font-size="13" fill="#64748b" font-weight="bold" letter-spacing="1.5">
-    <text x="34" y="348">LABORATORY (QC / MICRO)</text>
-    <text x="414" y="348">OFFICE</text>
-    <text x="764" y="348">SPARE PARTS STORE</text>
+    <text x="34" y="348">PHÒNG THÍ NGHIỆM (QC / VI SINH)</text>
+    <text x="414" y="348">VĂN PHÒNG</text>
+    <text x="764" y="348">KHO PHỤ TÙNG</text>
   </g>
   <g font-size="11" fill="#94a3b8" letter-spacing="1">
-    <text x="34" y="566">MEETING ROOM</text>
-    <text x="314" y="566">CANTEEN</text>
-    <text x="714" y="414" dy="-2">STAIR / LIFT</text>
-    <text x="834" y="566">RESTROOMS</text>
+    <text x="34" y="566">PHÒNG HỌP</text>
+    <text x="314" y="566">NHÀ ĂN</text>
+    <text x="714" y="414" dy="-2">CẦU THANG</text>
+    <text x="834" y="566">NHÀ VỆ SINH</text>
   </g>
 
   <!-- north arrow -->
@@ -73,5 +73,5 @@
   </g>
 
   <!-- title -->
-  <text x="20" y="15" font-size="10" fill="#64748b">DEMO COFFEE FACTORY · FLOOR 2 · QC LAB &amp; ADMINISTRATION — SAMPLE LAYOUT (ILLUSTRATIVE ONLY, NOT TO SCALE)</text>
+  <text x="20" y="15" font-size="10" fill="#64748b">NHÀ MÁY CÀ PHÊ DEMO · TẦNG 2 · PHÒNG QC &amp; HÀNH CHÍNH — MẶT BẰNG MẪU (CHỈ MINH HỌA, KHÔNG THEO TỈ LỆ)</text>
 </svg>

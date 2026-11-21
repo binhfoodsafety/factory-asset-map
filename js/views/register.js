@@ -11,41 +11,41 @@ window.FAM = window.FAM || {};
 
   const COLS = [
     { k: 'id', h: 'Asset ID', cls: 'sticky-col', fmt: (v) => `<a href="#" class="asset-id" data-act="open">${U.esc(v.id)}</a>` },
-    { k: 'name', h: 'Asset Name', fmt: (v) => U.esc(v.name) },
-    { k: 'categoryName', h: 'Category', fmt: (v) => `<span class="chip">${U.shapeSvg(v.categoryShape, '#64748b', 10)} ${U.esc(v.categoryName)}</span>` },
-    { k: 'deptName', h: 'Department', fmt: (v) => U.esc(v.deptName) },
-    { k: 'floorCode', h: 'Floor', fmt: (v) => U.esc(v.floorCode) },
-    { k: 'zoneName', h: 'Zone', fmt: (v) => U.esc(v.zoneName) },
+    { k: 'name', h: 'Tên tài sản', fmt: (v) => U.esc(v.name) },
+    { k: 'categoryName', h: 'Nhóm', fmt: (v) => `<span class="chip">${U.shapeSvg(v.categoryShape, '#64748b', 10)} ${U.esc(v.categoryName)}</span>` },
+    { k: 'deptName', h: 'Bộ phận', fmt: (v) => U.esc(v.deptName) },
+    { k: 'floorCode', h: 'Tầng', fmt: (v) => U.esc(v.floorCode) },
+    { k: 'zoneName', h: 'Khu vực', fmt: (v) => U.esc(v.zoneName) },
     { k: 'x', h: 'X', num: true, fmt: (v) => v.x },
     { k: 'y', h: 'Y', num: true, fmt: (v) => v.y },
     { k: 'locationCode', h: 'Location Code', fmt: (v) => `<span class="loc-code">${U.esc(v.locationCode)}</span>` },
-    { k: 'manufacturer', h: 'Manufacturer', fmt: (v) => U.esc(v.manufacturer) },
+    { k: 'manufacturer', h: 'Nhà sản xuất', fmt: (v) => U.esc(v.manufacturer) },
     { k: 'model', h: 'Model', fmt: (v) => U.esc(v.model) },
     { k: 'serial', h: 'Serial Number', fmt: (v) => `<span class="mono">${U.esc(v.serial)}</span>` },
-    { k: 'statusName', h: 'Status', fmt: (v) => UI.statusBadge(v.status) },
-    { k: 'lastInspection', h: 'Last Insp.', fmt: (v) => `<span class="nowrap">${U.fmtDate(v.lastInspection)}</span>` },
-    { k: 'photo', h: 'Photo', fmt: (v) => (v.photo ? `<span class="photo-thumb" style="width:34px;height:26px;background-image:url('${U.esc(v.photo)}')"></span>` : '<span class="muted">—</span>') },
-    { k: 'remarks', h: 'Remarks', fmt: (v) => `<span class="muted small" title="${U.esc(v.remarks)}">${U.esc((v.remarks || '').slice(0, 40))}${(v.remarks || '').length > 40 ? '…' : ''}</span>` },
+    { k: 'statusName', h: 'Trạng thái', fmt: (v) => UI.statusBadge(v.status) },
+    { k: 'lastInspection', h: 'Kiểm định', fmt: (v) => `<span class="nowrap">${U.fmtDate(v.lastInspection)}</span>` },
+    { k: 'photo', h: 'Ảnh', fmt: (v) => (v.photo ? `<span class="photo-thumb" style="width:34px;height:26px;background-image:url('${U.esc(v.photo)}')"></span>` : '<span class="muted">—</span>') },
+    { k: 'remarks', h: 'Ghi chú', fmt: (v) => `<span class="muted small" title="${U.esc(v.remarks)}">${U.esc((v.remarks || '').slice(0, 40))}${(v.remarks || '').length > 40 ? '…' : ''}</span>` },
   ];
 
   function build() {
     root = U.$('#view-register');
     root.innerHTML = `
       <div class="view-head">
-        <h2>Asset Register</h2>
+        <h2>Sổ tài sản (Asset Register)</h2>
         <div class="btn-row">
-          <button class="btn" id="rgImport">${U.icon('upload', 16)}Import CSV / Excel</button>
-          <button class="btn" id="rgExportCsv">${U.icon('download', 16)}Export CSV</button>
-          <button class="btn" id="rgExportXlsx">${U.icon('download', 16)}Export Excel</button>
-          <button class="btn btn-primary" id="rgAdd">${U.icon('plus', 16)}Add asset</button>
+          <button class="btn" id="rgImport">${U.icon('upload', 16)}Nhập CSV / Excel</button>
+          <button class="btn" id="rgExportCsv">${U.icon('download', 16)}Xuất CSV</button>
+          <button class="btn" id="rgExportXlsx">${U.icon('download', 16)}Xuất Excel</button>
+          <button class="btn btn-primary" id="rgAdd">${U.icon('plus', 16)}Thêm tài sản</button>
         </div>
-        <div class="sub">Asset master data. Asset ID is permanent; Location Code is recalculated whenever an asset moves.</div>
+        <div class="sub">Dữ liệu gốc của tài sản. Asset ID cố định; Location Code được tính lại mỗi khi tài sản di chuyển.</div>
       </div>
       <div class="card">
         <div class="toolbar">
-          <div class="search">${U.icon('search', 16)}<input type="search" id="rgQ" placeholder="Search ID, name, serial, model, location code…"></div>
+          <div class="search">${U.icon('search', 16)}<input type="search" id="rgQ" placeholder="Tìm ID, tên, serial, model, location code…"></div>
           <select id="rgCat"></select><select id="rgDept"></select><select id="rgFloor"></select><select id="rgZone"></select><select id="rgStatus"></select>
-          <button class="btn btn-sm btn-ghost" id="rgClear">Clear</button>
+          <button class="btn btn-sm btn-ghost" id="rgClear">Xoá lọc</button>
           <span class="count" id="rgCount"></span>
         </div>
         <div class="table-wrap" id="rgTableWrap"></div>
@@ -64,11 +64,11 @@ window.FAM = window.FAM || {};
   }
 
   function renderFilters() {
-    U.$('#rgCat').innerHTML = UI.options(S.categories(), st.cat, { empty: 'All categories' });
-    U.$('#rgDept').innerHTML = UI.options(S.departments(), st.dept, { empty: 'All departments' });
-    U.$('#rgFloor').innerHTML = UI.options(S.floors(), st.floor, { empty: 'All floors', label: (f) => f.code + ' – ' + f.name });
-    U.$('#rgZone').innerHTML = UI.options(S.zones(st.floor || undefined), st.zone, { empty: 'All zones', label: (z) => `${S.floor(z.floorId)?.code}/${z.code} – ${z.name}` });
-    U.$('#rgStatus').innerHTML = UI.options(S.statuses(), st.status, { empty: 'All statuses' });
+    U.$('#rgCat').innerHTML = UI.options(S.categories(), st.cat, { empty: 'Tất cả nhóm' });
+    U.$('#rgDept').innerHTML = UI.options(S.departments(), st.dept, { empty: 'Tất cả bộ phận' });
+    U.$('#rgFloor').innerHTML = UI.options(S.floors(), st.floor, { empty: 'Tất cả tầng', label: (f) => f.code + ' – ' + f.name });
+    U.$('#rgZone').innerHTML = UI.options(S.zones(st.floor || undefined), st.zone, { empty: 'Tất cả khu vực', label: (z) => `${S.floor(z.floorId)?.code}/${z.code} – ${z.name}` });
+    U.$('#rgStatus').innerHTML = UI.options(S.statuses(), st.status, { empty: 'Tất cả trạng thái' });
   }
 
   function filtered() {
@@ -91,29 +91,29 @@ window.FAM = window.FAM || {};
     const pages = Math.max(1, Math.ceil(list.length / st.size));
     st.page = Math.min(st.page, pages - 1);
     const rows = list.slice(st.page * st.size, (st.page + 1) * st.size);
-    U.$('#rgCount').textContent = `${list.length} of ${S.assets().length} assets`;
+    U.$('#rgCount').textContent = `${list.length}/${S.assets().length} tài sản`;
     U.$('#rgTableWrap').innerHTML = rows.length
       ? `<table class="tbl tbl-nowrap"><thead><tr>
           ${COLS.map((c) => `<th class="sortable ${c.cls || ''} ${c.num ? 'num' : ''} ${st.sort === c.k ? 'sorted' : ''}" data-sort="${c.k}">${c.h}<span class="sort">${st.sort === c.k ? (st.dir > 0 ? '▲' : '▼') : '▲'}</span></th>`).join('')}
-          <th class="actions">Actions</th></tr></thead>
+          <th class="actions">Thao tác</th></tr></thead>
         <tbody>${rows.map((v) => `<tr data-id="${U.esc(v.id)}">
           ${COLS.map((c) => `<td class="${c.cls || ''} ${c.num ? 'num' : ''}">${c.fmt(v)}</td>`).join('')}
           <td class="actions">
-            <button class="btn btn-sm" data-act="locate" title="Show on map">${U.icon('locate', 14)}Locate</button>
-            <button class="icon-btn" data-act="move" title="Move (update location)">${U.icon('move', 16)}</button>
-            <button class="icon-btn" data-act="edit" title="Edit">${U.icon('edit', 16)}</button>
-            <button class="icon-btn" data-act="qr" title="QR code">${U.icon('qr', 16)}</button>
-            <button class="icon-btn" data-act="delete" title="Delete" style="color:var(--red)">${U.icon('trash', 16)}</button>
+            <button class="btn btn-sm" data-act="locate" title="Xem trên sơ đồ">${U.icon('locate', 14)}Định vị</button>
+            <button class="icon-btn" data-act="move" title="Di chuyển (cập nhật vị trí)">${U.icon('move', 16)}</button>
+            <button class="icon-btn" data-act="edit" title="Sửa">${U.icon('edit', 16)}</button>
+            <button class="icon-btn" data-act="qr" title="Mã QR">${U.icon('qr', 16)}</button>
+            <button class="icon-btn" data-act="delete" title="Xoá" style="color:var(--red)">${U.icon('trash', 16)}</button>
           </td></tr>`).join('')}</tbody></table>`
-      : UI.empty(S.assets().length ? 'No assets match the current search / filters.' : 'No assets yet. Add an asset or import a CSV / Excel file.');
+      : UI.empty(S.assets().length ? 'Không có tài sản phù hợp với tìm kiếm / bộ lọc.' : 'Chưa có tài sản. Hãy thêm tài sản hoặc nhập file CSV / Excel.');
     U.$$('th[data-sort]', root).forEach((th) => th.addEventListener('click', () => {
       st.dir = st.sort === th.dataset.sort ? -st.dir : 1;
       st.sort = th.dataset.sort;
       renderTable();
     }));
     U.$('#rgPager').innerHTML = pages > 1
-      ? `<span>Page ${st.page + 1} / ${pages}</span><span class="sp"></span><button class="btn btn-sm" data-pg="-1" ${st.page === 0 ? 'disabled' : ''}>Previous</button><button class="btn btn-sm" data-pg="1" ${st.page >= pages - 1 ? 'disabled' : ''}>Next</button>`
-      : `<span>Click a column header to sort · ${list.length} row(s)</span>`;
+      ? `<span>Trang ${st.page + 1} / ${pages}</span><span class="sp"></span><button class="btn btn-sm" data-pg="-1" ${st.page === 0 ? 'disabled' : ''}>Trước</button><button class="btn btn-sm" data-pg="1" ${st.page >= pages - 1 ? 'disabled' : ''}>Sau</button>`
+      : `<span>Bấm tiêu đề cột để sắp xếp · ${list.length} dòng</span>`;
     U.$$('[data-pg]', root).forEach((b) => b.addEventListener('click', () => { st.page += Number(b.dataset.pg); renderTable(); }));
   }
 
@@ -129,8 +129,8 @@ window.FAM = window.FAM || {};
     else if (act === 'qr') F.views.qr.showFor(id);
     else if (act === 'delete') {
       const v = S.view(id);
-      const ok = await UI.confirm(`Delete <b>${U.esc(v.id)}</b> – ${U.esc(v.name)} from the register?<br><br><span class="small muted">Location history is kept (a "REMOVE" record is added). The Asset ID will not be reused.</span>`, { title: 'Delete asset', okLabel: 'Delete asset', danger: true });
-      if (ok) { S.deleteAsset(id, { by: S.currentUser() }); UI.toast(`${id} deleted.`, 'success'); }
+      const ok = await UI.confirm(`Xoá <b>${U.esc(v.id)}</b> – ${U.esc(v.name)} khỏi sổ tài sản?<br><br><span class="small muted">Lịch sử vị trí vẫn được giữ (thêm một dòng "REMOVE"). Asset ID sẽ không được dùng lại.</span>`, { title: 'Xoá tài sản', okLabel: 'Xoá tài sản', danger: true });
+      if (ok) { S.deleteAsset(id, { by: S.currentUser() }); UI.toast(`Đã xoá ${id}.`, 'success'); }
     }
   }
 
@@ -139,16 +139,16 @@ window.FAM = window.FAM || {};
     let analysis = null, fileName = '';
     const box = U.h(`<div>
       <div class="callout">${U.icon('info', 16)}<div>
-        Accepted: <b>.csv</b> (comma or semicolon) or <b>.xlsx / .xls</b> (first sheet, or sheet named "Assets").
-        Required columns: Asset ID, Asset Name, Category, Department, Floor, Zone, X, Y, Status.
-        Category / Department / Floor / Zone / Status may be given as code or name. Location Code is calculated automatically.
-        <div class="btn-row" style="margin-top:8px"><button class="btn btn-sm" id="imTplCsv">${U.icon('download', 14)}CSV template</button><button class="btn btn-sm" id="imTplXlsx">${U.icon('download', 14)}Excel template</button></div>
+        Chấp nhận: <b>.csv</b> (dấu phẩy hoặc chấm phẩy) hoặc <b>.xlsx / .xls</b> (sheet đầu tiên, hoặc sheet tên "Assets").
+        Cột bắt buộc: Asset ID, Tên tài sản, Nhóm, Bộ phận, Tầng, Khu vực, X, Y, Trạng thái (tiêu đề tiếng Việt hoặc tiếng Anh đều được).
+        Nhóm / Bộ phận / Tầng / Khu vực / Trạng thái có thể ghi theo mã hoặc tên. Location Code được tính tự động.
+        <div class="btn-row" style="margin-top:8px"><button class="btn btn-sm" id="imTplCsv">${U.icon('download', 14)}Mẫu CSV</button><button class="btn btn-sm" id="imTplXlsx">${U.icon('download', 14)}Mẫu Excel</button></div>
       </div></div>
       <div class="form-grid" style="margin-top:14px">
-        <div class="field full"><label>File</label><input type="file" id="imFile" accept=".csv,.txt,.xlsx,.xls,.ods"></div>
-        <div class="field full"><span class="lbl">Mode</span>
-          <label class="check"><input type="radio" name="mode" value="add" checked> Add new assets only (existing IDs are reported as errors)</label>
-          <label class="check"><input type="radio" name="mode" value="upsert"> Add new and update existing assets (location changes are logged in history)</label></div>
+        <div class="field full"><label>Tệp</label><input type="file" id="imFile" accept=".csv,.txt,.xlsx,.xls,.ods"></div>
+        <div class="field full"><span class="lbl">Chế độ</span>
+          <label class="check"><input type="radio" name="mode" value="add" checked> Chỉ thêm tài sản mới (ID đã tồn tại sẽ báo lỗi)</label>
+          <label class="check"><input type="radio" name="mode" value="upsert"> Thêm mới và cập nhật tài sản đã có (thay đổi vị trí được ghi lịch sử)</label></div>
       </div>
       <div id="imResult" style="margin-top:12px"></div>
     </div>`);
@@ -169,12 +169,12 @@ window.FAM = window.FAM || {};
         }
         const a = analysis;
         out.innerHTML = `<div class="import-summary">
-            <span class="chip" style="background:#dcfce7;color:#166534">${a.creates.length} new</span>
-            <span class="chip" style="background:#e0ecff;color:#1d4ed8">${a.updates.length} update(s)</span>
-            <span class="chip" style="background:#fee2e2;color:#991b1b">${a.errors.length} row(s) with errors – will be skipped</span>
+            <span class="chip" style="background:#dcfce7;color:#166534">${a.creates.length} mới</span>
+            <span class="chip" style="background:#e0ecff;color:#1d4ed8">${a.updates.length} cập nhật</span>
+            <span class="chip" style="background:#fee2e2;color:#991b1b">${a.errors.length} dòng lỗi – sẽ bỏ qua</span>
           </div>
-          ${a.errors.length ? `<div class="err-list">${a.errors.map((e) => `<div><b>Row ${e.line}</b>${e.id ? ` · <span class="mono">${U.esc(e.id)}</span>` : ''}: ${e.errs.map(U.esc).join('; ')}</div>`).join('')}</div>` : ''}
-          ${a.creates.length + a.updates.length ? `<p class="small muted" style="margin-top:8px">Valid rows will be imported when you click <b>Import</b>.</p>` : '<p class="small muted" style="margin-top:8px">Nothing to import.</p>'}`;
+          ${a.errors.length ? `<div class="err-list">${a.errors.map((e) => `<div><b>Dòng ${e.line}</b>${e.id ? ` · <span class="mono">${U.esc(e.id)}</span>` : ''}: ${e.errs.map(U.esc).join('; ')}</div>`).join('')}</div>` : ''}
+          ${a.creates.length + a.updates.length ? `<p class="small muted" style="margin-top:8px">Các dòng hợp lệ sẽ được nhập khi bấm <b>Nhập dữ liệu</b>.</p>` : '<p class="small muted" style="margin-top:8px">Không có dữ liệu để nhập.</p>'}`;
       } catch (e) {
         out.innerHTML = `<div class="callout err">${U.icon('alert', 16)}<div>${U.esc(e.message)}</div></div>`;
       }
@@ -184,14 +184,14 @@ window.FAM = window.FAM || {};
     U.$('#imTplCsv', box).addEventListener('click', () => IO.downloadTemplate('csv'));
     U.$('#imTplXlsx', box).addEventListener('click', () => IO.downloadTemplate('xlsx'));
     UI.modal({
-      title: 'Import assets from CSV / Excel', size: 'modal-lg', body: box,
+      title: 'Nhập tài sản từ CSV / Excel', size: 'modal-lg', body: box,
       actions: [
-        { label: 'Cancel' },
-        { label: 'Import', primary: true, icon: 'upload', onClick: () => {
-          if (!analysis || !(analysis.creates.length + analysis.updates.length)) { UI.toast('Choose a file with at least one valid row.', 'error'); return false; }
+        { label: 'Hủy' },
+        { label: 'Nhập dữ liệu', primary: true, icon: 'upload', onClick: () => {
+          if (!analysis || !(analysis.creates.length + analysis.updates.length)) { UI.toast('Hãy chọn tệp có ít nhất một dòng hợp lệ.', 'error'); return false; }
           try {
-            const r = IO.apply(analysis, { by: S.currentUser(), reason: 'Bulk import: ' + fileName });
-            UI.toast(`Imported: ${r.created} new, ${r.updated} updated (${r.moved} moved). ${analysis.errors.length} row(s) skipped.`, 'success', 5000);
+            const r = IO.apply(analysis, { by: S.currentUser(), reason: 'Nhập hàng loạt: ' + fileName });
+            UI.toast(`Đã nhập: ${r.created} mới, ${r.updated} cập nhật (${r.moved} đổi vị trí). Bỏ qua ${analysis.errors.length} dòng.`, 'success', 5000);
           } catch (e) { UI.toast(e.message, 'error', 6000); return false; }
         } },
       ],

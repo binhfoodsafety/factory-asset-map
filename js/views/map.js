@@ -24,17 +24,17 @@ window.FAM = window.FAM || {};
     root = U.$('#view-map');
     root.innerHTML = `
       <div class="map-top">
-        <button class="btn btn-sm filters-toggle" id="mapFiltersBtn">${U.icon('filter', 16)}<span>Filters</span></button>
+        <button class="btn btn-sm filters-toggle" id="mapFiltersBtn">${U.icon('filter', 16)}<span>Bộ lọc</span></button>
         <form class="search" id="mapSearchForm" autocomplete="off">${U.icon('search', 16)}
-          <input id="mapSearch" type="search" list="assetIdList" placeholder="Asset ID or name, then Enter" aria-label="Search asset on map">
+          <input id="mapSearch" type="search" list="assetIdList" placeholder="Asset ID hoặc tên, rồi nhấn Enter" aria-label="Tìm tài sản trên sơ đồ">
         </form>
-        <div class="floor-tabs" id="floorTabs" role="tablist" aria-label="Floors"></div>
+        <div class="floor-tabs" id="floorTabs" role="tablist" aria-label="Tầng"></div>
         <span class="muted small" id="mapCount"></span>
       </div>
       <div class="map-body" id="mapBody">
-        <aside class="map-filters" id="mapFilters" aria-label="Map filters"></aside>
+        <aside class="map-filters" id="mapFilters" aria-label="Bộ lọc sơ đồ"></aside>
         <div class="map-stage" id="mapStage">
-          <svg class="map-svg" id="mapSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Factory floor plan">
+          <svg class="map-svg" id="mapSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mặt bằng nhà máy">
             <g id="lyPlan"><image id="planImg" x="0" y="0" preserveAspectRatio="none"/></g>
             <g id="lyZones"></g>
             <g id="lyMarkers"></g>
@@ -42,16 +42,16 @@ window.FAM = window.FAM || {};
           </svg>
           <div class="map-info" id="mapInfo"></div>
           <div class="map-ctrls">
-            <button data-z="in" title="Zoom in">${U.icon('zoomIn')}</button>
-            <button data-z="out" title="Zoom out">${U.icon('zoomOut')}</button>
-            <button data-z="fit" title="Fit floor to screen">${U.icon('fit')}</button>
-            <button data-z="legend" title="Show / hide legend">${U.icon('info')}</button>
+            <button data-z="in" title="Phóng to">${U.icon('zoomIn')}</button>
+            <button data-z="out" title="Thu nhỏ">${U.icon('zoomOut')}</button>
+            <button data-z="fit" title="Vừa màn hình">${U.icon('fit')}</button>
+            <button data-z="legend" title="Hiện / ẩn chú giải">${U.icon('info')}</button>
           </div>
           <div class="map-readout" id="mapReadout">X — · Y —</div>
           <div class="map-legend" id="mapLegend"></div>
           <div class="map-mode-banner" id="mapBanner" hidden></div>
         </div>
-        <aside class="detail" id="mapDetail" aria-label="Asset details"></aside>
+        <aside class="detail" id="mapDetail" aria-label="Chi tiết tài sản"></aside>
       </div>`;
     svg = U.$('#mapSvg'); gPlan = U.$('#lyPlan'); gZones = U.$('#lyZones'); gMarkers = U.$('#lyMarkers'); gOverlay = U.$('#lyOverlay');
     stage = U.$('#mapStage'); body = U.$('#mapBody'); detailEl = U.$('#mapDetail'); readout = U.$('#mapReadout');
@@ -64,7 +64,7 @@ window.FAM = window.FAM || {};
       if (!q) return;
       const a = M.findAsset(q);
       if (a) M.locate(a.id);
-      else UI.toast(`No asset matches "${q}"`, 'error');
+      else UI.toast(`Không tìm thấy tài sản "${q}"`, 'error');
     });
     U.$$('.map-ctrls button', root).forEach((b) =>
       b.addEventListener('click', () => {
@@ -145,7 +145,7 @@ window.FAM = window.FAM || {};
     const el = U.$('#floorTabs');
     el.innerHTML = S.floors().map((f) => {
       const n = S.raw().locations.filter((l) => l.floorId === f.id).length;
-      return `<button role="tab" data-f="${U.esc(f.id)}" class="${f.id === st.floorId ? 'on' : ''}" title="${U.esc(f.name)}">${U.esc(f.code)} <span class="muted small">${U.esc(f.name.replace(/^Floor\s*\d+\s*[–-]\s*/i, ''))}</span> <span class="chip">${n}</span></button>`;
+      return `<button role="tab" data-f="${U.esc(f.id)}" class="${f.id === st.floorId ? 'on' : ''}" title="${U.esc(f.name)}">${U.esc(f.code)} <span class="muted small">${U.esc(f.name.replace(/^(Floor|Tầng)\s*\d+\s*[–-]\s*/i, ''))}</span> <span class="chip">${n}</span></button>`;
     }).join('');
     U.$$('button', el).forEach((b) => b.addEventListener('click', () => M.setFloor(b.dataset.f)));
   }
@@ -163,7 +163,7 @@ window.FAM = window.FAM || {};
       st.planKey = key;
       fit(false);
     }
-    infoEl.innerHTML = `${U.esc(floor ? floor.name : '')} · <span title="Floor plan source">${U.esc(info.label)}</span>${S.isDemo() ? ' · <b style="color:#b45309">demo coordinates</b>' : ''}`;
+    infoEl.innerHTML = `${U.esc(floor ? floor.name : '')} · <span title="Nguồn bản vẽ">${U.esc(info.label)}</span>${S.isDemo() ? ' · <b style="color:#b45309">tọa độ demo</b>' : ''}`;
   }
 
   function renderZones() {
@@ -198,7 +198,7 @@ window.FAM = window.FAM || {};
     }).join('');
     U.$$('.mk', gMarkers).forEach((g) => g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); M.select(g.dataset.id); } }));
     const onFloor = views.filter((v) => v.floorId === st.floorId).length;
-    U.$('#mapCount').textContent = `Showing ${visible.length} of ${onFloor} assets on this floor`;
+    U.$('#mapCount').textContent = `Hiển thị ${visible.length}/${onFloor} tài sản trên tầng này`;
     updateScale();
   }
 
@@ -208,21 +208,21 @@ window.FAM = window.FAM || {};
     const cnt = (fn) => onFloor.filter(fn).length;
     const s = S.settings();
     el.innerHTML = `
-      <div class="grp"><h4>Zone</h4>
-        <select id="fZone">${UI.options(S.zones(st.floorId), st.filters.zone, { empty: 'All zones on this floor', label: (z) => `${z.code} – ${z.name}` })}</select></div>
-      <div class="grp"><h4>Responsible department</h4>
-        <select id="fDept">${UI.options(S.departments(), st.filters.dept, { empty: 'All departments', label: (d) => `${d.code} – ${d.name}` })}</select></div>
-      <div class="grp"><h4>Categories</h4>
+      <div class="grp"><h4>Khu vực</h4>
+        <select id="fZone">${UI.options(S.zones(st.floorId), st.filters.zone, { empty: 'Tất cả khu vực trên tầng', label: (z) => `${z.code} – ${z.name}` })}</select></div>
+      <div class="grp"><h4>Bộ phận quản lý</h4>
+        <select id="fDept">${UI.options(S.departments(), st.filters.dept, { empty: 'Tất cả bộ phận', label: (d) => `${d.code} – ${d.name}` })}</select></div>
+      <div class="grp"><h4>Nhóm tài sản</h4>
         ${S.categories().map((c) => `<label class="check"><span><input type="checkbox" data-cat="${U.esc(c.id)}" ${st.filters.cats.has(c.id) ? 'checked' : ''}>${U.shapeSvg(c.shape, '#64748b')}${U.esc(c.name)}</span><span class="count">${cnt((v) => v.categoryId === c.id)}</span></label>`).join('')}
       </div>
-      <div class="grp"><h4>Status</h4>
+      <div class="grp"><h4>Trạng thái</h4>
         ${S.statuses().map((x) => `<label class="check"><span><input type="checkbox" data-st="${U.esc(x.id)}" ${st.filters.statuses.has(x.id) ? 'checked' : ''}><i class="dot" style="--c:${x.color}"></i>${U.esc(x.name)}</span><span class="count">${cnt((v) => v.status === x.id)}</span></label>`).join('')}
       </div>
-      <div class="grp"><h4>Display</h4>
-        <label class="check"><span><input type="checkbox" id="fShowZones" ${s.showZones !== false ? 'checked' : ''}>Zone boundaries</span></label>
-        <label class="check"><span><input type="checkbox" id="fShowLabels" ${s.showLabels !== false ? 'checked' : ''}>Asset ID labels (when zoomed)</span></label>
+      <div class="grp"><h4>Hiển thị</h4>
+        <label class="check"><span><input type="checkbox" id="fShowZones" ${s.showZones !== false ? 'checked' : ''}>Ranh giới khu vực</span></label>
+        <label class="check"><span><input type="checkbox" id="fShowLabels" ${s.showLabels !== false ? 'checked' : ''}>Nhãn Asset ID (khi phóng to)</span></label>
       </div>
-      <button class="btn btn-sm" id="fReset">Reset filters</button>`;
+      <button class="btn btn-sm" id="fReset">Xoá bộ lọc</button>`;
     U.$('#fZone', el).addEventListener('change', (e) => {
       st.filters.zone = e.target.value;
       renderZones(); renderMarkers(); renderFilters();
@@ -238,13 +238,13 @@ window.FAM = window.FAM || {};
 
   function renderLegend() {
     legendEl.innerHTML = `
-      <h5>Status</h5>
+      <h5>Trạng thái</h5>
       ${S.statuses().map((s) => `<span class="row"><i class="dot" style="--c:${s.color}"></i>${U.esc(s.name)}</span>`).join('')}
-      <span class="sep"></span><h5>Category</h5>
+      <span class="sep"></span><h5>Nhóm</h5>
       ${S.categories().map((c) => `<span class="row">${U.shapeSvg(c.shape, '#64748b', 13)}${U.esc(c.name)}</span>`).join('')}
       <span class="sep"></span>
-      <span class="row"><svg width="14" height="14" viewBox="-10 -10 20 20"><circle r="7" fill="none" stroke="#1d63d8" stroke-width="3"/></svg>Selected</span>
-      <span class="row"><svg width="16" height="12"><rect x="1" y="1" width="14" height="10" fill="#2563eb" fill-opacity=".1" stroke="#2563eb" stroke-dasharray="3 2"/></svg>Zone</span>`;
+      <span class="row"><svg width="14" height="14" viewBox="-10 -10 20 20"><circle r="7" fill="none" stroke="#1d63d8" stroke-width="3"/></svg>Đang chọn</span>
+      <span class="row"><svg width="16" height="12"><rect x="1" y="1" width="14" height="10" fill="#2563eb" fill-opacity=".1" stroke="#2563eb" stroke-dasharray="3 2"/></svg>Khu vực</span>`;
   }
 
   function kv(label, val) { return `<div>${U.esc(label)}</div><div>${val}</div>`; }
@@ -252,8 +252,8 @@ window.FAM = window.FAM || {};
     const v = st.selected && S.view(st.selected);
     if (!v) {
       body.classList.remove('detail-open');
-      detailEl.innerHTML = `<div class="detail-empty">${U.icon('pin', 32)}<p><b>Select an asset</b></p><p class="small">Click a marker on the map, or search an Asset ID above. Details, location and history appear here.</p>
-        <div class="callout" style="text-align:left;margin-top:14px">${U.icon('info', 16)}<div class="small">Coordinates are % of the floor drawing: origin <b>top-left</b>, X → right, Y ↓ down. ${S.isDemo() ? 'All positions shown are <b>demo data</b>.' : ''}</div></div></div>`;
+      detailEl.innerHTML = `<div class="detail-empty">${U.icon('pin', 32)}<p><b>Chọn một tài sản</b></p><p class="small">Bấm vào điểm đánh dấu trên sơ đồ hoặc tìm Asset ID ở trên. Thông tin chi tiết, vị trí và lịch sử sẽ hiển thị tại đây.</p>
+        <div class="callout" style="text-align:left;margin-top:14px">${U.icon('info', 16)}<div class="small">Tọa độ tính theo % bản vẽ: gốc ở <b>góc trên bên trái</b>, X → sang phải, Y ↓ xuống dưới. ${S.isDemo() ? 'Mọi vị trí hiển thị là <b>dữ liệu demo</b>.' : ''}</div></div></div>`;
       return;
     }
     const hist = S.history().filter((h) => h.assetId === v.id).slice(-4).reverse();
@@ -265,44 +265,44 @@ window.FAM = window.FAM || {};
             <h3>${U.esc(v.name)}</h3>
             ${UI.statusBadge(v.status)} <span class="chip">${U.shapeSvg(v.categoryShape, '#64748b', 11)} ${U.esc(v.categoryName)}</span>
           </div>
-          <button class="icon-btn close-detail" id="dClose" title="Close">${U.icon('x')}</button>
+          <button class="icon-btn close-detail" id="dClose" title="Đóng">${U.icon('x')}</button>
         </div>
       </div>
-      <div class="detail-photo ${v.photo ? 'has' : ''}" ${v.photo ? `style="background-image:url('${U.esc(v.photo)}')"` : ''}>${v.photo ? '' : `<div style="text-align:center">${U.icon('image', 30)}<div class="small">No photo</div></div>`}</div>
+      <div class="detail-photo ${v.photo ? 'has' : ''}" ${v.photo ? `style="background-image:url('${U.esc(v.photo)}')"` : ''}>${v.photo ? '' : `<div style="text-align:center">${U.icon('image', 30)}<div class="small">Chưa có ảnh</div></div>`}</div>
       <div class="detail-actions">
-        <button class="btn btn-sm btn-primary" id="dMove">${U.icon('move', 15)}Move on map</button>
-        <button class="btn btn-sm" id="dEdit">${U.icon('edit', 15)}Edit asset</button>
-        <button class="btn btn-sm" id="dZoom">${U.icon('locate', 15)}Zoom to</button>
-        <button class="btn btn-sm" id="dQr">${U.icon('qr', 15)}QR code</button>
+        <button class="btn btn-sm btn-primary" id="dMove">${U.icon('move', 15)}Di chuyển</button>
+        <button class="btn btn-sm" id="dEdit">${U.icon('edit', 15)}Sửa tài sản</button>
+        <button class="btn btn-sm" id="dZoom">${U.icon('locate', 15)}Phóng tới</button>
+        <button class="btn btn-sm" id="dQr">${U.icon('qr', 15)}Mã QR</button>
       </div>
       <div class="kv">
-        <div class="kv-section">Identification</div>
+        <div class="kv-section">Thông tin nhận dạng</div>
         ${kv('Asset ID', `<span class="asset-id">${U.esc(v.id)}</span>`)}
-        ${kv('Asset Name', U.esc(v.name))}
-        ${kv('Category', U.esc(v.categoryName))}
-        ${kv('Status', UI.statusBadge(v.status))}
-        <div class="kv-section">Location</div>
-        ${kv('Floor', U.esc(v.floorName))}
-        ${kv('Department (area)', U.esc(v.areaDeptName))}
-        ${kv('Zone', `${U.esc(v.zoneCode)} – ${U.esc(v.zoneName)}`)}
+        ${kv('Tên tài sản', U.esc(v.name))}
+        ${kv('Nhóm tài sản', U.esc(v.categoryName))}
+        ${kv('Trạng thái', UI.statusBadge(v.status))}
+        <div class="kv-section">Vị trí</div>
+        ${kv('Tầng', U.esc(v.floorName))}
+        ${kv('Bộ phận (khu vực)', U.esc(v.areaDeptName))}
+        ${kv('Khu vực', `${U.esc(v.zoneCode)} – ${U.esc(v.zoneName)}`)}
         ${kv('Location Code', `<span class="loc-code">${U.esc(v.locationCode)}</span>`)}
-        ${kv('X Coordinate', `${v.x} %`)}
-        ${kv('Y Coordinate', `${v.y} %`)}
-        ${kv('Location updated', U.fmtDateTime(v.locationUpdatedAt))}
-        <div class="kv-section">Technical</div>
-        ${kv('Manufacturer', U.esc(v.manufacturer || '—'))}
+        ${kv('Tọa độ X', `${v.x} %`)}
+        ${kv('Tọa độ Y', `${v.y} %`)}
+        ${kv('Cập nhật vị trí', U.fmtDateTime(v.locationUpdatedAt))}
+        <div class="kv-section">Thông số kỹ thuật</div>
+        ${kv('Nhà sản xuất', U.esc(v.manufacturer || '—'))}
         ${kv('Model', U.esc(v.model || '—'))}
         ${kv('Serial Number', `<span class="mono">${U.esc(v.serial || '—')}</span>`)}
-        ${kv('Last Inspection', U.fmtDate(v.lastInspection))}
-        ${kv('Responsible Dept.', U.esc(v.deptName))}
-        ${kv('Remarks', U.esc(v.remarks || '—'))}
+        ${kv('Kiểm định gần nhất', U.fmtDate(v.lastInspection))}
+        ${kv('Bộ phận quản lý', U.esc(v.deptName))}
+        ${kv('Ghi chú', U.esc(v.remarks || '—'))}
       </div>
-      <div class="kv"><div class="kv-section">Recent location history</div></div>
+      <div class="kv"><div class="kv-section">Lịch sử vị trí gần đây</div></div>
       <div class="mini-hist">
         ${hist.map((h) => `<div class="it"><div class="t">${U.fmtDateTime(h.at)} · <span class="tag-action tag-${h.action}">${h.action}</span> · ${U.esc(h.updatedBy)}</div>
-          <div>${h.prev ? `<span class="loc-code">${U.esc(h.prev.code)}</span> → ` : ''}${h.next ? `<span class="loc-code">${U.esc(h.next.code)}</span>` : '<i>removed</i>'}</div>
-          <div class="muted small">${U.esc(h.reason)}</div></div>`).join('') || '<div class="muted small">No history.</div>'}
-        <a href="#/history?asset=${encodeURIComponent(v.id)}" class="small">View full history →</a>
+          <div>${h.prev ? `<span class="loc-code">${U.esc(h.prev.code)}</span> → ` : ''}${h.next ? `<span class="loc-code">${U.esc(h.next.code)}</span>` : '<i>đã xoá</i>'}</div>
+          <div class="muted small">${U.esc(h.reason)}</div></div>`).join('') || '<div class="muted small">Chưa có lịch sử.</div>'}
+        <a href="#/history?asset=${encodeURIComponent(v.id)}" class="small">Xem toàn bộ lịch sử →</a>
       </div>`;
     U.$('#dClose', detailEl).addEventListener('click', () => { body.classList.remove('detail-open'); });
     U.$('#dMove', detailEl).addEventListener('click', () => M.startPlace(v.id));
@@ -446,7 +446,7 @@ window.FAM = window.FAM || {};
       // click
       if (st.mode && st.mode.type === 'place') {
         const u = toUser(e.clientX, e.clientY);
-        if (!inPlan(u)) return UI.toast('Click inside the floor drawing.', 'error');
+        if (!inPlan(u)) return UI.toast('Hãy bấm bên trong bản vẽ.', 'error');
         placeAt(toPct(u));
         return;
       }
@@ -464,7 +464,7 @@ window.FAM = window.FAM || {};
 
   /* ---------------- modes ---------------- */
   function showBanner(html) {
-    banner.innerHTML = `${html}<button class="btn btn-sm" id="mbCancel">Cancel</button>`;
+    banner.innerHTML = `${html}<button class="btn btn-sm" id="mbCancel">Hủy</button>`;
     banner.hidden = false;
     U.$('#mbCancel', banner).addEventListener('click', cancelMode);
   }
@@ -484,7 +484,7 @@ window.FAM = window.FAM || {};
     st.mode = { type: 'place', assetId };
     stage.classList.add('mode-place');
     body.classList.remove('detail-open');
-    showBanner(`${U.icon('move', 16)}<span>Click the new location of <b>${U.esc(v.id)}</b>. Switch floor first if needed. Esc to cancel.</span>`);
+    showBanner(`${U.icon('move', 16)}<span>Bấm vào vị trí mới của <b>${U.esc(v.id)}</b>. Có thể đổi tầng trước nếu cần. Esc để hủy.</span>`);
   };
 
   function placeAt(p) {
@@ -502,28 +502,28 @@ window.FAM = window.FAM || {};
   M.openMoveDialog = (assetId, proposed, onDone, onCancel) => {
     const v = S.view(assetId);
     const form = U.h(`<form class="form-grid" autocomplete="off">
-      <div class="full callout">${U.icon('info', 16)}<div>Current: <span class="loc-code">${U.esc(v.locationCode)}</span> (${U.esc(v.floorCode)} · ${U.esc(v.zoneName)} · X ${v.x} · Y ${v.y})</div></div>
-      <div class="field"><label>Floor <span class="req">*</span></label><select name="floorId">${UI.options(S.floors(), proposed.floorId, { label: (f) => `${f.code} – ${f.name}` })}</select></div>
-      <div class="field"><label>Zone <span class="req">*</span></label><select name="zoneId"></select></div>
+      <div class="full callout">${U.icon('info', 16)}<div>Hiện tại: <span class="loc-code">${U.esc(v.locationCode)}</span> (${U.esc(v.floorCode)} · ${U.esc(v.zoneName)} · X ${v.x} · Y ${v.y})</div></div>
+      <div class="field"><label>Tầng <span class="req">*</span></label><select name="floorId">${UI.options(S.floors(), proposed.floorId, { label: (f) => `${f.code} – ${f.name}` })}</select></div>
+      <div class="field"><label>Khu vực <span class="req">*</span></label><select name="zoneId"></select></div>
       <div class="field"><label>X (%) <span class="req">*</span></label><input name="x" type="number" step="0.1" min="0" max="100" value="${proposed.x}"></div>
       <div class="field"><label>Y (%) <span class="req">*</span></label><input name="y" type="number" step="0.1" min="0" max="100" value="${proposed.y}"></div>
-      <div class="field full"><label>New Location Code</label><input name="_code" readonly></div>
-      <div class="field"><label>Updated By <span class="req">*</span></label><input name="by" value="${U.esc(S.currentUser())}"></div>
-      <div class="field"><label>Reason for change <span class="req">*</span></label><input name="reason" list="reasonList" placeholder="e.g. Line re-layout">
-        <datalist id="reasonList"><option>Relocation</option><option>Line re-layout</option><option>Sent for maintenance</option><option>Returned from maintenance</option><option>Correction of recorded position</option><option>Temporary storage</option></datalist></div>
+      <div class="field full"><label>Location Code mới</label><input name="_code" readonly></div>
+      <div class="field"><label>Người cập nhật <span class="req">*</span></label><input name="by" value="${U.esc(S.currentUser())}"></div>
+      <div class="field"><label>Lý do thay đổi <span class="req">*</span></label><input name="reason" list="reasonList" placeholder="VD: Bố trí lại dây chuyền">
+        <datalist id="reasonList"><option>Di dời</option><option>Bố trí lại dây chuyền</option><option>Đưa đi bảo trì</option><option>Nhận về sau bảo trì</option><option>Hiệu chỉnh vị trí đã ghi</option><option>Lưu kho tạm</option></datalist></div>
       <div class="full small muted" id="mvWarn"></div>
     </form>`);
     const fSel = U.$('[name=floorId]', form), zSel = U.$('[name=zoneId]', form);
-    const fillZones = (sel) => { zSel.innerHTML = UI.options(S.zones(fSel.value), sel, { empty: '— select zone —', label: (z) => `${z.code} – ${z.name}` }); };
+    const fillZones = (sel) => { zSel.innerHTML = UI.options(S.zones(fSel.value), sel, { empty: '— chọn khu vực —', label: (z) => `${z.code} – ${z.name}` }); };
     const refresh = () => {
       const d = UI.formData(form);
       U.$('[name=_code]', form).value = S.locationCode({ floorId: d.floorId, zoneId: d.zoneId, x: U.num(d.x), y: U.num(d.y) });
       const z = S.zone(d.zoneId);
       const x = U.num(d.x), y = U.num(d.y);
       const w = U.$('#mvWarn', form);
-      if (!d.zoneId) w.innerHTML = `<span style="color:var(--amber)">${U.icon('alert', 14)} The point is outside all defined zones on this floor — select the zone manually.</span>`;
-      else if (z && !(x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h)) w.innerHTML = `<span style="color:var(--amber)">${U.icon('alert', 14)} Note: X/Y lies outside the boundary of zone ${U.esc(z.code)}.</span>`;
-      else w.textContent = 'Saving appends a record to Location History. The Asset ID does not change.';
+      if (!d.zoneId) w.innerHTML = `<span style="color:var(--amber)">${U.icon('alert', 14)} Điểm này nằm ngoài mọi khu vực của tầng — hãy chọn khu vực thủ công.</span>`;
+      else if (z && !(x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h)) w.innerHTML = `<span style="color:var(--amber)">${U.icon('alert', 14)} Lưu ý: X/Y nằm ngoài ranh giới khu vực ${U.esc(z.code)}.</span>`;
+      else w.textContent = 'Khi lưu, hệ thống thêm một dòng vào Lịch sử vị trí. Asset ID không thay đổi.';
     };
     fillZones(proposed.zoneId);
     fSel.addEventListener('change', () => { const auto = S.zoneAt(fSel.value, U.num(U.$('[name=x]', form).value), U.num(U.$('[name=y]', form).value)); fillZones(auto ? auto.id : ''); refresh(); });
@@ -537,17 +537,17 @@ window.FAM = window.FAM || {};
     refresh();
     let saved = false;
     UI.modal({
-      title: `Move ${v.id} – ${v.name}`,
+      title: `Di chuyển ${v.id} – ${v.name}`,
       body: form,
       actions: [
-        { label: 'Cancel' },
-        { label: 'Save new location', primary: true, icon: 'check', onClick: () => {
+        { label: 'Hủy' },
+        { label: 'Lưu vị trí mới', primary: true, icon: 'check', onClick: () => {
           const d = UI.formData(form);
-          if (!String(d.by).trim()) { UI.showErrors(form, { by: 'Updated By is required' }); return false; }
+          if (!String(d.by).trim()) { UI.showErrors(form, { by: 'Bắt buộc nhập người cập nhật' }); return false; }
           try {
             const changed = S.moveAsset(assetId, { floorId: d.floorId, zoneId: d.zoneId, x: U.num(d.x), y: U.num(d.y) }, { by: d.by.trim(), reason: d.reason });
             saved = true;
-            UI.toast(changed ? `${assetId} moved → ${S.location(assetId).code}` : 'Location unchanged — nothing recorded.', changed ? 'success' : 'info');
+            UI.toast(changed ? `${assetId} đã chuyển → ${S.location(assetId).code}` : 'Vị trí không đổi — không ghi nhận.', changed ? 'success' : 'info');
             onDone && onDone();
             if (F.app.current() === 'map') { st.selected = assetId; if (d.floorId !== st.floorId) M.setFloor(d.floorId); render(); }
           } catch (e) {
@@ -569,11 +569,11 @@ window.FAM = window.FAM || {};
     stage.classList.add('mode-draw');
     body.classList.remove('detail-open');
     fit(true);
-    showBanner(`${U.icon('square', 16)}<span>Drag a rectangle on <b>${U.esc(S.floor(st.floorId).code)}</b> to define the zone boundary.</span>`);
+    showBanner(`${U.icon('square', 16)}<span>Kéo một hình chữ nhật trên <b>${U.esc(S.floor(st.floorId).code)}</b> để xác định ranh giới khu vực.</span>`);
   };
   function finishDraw() {
     const m = st.mode;
-    if (!m || !m.rect || m.rect.w < 3 || m.rect.h < 3) { gOverlay.innerHTML = ''; return UI.toast('Drag to draw a larger rectangle.', 'error'); }
+    if (!m || !m.rect || m.rect.w < 3 || m.rect.h < 3) { gOverlay.innerHTML = ''; return UI.toast('Hãy kéo hình chữ nhật lớn hơn.', 'error'); }
     const r = m.rect;
     const pct = { x: U.round1((r.x / st.W) * 100), y: U.round1((r.y / st.H) * 100), w: U.round1((r.w / st.W) * 100), h: U.round1((r.h / st.H) * 100), floorId: st.floorId };
     st.mode = null;
@@ -599,11 +599,11 @@ window.FAM = window.FAM || {};
   };
   M.locate = (id) => {
     const v = S.view(id);
-    if (!v) return UI.toast('Asset not found: ' + id, 'error');
+    if (!v) return UI.toast('Không tìm thấy tài sản: ' + id, 'error');
     if (F.app.current() !== 'map') { F.app.go('map', { asset: id }); return; }
     if (v.floorId !== st.floorId) { st.floorId = v.floorId; st.filters.zone = ''; }
     ensureFilters();
-    if (!passes(v)) { resetFilters(); UI.toast('Filters were reset to show ' + id, 'info'); }
+    if (!passes(v)) { resetFilters(); UI.toast('Đã xoá bộ lọc để hiển thị ' + id, 'info'); }
     st.selected = id;
     render();
     body.classList.add('detail-open');

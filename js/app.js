@@ -5,13 +5,13 @@ window.FAM = window.FAM || {};
   const U = F.util, S = F.store, UI = F.ui;
   const A = (F.app = {});
   const ROUTES = {
-    dashboard: { title: 'Dashboard', view: () => F.views.dashboard },
-    map: { title: 'Interactive Factory Map', view: () => F.views.map },
-    register: { title: 'Asset Register', view: () => F.views.register },
-    zones: { title: 'Factory Zones', view: () => F.views.zones },
-    history: { title: 'Location History', view: () => F.views.history },
-    qr: { title: 'QR Code Management', view: () => F.views.qr },
-    settings: { title: 'Settings & User Guide', view: () => F.views.settings },
+    dashboard: { title: 'Dashboard – Tổng quan', view: () => F.views.dashboard },
+    map: { title: 'Sơ đồ nhà máy tương tác', view: () => F.views.map },
+    register: { title: 'Sổ tài sản (Asset Register)', view: () => F.views.register },
+    zones: { title: 'Khu vực nhà máy', view: () => F.views.zones },
+    history: { title: 'Lịch sử vị trí', view: () => F.views.history },
+    qr: { title: 'Quản lý mã QR', view: () => F.views.qr },
+    settings: { title: 'Cài đặt & Hướng dẫn', view: () => F.views.settings },
   };
   let current = null;
   let lastHash = null;
@@ -33,11 +33,11 @@ window.FAM = window.FAM || {};
     U.$$('.view').forEach((v) => (v.hidden = v.id !== 'view-' + name));
     U.$$('#nav a').forEach((a) => a.classList.toggle('active', a.dataset.route === name));
     U.$('#pageTitle').textContent = ROUTES[name].title;
-    document.title = ROUTES[name].title + ' · Factory Asset Map';
+    document.title = ROUTES[name].title + ' · Bản đồ tài sản nhà máy';
     document.body.classList.remove('nav-open');
     const viewsEl = U.$('#views');
     if (prev !== name) viewsEl.scrollTop = 0;
-    try { ROUTES[name].view().show(params); } catch (e) { console.error(e); UI.toast('Error showing view: ' + e.message, 'error', 6000); }
+    try { ROUTES[name].view().show(params); } catch (e) { console.error(e); UI.toast('Lỗi hiển thị trang: ' + e.message, 'error', 6000); }
   }
 
   A.current = () => current;
@@ -58,7 +58,7 @@ window.FAM = window.FAM || {};
     U.$('#userSelect').innerHTML = names.map((n) => `<option ${n === cur ? 'selected' : ''}>${U.esc(n)}</option>`).join('');
     U.$('#assetIdList').innerHTML = S.assets().map((a) => `<option value="${U.esc(a.id)}">${U.esc(a.name)}</option>`).join('');
     const kb = S.storageBytes() / 1024;
-    U.$('#storageInfo').textContent = `${S.assets().length} assets · ${kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : Math.round(kb) + ' KB'} stored`;
+    U.$('#storageInfo').textContent = `${S.assets().length} tài sản · lưu ${kb > 1024 ? (kb / 1024).toFixed(1) + ' MB' : Math.round(kb) + ' KB'}`;
   }
 
   function init() {
@@ -67,7 +67,7 @@ window.FAM = window.FAM || {};
     U.$('#menuBtn').innerHTML = U.icon('menu', 20);
 
     const state = S.init();
-    if (state === 'seeded' && !F.remote.enabled()) setTimeout(() => UI.toast('Demo dataset loaded (illustrative coffee factory).', 'info', 4500), 400);
+    if (state === 'seeded' && !F.remote.enabled()) setTimeout(() => UI.toast('Đã nạp dữ liệu demo (nhà máy cà phê minh họa).', 'info', 4500), 400);
     U.bus.on('sync-status', renderSync);
     renderSync(F.remote.state());
 
@@ -80,7 +80,7 @@ window.FAM = window.FAM || {};
       const q = inp.value.trim();
       if (!q) return;
       const a = F.views.map.findAsset(q);
-      if (!a) return UI.toast(`No asset matches "${q}"`, 'error');
+      if (!a) return UI.toast(`Không tìm thấy tài sản "${q}"`, 'error');
       inp.value = '';
       inp.blur();
       if (current === 'map') F.views.map.locate(a.id);
@@ -110,15 +110,15 @@ window.FAM = window.FAM || {};
     if (!el) return;
     const t = st.at ? st.at.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
     const map = {
-      local: ['#94a3b8', 'Local only (this browser)'],
-      connecting: ['#fbbf24', 'Connecting to server…'],
-      saving: ['#38bdf8', 'Saving to server…'],
-      online: ['#34d399', 'Synced with Cloudflare · ' + t],
-      offline: ['#f87171', 'Offline — changes kept locally'],
+      local: ['#94a3b8', 'Chỉ lưu trên trình duyệt này'],
+      connecting: ['#fbbf24', 'Đang kết nối máy chủ…'],
+      saving: ['#38bdf8', 'Đang lưu lên máy chủ…'],
+      online: ['#34d399', 'Đã đồng bộ Cloudflare · ' + t],
+      offline: ['#f87171', 'Mất kết nối — thay đổi lưu tạm trên máy'],
     };
     const [c, label] = map[st.status] || map.local;
     el.innerHTML = `<i class="dot" style="--c:${c}"></i> ${U.esc(label)}`;
-    el.title = st.detail || (F.remote.enabled() ? 'Server: ' + F.remote.base() : 'No server configured (js/config.js)');
+    el.title = st.detail || (F.remote.enabled() ? 'Máy chủ: ' + F.remote.base() : 'Chưa cấu hình máy chủ (js/config.js)');
   }
 
   document.addEventListener('DOMContentLoaded', init);

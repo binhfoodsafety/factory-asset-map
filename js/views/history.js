@@ -22,17 +22,17 @@ window.FAM = window.FAM || {};
   function build() {
     const root = U.$('#view-history');
     root.innerHTML = `
-      <div class="view-head"><h2>Location History</h2>
-        <div class="btn-row"><button class="btn" id="hsCsv">${U.icon('download', 16)}Export CSV</button><button class="btn" id="hsXlsx">${U.icon('download', 16)}Export Excel</button></div>
-        <div class="sub">Append-only. Every location change creates a new record; existing records are never edited or overwritten.</div></div>
+      <div class="view-head"><h2>Lịch sử vị trí</h2>
+        <div class="btn-row"><button class="btn" id="hsCsv">${U.icon('download', 16)}Xuất CSV</button><button class="btn" id="hsXlsx">${U.icon('download', 16)}Xuất Excel</button></div>
+        <div class="sub">Chỉ ghi thêm. Mỗi lần thay đổi vị trí tạo một dòng mới; các dòng cũ không bao giờ bị sửa hoặc ghi đè.</div></div>
       <div class="card">
         <div class="toolbar">
-          <div class="search">${U.icon('search', 16)}<input type="search" id="hsQ" placeholder="Asset ID, name, user, reason, location code…"></div>
-          <select id="hsAction"><option value="MOVE">Moves only</option><option value="">All records</option><option value="REGISTER">Registrations</option><option value="REMOVE">Removals</option></select>
+          <div class="search">${U.icon('search', 16)}<input type="search" id="hsQ" placeholder="Asset ID, tên, người cập nhật, lý do, location code…"></div>
+          <select id="hsAction"><option value="MOVE">Chỉ di chuyển</option><option value="">Tất cả</option><option value="REGISTER">Đăng ký mới</option><option value="REMOVE">Xoá tài sản</option></select>
           <select id="hsFloor"></select>
-          <label class="small muted">From <input type="date" id="hsFrom"></label>
-          <label class="small muted">To <input type="date" id="hsTo"></label>
-          <button class="btn btn-sm btn-ghost" id="hsClear">Clear</button>
+          <label class="small muted">Từ <input type="date" id="hsFrom"></label>
+          <label class="small muted">Đến <input type="date" id="hsTo"></label>
+          <button class="btn btn-sm btn-ghost" id="hsClear">Xoá lọc</button>
           <span class="count" id="hsCount"></span>
         </div>
         <div class="table-wrap" id="hsTable"></div>
@@ -47,20 +47,20 @@ window.FAM = window.FAM || {};
   }
   function syncInputs() {
     U.$('#hsQ').value = st.q; U.$('#hsAction').value = st.action; U.$('#hsFrom').value = st.from; U.$('#hsTo').value = st.to;
-    U.$('#hsFloor').innerHTML = UI.options(S.floors(), st.floor, { empty: 'All floors', label: (f) => f.code + ' – ' + f.name });
+    U.$('#hsFloor').innerHTML = UI.options(S.floors(), st.floor, { empty: 'Tất cả tầng', label: (f) => f.code + ' – ' + f.name });
   }
   function renderTable() {
     const list = filtered();
     const pages = Math.max(1, Math.ceil(list.length / st.size));
     st.page = Math.min(st.page, pages - 1);
     const rows = list.slice(st.page * st.size, (st.page + 1) * st.size);
-    U.$('#hsCount').textContent = `${list.length} record(s)`;
-    U.$('#hsTable').innerHTML = rows.length ? `<table class="tbl"><thead><tr><th>Date &amp; time</th><th>Action</th><th>Asset ID</th><th>Asset Name</th><th>Previous location</th><th>New location</th><th>Updated By</th><th>Reason for change</th></tr></thead><tbody>
+    U.$('#hsCount').textContent = `${list.length} dòng`;
+    U.$('#hsTable').innerHTML = rows.length ? `<table class="tbl"><thead><tr><th>Thời gian</th><th>Hành động</th><th>Asset ID</th><th>Tên tài sản</th><th>Vị trí cũ</th><th>Vị trí mới</th><th>Người cập nhật</th><th>Lý do thay đổi</th></tr></thead><tbody>
       ${rows.map((h) => `<tr><td class="nowrap small">${U.fmtDateTime(h.at)}</td><td><span class="tag-action tag-${h.action}">${h.action}</span></td>
-        <td>${S.asset(h.assetId) ? `<a href="#/map?asset=${encodeURIComponent(h.assetId)}" class="asset-id" title="Show on map">${U.esc(h.assetId)}</a>` : `<span class="asset-id">${U.esc(h.assetId)}</span>`}</td>
+        <td>${S.asset(h.assetId) ? `<a href="#/map?asset=${encodeURIComponent(h.assetId)}" class="asset-id" title="Xem trên sơ đồ">${U.esc(h.assetId)}</a>` : `<span class="asset-id">${U.esc(h.assetId)}</span>`}</td>
         <td>${U.esc(h.assetName)}</td><td>${locCell(h.prev)}</td><td>${locCell(h.next)}</td><td class="small">${U.esc(h.updatedBy)}</td><td class="small">${U.esc(h.reason)}</td></tr>`).join('')}
-      </tbody></table>` : UI.empty('No history records match.', 'history');
-    U.$('#hsPager').innerHTML = pages > 1 ? `<span>Page ${st.page + 1} / ${pages}</span><span class="sp"></span><button class="btn btn-sm" data-pg="-1" ${st.page === 0 ? 'disabled' : ''}>Previous</button><button class="btn btn-sm" data-pg="1" ${st.page >= pages - 1 ? 'disabled' : ''}>Next</button>` : '<span>Newest first</span>';
+      </tbody></table>` : UI.empty('Không có dòng lịch sử phù hợp.', 'history');
+    U.$('#hsPager').innerHTML = pages > 1 ? `<span>Trang ${st.page + 1} / ${pages}</span><span class="sp"></span><button class="btn btn-sm" data-pg="-1" ${st.page === 0 ? 'disabled' : ''}>Trước</button><button class="btn btn-sm" data-pg="1" ${st.page >= pages - 1 ? 'disabled' : ''}>Sau</button>` : '<span>Mới nhất ở trên</span>';
     U.$$('#hsPager [data-pg]').forEach((b) => b.addEventListener('click', () => { st.page += Number(b.dataset.pg); renderTable(); }));
   }
   H.show = (params = {}) => {

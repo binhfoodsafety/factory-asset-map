@@ -9,56 +9,56 @@
  */
 window.FAM = window.FAM || {};
 window.FAM.DEMO = {
-  factory: { id: 'FAC1', code: 'DCF', name: 'Demo Coffee Factory (illustrative)', address: 'Fictional site — demo data only' },
+  factory: { id: 'FAC1', code: 'DCF', name: 'Nhà máy cà phê Demo (minh họa)', address: 'Địa điểm giả định — chỉ là dữ liệu demo' },
 
   floors: [
-    { id: 'F1', code: 'F1', name: 'Floor 1 – Production', level: 1, builtinPlan: 'F1' },
-    { id: 'F2', code: 'F2', name: 'Floor 2 – QC Lab & Administration', level: 2, builtinPlan: 'F2' },
+    { id: 'F1', code: 'F1', name: 'Tầng 1 – Sản xuất', level: 1, builtinPlan: 'F1' },
+    { id: 'F2', code: 'F2', name: 'Tầng 2 – Phòng QC & Hành chính', level: 2, builtinPlan: 'F2' },
   ],
 
   departments: [
-    { id: 'PR', code: 'PR', name: 'Production' },
-    { id: 'EN', code: 'EN', name: 'Engineering & Utilities' },
-    { id: 'QA', code: 'QA', name: 'Quality Assurance' },
-    { id: 'LG', code: 'LG', name: 'Logistics & Warehouse' },
-    { id: 'AD', code: 'AD', name: 'Administration' },
+    { id: 'PR', code: 'PR', name: 'Sản xuất' },
+    { id: 'EN', code: 'EN', name: 'Kỹ thuật & Phụ trợ' },
+    { id: 'QA', code: 'QA', name: 'Đảm bảo chất lượng (QA)' },
+    { id: 'LG', code: 'LG', name: 'Kho vận' },
+    { id: 'AD', code: 'AD', name: 'Hành chính' },
   ],
 
   // Zone bounds are in percent of the floor drawing (x, y = top-left corner).
   zones: [
-    { id: 'Z-EXT', code: 'EXT', name: 'Extraction',        floorId: 'F1', departmentId: 'PR', x: 2,  y: 4,  w: 28, h: 44, color: '#2563eb' },
-    { id: 'Z-EVP', code: 'EVP', name: 'Evaporation',       floorId: 'F1', departmentId: 'PR', x: 30, y: 4,  w: 22, h: 44, color: '#7c3aed' },
-    { id: 'Z-FDR', code: 'FDR', name: 'Freeze Drying',     floorId: 'F1', departmentId: 'PR', x: 52, y: 4,  w: 28, h: 44, color: '#0891b2' },
-    { id: 'Z-UTL', code: 'UTL', name: 'Utility',           floorId: 'F1', departmentId: 'EN', x: 80, y: 4,  w: 18, h: 44, color: '#ea580c' },
-    { id: 'Z-PCK', code: 'PCK', name: 'Packing',           floorId: 'F1', departmentId: 'PR', x: 2,  y: 56, w: 43, h: 40, color: '#16a34a' },
-    { id: 'Z-WHS', code: 'WHS', name: 'Warehouse',         floorId: 'F1', departmentId: 'LG', x: 45, y: 56, w: 53, h: 40, color: '#ca8a04' },
-    { id: 'Z-LAB', code: 'LAB', name: 'Laboratory',        floorId: 'F2', departmentId: 'QA', x: 2,  y: 4,  w: 38, h: 56, color: '#db2777' },
-    { id: 'Z-OFF', code: 'OFF', name: 'Office',            floorId: 'F2', departmentId: 'AD', x: 40, y: 4,  w: 35, h: 56, color: '#475569' },
-    { id: 'Z-SPS', code: 'SPS', name: 'Spare Parts Store', floorId: 'F2', departmentId: 'EN', x: 75, y: 4,  w: 23, h: 56, color: '#b45309' },
+    { id: 'Z-EXT', code: 'EXT', name: 'Trích ly',          floorId: 'F1', departmentId: 'PR', x: 2,  y: 4,  w: 28, h: 44, color: '#2563eb' },
+    { id: 'Z-EVP', code: 'EVP', name: 'Cô đặc',            floorId: 'F1', departmentId: 'PR', x: 30, y: 4,  w: 22, h: 44, color: '#7c3aed' },
+    { id: 'Z-FDR', code: 'FDR', name: 'Sấy thăng hoa',     floorId: 'F1', departmentId: 'PR', x: 52, y: 4,  w: 28, h: 44, color: '#0891b2' },
+    { id: 'Z-UTL', code: 'UTL', name: 'Phụ trợ',           floorId: 'F1', departmentId: 'EN', x: 80, y: 4,  w: 18, h: 44, color: '#ea580c' },
+    { id: 'Z-PCK', code: 'PCK', name: 'Đóng gói',          floorId: 'F1', departmentId: 'PR', x: 2,  y: 56, w: 43, h: 40, color: '#16a34a' },
+    { id: 'Z-WHS', code: 'WHS', name: 'Kho thành phẩm',    floorId: 'F1', departmentId: 'LG', x: 45, y: 56, w: 53, h: 40, color: '#ca8a04' },
+    { id: 'Z-LAB', code: 'LAB', name: 'Phòng thí nghiệm',  floorId: 'F2', departmentId: 'QA', x: 2,  y: 4,  w: 38, h: 56, color: '#db2777' },
+    { id: 'Z-OFF', code: 'OFF', name: 'Văn phòng',         floorId: 'F2', departmentId: 'AD', x: 40, y: 4,  w: 35, h: 56, color: '#475569' },
+    { id: 'Z-SPS', code: 'SPS', name: 'Kho phụ tùng',      floorId: 'F2', departmentId: 'EN', x: 75, y: 4,  w: 23, h: 56, color: '#b45309' },
   ],
 
   categories: [
-    { id: 'EQP', code: 'EQP', name: 'Equipment', shape: 'circle' },
-    { id: 'UTL', code: 'UTL', name: 'Utility',   shape: 'square' },
-    { id: 'LAB', code: 'LAB', name: 'Lab',       shape: 'diamond' },
-    { id: 'FUR', code: 'FUR', name: 'Furniture', shape: 'triangle' },
+    { id: 'EQP', code: 'EQP', name: 'Thiết bị', shape: 'circle' },
+    { id: 'UTL', code: 'UTL', name: 'Phụ trợ (Utility)', shape: 'square' },
+    { id: 'LAB', code: 'LAB', name: 'Phòng thí nghiệm (Lab)', shape: 'diamond' },
+    { id: 'FUR', code: 'FUR', name: 'Nội thất', shape: 'triangle' },
   ],
 
   statuses: [
-    { id: 'ACTIVE', name: 'Active',          color: '#0d9488', core: true },
-    { id: 'INSP',   name: 'Inspection Due',  color: '#d97706', core: true },
-    { id: 'OOS',    name: 'Out of Service',  color: '#dc2626', core: true },
+    { id: 'ACTIVE', name: 'Đang hoạt động',    color: '#0d9488', core: true },
+    { id: 'INSP',   name: 'Đến hạn kiểm định', color: '#d97706', core: true },
+    { id: 'OOS',    name: 'Ngừng hoạt động',   color: '#dc2626', core: true },
   ],
 
   users: [
-    { id: 'U1', name: 'Demo Admin',           role: 'Administrator' },
-    { id: 'U2', name: 'Maintenance Planner',  role: 'Engineering' },
-    { id: 'U3', name: 'Warehouse Supervisor', role: 'Logistics' },
-    { id: 'U4', name: 'QA Officer',           role: 'Quality' },
+    { id: 'U1', name: 'Quản trị viên',      role: 'Quản trị' },
+    { id: 'U2', name: 'Kế hoạch bảo trì',   role: 'Kỹ thuật' },
+    { id: 'U3', name: 'Giám sát kho',       role: 'Kho vận' },
+    { id: 'U4', name: 'Nhân viên QA',       role: 'Chất lượng' },
   ],
 
   settings: {
-    currentUser: 'Demo Admin',
+    currentUser: 'Quản trị viên',
     qrBaseUrl: '',
     markerScale: 1,
     showLabels: true,
@@ -70,65 +70,65 @@ window.FAM.DEMO = {
 
   assets: [
     // ---- Floor 1 · Extraction
-    { id: 'AST-EQP-0001', name: 'Coffee Extractor EX-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Brewtek Process Systems (fictional)', model: 'CXT-6000', serial: 'SN-CX6-2021-0457', status: 'ACTIVE', lastInspection: '2026-09-18', remarks: 'Column extractor, line A. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EXT', x: 8, y: 14, updatedAt: '2026-09-18T09:10:00.000Z' },
-    { id: 'AST-EQP-0002', name: 'Coffee Extractor EX-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Brewtek Process Systems (fictional)', model: 'CXT-6000', serial: 'SN-CX6-2021-0458', status: 'ACTIVE', lastInspection: '2026-09-18', remarks: 'Column extractor, line A. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EXT', x: 16, y: 14, updatedAt: '2026-09-18T09:20:00.000Z' },
-    { id: 'AST-EQP-0003', name: 'Coffee Extractor EX-03', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Brewtek Process Systems (fictional)', model: 'CXT-6000', serial: 'SN-CX6-2022-0612', status: 'INSP', lastInspection: '2026-03-02', remarks: 'Pressure vessel inspection overdue. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EXT', x: 24, y: 14, updatedAt: '2026-11-03T07:45:00.000Z' },
-    { id: 'AST-EQP-0004', name: 'Centrifuge CF-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Separa Dynamics (fictional)', model: 'SDC-450', serial: 'SN-SD450-1934', status: 'ACTIVE', lastInspection: '2026-08-07', remarks: 'Clarifies extract before evaporation. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EXT', x: 10, y: 36, updatedAt: '2026-08-07T13:00:00.000Z' },
-    { id: 'AST-EQP-0005', name: 'Centrifuge CF-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Separa Dynamics (fictional)', model: 'SDC-450', serial: 'SN-SD450-2208', status: 'OOS', lastInspection: '2026-05-21', remarks: 'Bearing failure — awaiting spare parts. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EXT', x: 20, y: 36, updatedAt: '2026-11-14T10:30:00.000Z' },
+    { id: 'AST-EQP-0001', name: 'Bình trích ly cà phê EX-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Brewtek Process Systems (giả định)', model: 'CXT-6000', serial: 'SN-CX6-2021-0457', status: 'ACTIVE', lastInspection: '2026-09-18', remarks: 'Bình trích ly dạng cột, dây chuyền A. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EXT', x: 8, y: 14, updatedAt: '2026-09-18T09:10:00.000Z' },
+    { id: 'AST-EQP-0002', name: 'Bình trích ly cà phê EX-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Brewtek Process Systems (giả định)', model: 'CXT-6000', serial: 'SN-CX6-2021-0458', status: 'ACTIVE', lastInspection: '2026-09-18', remarks: 'Bình trích ly dạng cột, dây chuyền A. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EXT', x: 16, y: 14, updatedAt: '2026-09-18T09:20:00.000Z' },
+    { id: 'AST-EQP-0003', name: 'Bình trích ly cà phê EX-03', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Brewtek Process Systems (giả định)', model: 'CXT-6000', serial: 'SN-CX6-2022-0612', status: 'INSP', lastInspection: '2026-03-02', remarks: 'Quá hạn kiểm định bình áp lực. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EXT', x: 24, y: 14, updatedAt: '2026-11-03T07:45:00.000Z' },
+    { id: 'AST-EQP-0004', name: 'Máy ly tâm CF-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Separa Dynamics (giả định)', model: 'SDC-450', serial: 'SN-SD450-1934', status: 'ACTIVE', lastInspection: '2026-08-07', remarks: 'Làm trong dịch trích trước khi cô đặc. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EXT', x: 10, y: 36, updatedAt: '2026-08-07T13:00:00.000Z' },
+    { id: 'AST-EQP-0005', name: 'Máy ly tâm CF-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Separa Dynamics (giả định)', model: 'SDC-450', serial: 'SN-SD450-2208', status: 'OOS', lastInspection: '2026-05-21', remarks: 'Hỏng vòng bi — chờ phụ tùng. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EXT', x: 20, y: 36, updatedAt: '2026-11-14T10:30:00.000Z' },
 
     // ---- Floor 1 · Evaporation
-    { id: 'AST-EQP-0006', name: 'Falling Film Evaporator EV-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'ThermaVap Engineering (fictional)', model: 'FFE-3T', serial: 'SN-TV3-2020-0091', status: 'ACTIVE', lastInspection: '2026-07-15', remarks: '3-effect evaporator. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EVP', x: 36, y: 16, updatedAt: '2026-07-15T08:00:00.000Z' },
-    { id: 'AST-EQP-0007', name: 'Concentrate Tank CT-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'StainCo Vessels (fictional)', model: 'SV-12000', serial: 'SN-SV12-7781', status: 'ACTIVE', lastInspection: '2026-06-30', remarks: '12 m³ jacketed tank. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EVP', x: 45, y: 14, updatedAt: '2026-06-30T11:00:00.000Z' },
-    { id: 'AST-EQP-0008', name: 'Concentrate Tank CT-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'StainCo Vessels (fictional)', model: 'SV-12000', serial: 'SN-SV12-7782', status: 'INSP', lastInspection: '2026-01-20', remarks: 'CIP validation due. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EVP', x: 45, y: 34, updatedAt: '2026-11-10T14:15:00.000Z' },
-    { id: 'AST-EQP-0009', name: 'Aroma Recovery Unit AR-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'ThermaVap Engineering (fictional)', model: 'ARU-500', serial: 'SN-ARU-0333', status: 'ACTIVE', lastInspection: '2026-07-15', remarks: 'DEMO RECORD.', floorId: 'F1', zoneId: 'Z-EVP', x: 36, y: 38, updatedAt: '2026-07-15T08:30:00.000Z' },
+    { id: 'AST-EQP-0006', name: 'Thiết bị cô đặc màng rơi EV-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'ThermaVap Engineering (giả định)', model: 'FFE-3T', serial: 'SN-TV3-2020-0091', status: 'ACTIVE', lastInspection: '2026-07-15', remarks: 'Thiết bị cô đặc 3 hiệu. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EVP', x: 36, y: 16, updatedAt: '2026-07-15T08:00:00.000Z' },
+    { id: 'AST-EQP-0007', name: 'Bồn chứa dịch cô đặc CT-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'StainCo Vessels (giả định)', model: 'SV-12000', serial: 'SN-SV12-7781', status: 'ACTIVE', lastInspection: '2026-06-30', remarks: 'Bồn có vỏ áo 12 m³. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EVP', x: 45, y: 14, updatedAt: '2026-06-30T11:00:00.000Z' },
+    { id: 'AST-EQP-0008', name: 'Bồn chứa dịch cô đặc CT-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'StainCo Vessels (giả định)', model: 'SV-12000', serial: 'SN-SV12-7782', status: 'INSP', lastInspection: '2026-01-20', remarks: 'Đến hạn thẩm định CIP. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EVP', x: 45, y: 34, updatedAt: '2026-11-10T14:15:00.000Z' },
+    { id: 'AST-EQP-0009', name: 'Cụm thu hồi hương AR-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'ThermaVap Engineering (giả định)', model: 'ARU-500', serial: 'SN-ARU-0333', status: 'ACTIVE', lastInspection: '2026-07-15', remarks: 'DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-EVP', x: 36, y: 38, updatedAt: '2026-07-15T08:30:00.000Z' },
 
     // ---- Floor 1 · Freeze Drying
-    { id: 'AST-EQP-0010', name: 'Freeze Dryer FD-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Cryonova Systems (fictional)', model: 'CN-FD80', serial: 'SN-CN80-2019-0014', status: 'ACTIVE', lastInspection: '2026-10-02', remarks: 'Continuous tray freeze dryer. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-FDR', x: 58.5, y: 16, updatedAt: '2026-10-02T09:00:00.000Z' },
-    { id: 'AST-EQP-0011', name: 'Freeze Dryer FD-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Cryonova Systems (fictional)', model: 'CN-FD80', serial: 'SN-CN80-2021-0027', status: 'ACTIVE', lastInspection: '2026-10-02', remarks: 'DEMO RECORD.', floorId: 'F1', zoneId: 'Z-FDR', x: 70.5, y: 16, updatedAt: '2026-10-02T09:30:00.000Z' },
-    { id: 'AST-EQP-0012', name: 'Sifter V1220', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Vibrosift Machinery (fictional)', model: 'V1220', serial: 'SN-V1220-4410', status: 'ACTIVE', lastInspection: '2026-09-25', remarks: 'Granule sizing after freeze drying. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-FDR', x: 64, y: 38, updatedAt: '2026-11-18T08:05:00.000Z' },
-    { id: 'AST-EQP-0013', name: 'Granulator GR-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Vibrosift Machinery (fictional)', model: 'GRX-200', serial: 'SN-GRX-1188', status: 'INSP', lastInspection: '2026-02-11', remarks: 'Annual guarding check due. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-FDR', x: 75, y: 38, updatedAt: '2026-10-28T10:00:00.000Z' },
+    { id: 'AST-EQP-0010', name: 'Máy sấy thăng hoa FD-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Cryonova Systems (giả định)', model: 'CN-FD80', serial: 'SN-CN80-2019-0014', status: 'ACTIVE', lastInspection: '2026-10-02', remarks: 'Máy sấy thăng hoa khay liên tục. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-FDR', x: 58.5, y: 16, updatedAt: '2026-10-02T09:00:00.000Z' },
+    { id: 'AST-EQP-0011', name: 'Máy sấy thăng hoa FD-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Cryonova Systems (giả định)', model: 'CN-FD80', serial: 'SN-CN80-2021-0027', status: 'ACTIVE', lastInspection: '2026-10-02', remarks: 'DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-FDR', x: 70.5, y: 16, updatedAt: '2026-10-02T09:30:00.000Z' },
+    { id: 'AST-EQP-0012', name: 'Máy sàng Sifter V1220', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Vibrosift Machinery (giả định)', model: 'V1220', serial: 'SN-V1220-4410', status: 'ACTIVE', lastInspection: '2026-09-25', remarks: 'Phân cỡ hạt sau sấy thăng hoa. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-FDR', x: 64, y: 38, updatedAt: '2026-11-18T08:05:00.000Z' },
+    { id: 'AST-EQP-0013', name: 'Máy tạo hạt GR-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Vibrosift Machinery (giả định)', model: 'GRX-200', serial: 'SN-GRX-1188', status: 'INSP', lastInspection: '2026-02-11', remarks: 'Đến hạn kiểm tra che chắn an toàn hằng năm. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-FDR', x: 75, y: 38, updatedAt: '2026-10-28T10:00:00.000Z' },
 
     // ---- Floor 1 · Utility
-    { id: 'AST-UTL-0001', name: 'Air Compressor AC-01', categoryId: 'UTL', departmentId: 'EN', manufacturer: 'Kestrel Air Systems (fictional)', model: 'KA-75VSD', serial: 'SN-KA75-5521', status: 'ACTIVE', lastInspection: '2026-10-20', remarks: 'Oil-free screw compressor. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-UTL', x: 84, y: 14, updatedAt: '2026-10-20T07:30:00.000Z' },
-    { id: 'AST-UTL-0002', name: 'Air Compressor AC-02', categoryId: 'UTL', departmentId: 'EN', manufacturer: 'Kestrel Air Systems (fictional)', model: 'KA-75VSD', serial: 'SN-KA75-5522', status: 'OOS', lastInspection: '2026-04-09', remarks: 'Standby unit, motor rewinding. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-UTL', x: 92, y: 14, updatedAt: '2026-11-05T15:40:00.000Z' },
-    { id: 'AST-UTL-0003', name: 'Chiller CH-01', categoryId: 'UTL', departmentId: 'EN', manufacturer: 'Polar Process Cooling (fictional)', model: 'PPC-400', serial: 'SN-PPC4-0902', status: 'ACTIVE', lastInspection: '2026-08-28', remarks: 'Glycol chiller for freeze drying. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-UTL', x: 86, y: 34, updatedAt: '2026-08-28T09:00:00.000Z' },
-    { id: 'AST-UTL-0004', name: 'RO Water Treatment Unit WT-01', categoryId: 'UTL', departmentId: 'EN', manufacturer: 'ClearFlow Water (fictional)', model: 'CF-RO10', serial: 'SN-CFRO-3003', status: 'INSP', lastInspection: '2026-05-14', remarks: 'Membrane integrity test due. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-UTL', x: 94, y: 38, updatedAt: '2026-11-12T08:20:00.000Z' },
+    { id: 'AST-UTL-0001', name: 'Máy nén khí AC-01', categoryId: 'UTL', departmentId: 'EN', manufacturer: 'Kestrel Air Systems (giả định)', model: 'KA-75VSD', serial: 'SN-KA75-5521', status: 'ACTIVE', lastInspection: '2026-10-20', remarks: 'Máy nén trục vít không dầu. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-UTL', x: 84, y: 14, updatedAt: '2026-10-20T07:30:00.000Z' },
+    { id: 'AST-UTL-0002', name: 'Máy nén khí AC-02', categoryId: 'UTL', departmentId: 'EN', manufacturer: 'Kestrel Air Systems (giả định)', model: 'KA-75VSD', serial: 'SN-KA75-5522', status: 'OOS', lastInspection: '2026-04-09', remarks: 'Máy dự phòng, đang quấn lại động cơ. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-UTL', x: 92, y: 14, updatedAt: '2026-11-05T15:40:00.000Z' },
+    { id: 'AST-UTL-0003', name: 'Máy làm lạnh Chiller CH-01', categoryId: 'UTL', departmentId: 'EN', manufacturer: 'Polar Process Cooling (giả định)', model: 'PPC-400', serial: 'SN-PPC4-0902', status: 'ACTIVE', lastInspection: '2026-08-28', remarks: 'Chiller glycol cho sấy thăng hoa. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-UTL', x: 86, y: 34, updatedAt: '2026-08-28T09:00:00.000Z' },
+    { id: 'AST-UTL-0004', name: 'Hệ thống xử lý nước RO WT-01', categoryId: 'UTL', departmentId: 'EN', manufacturer: 'ClearFlow Water (giả định)', model: 'CF-RO10', serial: 'SN-CFRO-3003', status: 'INSP', lastInspection: '2026-05-14', remarks: 'Đến hạn kiểm tra màng lọc. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-UTL', x: 94, y: 38, updatedAt: '2026-11-12T08:20:00.000Z' },
 
     // ---- Floor 1 · Packing
-    { id: 'AST-EQP-0014', name: 'Jar Filling Line FL-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'PackLogic Automation (fictional)', model: 'PL-JF120', serial: 'SN-PLJ-2023-0071', status: 'ACTIVE', lastInspection: '2026-09-09', remarks: '120 jars/min. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-PCK', x: 12, y: 68, updatedAt: '2026-09-09T10:00:00.000Z' },
-    { id: 'AST-EQP-0015', name: 'Stick-Pack Filling Line FL-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'PackLogic Automation (fictional)', model: 'PL-SP10', serial: 'SN-PLS-2024-0019', status: 'INSP', lastInspection: '2026-03-30', remarks: 'Check-weigher calibration due. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-PCK', x: 12, y: 84, updatedAt: '2026-11-17T13:30:00.000Z' },
-    { id: 'AST-EQP-0016', name: 'Metal Detector MD-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Detectra Inspection (fictional)', model: 'DX-300', serial: 'SN-DX3-6614', status: 'ACTIVE', lastInspection: '2026-11-01', remarks: 'CCP — daily test pieces. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-PCK', x: 38.4, y: 76, updatedAt: '2026-11-19T09:00:00.000Z' },
-    { id: 'AST-EQP-0017', name: 'Metal Detector MD-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Detectra Inspection (fictional)', model: 'DX-300', serial: 'SN-DX3-6615', status: 'ACTIVE', lastInspection: '2026-11-01', remarks: 'CCP — daily test pieces. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-PCK', x: 32, y: 84, updatedAt: '2026-11-01T09:00:00.000Z' },
-    { id: 'AST-FUR-0001', name: 'Packing Workbench WB-01', categoryId: 'FUR', departmentId: 'PR', manufacturer: 'Generic (fictional)', model: 'SS-1800', serial: 'SN-WB-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: 'Stainless steel bench. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-PCK', x: 40, y: 88, updatedAt: '2026-06-01T08:00:00.000Z' },
+    { id: 'AST-EQP-0014', name: 'Dây chuyền chiết hũ FL-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'PackLogic Automation (giả định)', model: 'PL-JF120', serial: 'SN-PLJ-2023-0071', status: 'ACTIVE', lastInspection: '2026-09-09', remarks: '120 hũ/phút. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-PCK', x: 12, y: 68, updatedAt: '2026-09-09T10:00:00.000Z' },
+    { id: 'AST-EQP-0015', name: 'Dây chuyền đóng gói stick FL-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'PackLogic Automation (giả định)', model: 'PL-SP10', serial: 'SN-PLS-2024-0019', status: 'INSP', lastInspection: '2026-03-30', remarks: 'Đến hạn hiệu chuẩn cân kiểm tra. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-PCK', x: 12, y: 84, updatedAt: '2026-11-17T13:30:00.000Z' },
+    { id: 'AST-EQP-0016', name: 'Máy dò kim loại MD-01', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Detectra Inspection (giả định)', model: 'DX-300', serial: 'SN-DX3-6614', status: 'ACTIVE', lastInspection: '2026-11-01', remarks: 'CCP — thử mẫu chuẩn hằng ngày. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-PCK', x: 38.4, y: 76, updatedAt: '2026-11-19T09:00:00.000Z' },
+    { id: 'AST-EQP-0017', name: 'Máy dò kim loại MD-02', categoryId: 'EQP', departmentId: 'PR', manufacturer: 'Detectra Inspection (giả định)', model: 'DX-300', serial: 'SN-DX3-6615', status: 'ACTIVE', lastInspection: '2026-11-01', remarks: 'CCP — thử mẫu chuẩn hằng ngày. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-PCK', x: 32, y: 84, updatedAt: '2026-11-01T09:00:00.000Z' },
+    { id: 'AST-FUR-0001', name: 'Bàn thao tác đóng gói WB-01', categoryId: 'FUR', departmentId: 'PR', manufacturer: 'Hàng phổ thông (giả định)', model: 'SS-1800', serial: 'SN-WB-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: 'Bàn inox. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-PCK', x: 40, y: 88, updatedAt: '2026-06-01T08:00:00.000Z' },
 
     // ---- Floor 1 · Warehouse
-    { id: 'AST-EQP-0018', name: 'Forklift FK-01', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (fictional)', model: 'LM-25E', serial: 'SN-LM25-8840', status: 'ACTIVE', lastInspection: '2026-10-11', remarks: 'Electric 2.5 t. Parking bay P1. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-WHS', x: 60, y: 70, updatedAt: '2026-10-11T07:00:00.000Z' },
-    { id: 'AST-EQP-0019', name: 'Forklift FK-02', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (fictional)', model: 'LM-25E', serial: 'SN-LM25-8841', status: 'INSP', lastInspection: '2026-04-22', remarks: 'Statutory lifting inspection due. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-WHS', x: 66, y: 86, updatedAt: '2026-11-20T16:10:00.000Z' },
-    { id: 'AST-EQP-0020', name: 'Pallet Truck PT-01', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (fictional)', model: 'PT-20M', serial: 'SN-PT20-1201', status: 'ACTIVE', lastInspection: '2026-09-30', remarks: 'Manual pallet truck. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-WHS', x: 52, y: 80, updatedAt: '2026-11-16T11:00:00.000Z' },
-    { id: 'AST-EQP-0021', name: 'Pallet Truck PT-02', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (fictional)', model: 'PT-20M', serial: 'SN-PT20-1202', status: 'OOS', lastInspection: '2026-02-18', remarks: 'Hydraulic leak, tagged out. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-WHS', x: 92, y: 66, updatedAt: '2026-10-30T09:45:00.000Z' },
-    { id: 'AST-FUR-0002', name: 'Pallet Racking Row A', categoryId: 'FUR', departmentId: 'LG', manufacturer: 'StoreRack (fictional)', model: 'SR-4L', serial: 'SN-SR-A-001', status: 'ACTIVE', lastInspection: '2026-07-01', remarks: '4-level selective racking. DEMO RECORD.', floorId: 'F1', zoneId: 'Z-WHS', x: 84, y: 80, updatedAt: '2026-07-01T08:00:00.000Z' },
+    { id: 'AST-EQP-0018', name: 'Xe nâng FK-01', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (giả định)', model: 'LM-25E', serial: 'SN-LM25-8840', status: 'ACTIVE', lastInspection: '2026-10-11', remarks: 'Xe nâng điện 2,5 tấn. Bãi đỗ P1. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-WHS', x: 60, y: 70, updatedAt: '2026-10-11T07:00:00.000Z' },
+    { id: 'AST-EQP-0019', name: 'Xe nâng FK-02', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (giả định)', model: 'LM-25E', serial: 'SN-LM25-8841', status: 'INSP', lastInspection: '2026-04-22', remarks: 'Đến hạn kiểm định thiết bị nâng theo quy định. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-WHS', x: 66, y: 86, updatedAt: '2026-11-20T16:10:00.000Z' },
+    { id: 'AST-EQP-0020', name: 'Xe nâng tay PT-01', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (giả định)', model: 'PT-20M', serial: 'SN-PT20-1201', status: 'ACTIVE', lastInspection: '2026-09-30', remarks: 'Xe nâng tay. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-WHS', x: 52, y: 80, updatedAt: '2026-11-16T11:00:00.000Z' },
+    { id: 'AST-EQP-0021', name: 'Xe nâng tay PT-02', categoryId: 'EQP', departmentId: 'LG', manufacturer: 'Liftmaster Industrial (giả định)', model: 'PT-20M', serial: 'SN-PT20-1202', status: 'OOS', lastInspection: '2026-02-18', remarks: 'Rò rỉ thuỷ lực, đã treo thẻ khoá. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-WHS', x: 92, y: 66, updatedAt: '2026-10-30T09:45:00.000Z' },
+    { id: 'AST-FUR-0002', name: 'Kệ pallet dãy A', categoryId: 'FUR', departmentId: 'LG', manufacturer: 'StoreRack (giả định)', model: 'SR-4L', serial: 'SN-SR-A-001', status: 'ACTIVE', lastInspection: '2026-07-01', remarks: 'Kệ chọn lọc 4 tầng. DỮ LIỆU DEMO.', floorId: 'F1', zoneId: 'Z-WHS', x: 84, y: 80, updatedAt: '2026-07-01T08:00:00.000Z' },
 
     // ---- Floor 2 · Laboratory
-    { id: 'AST-LAB-0001', name: 'Microbiology Incubator INC-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Labthermo Instruments (fictional)', model: 'LT-INC150', serial: 'SN-LTI-150-2290', status: 'ACTIVE', lastInspection: '2026-10-14', remarks: '30 °C TPC incubation. DEMO RECORD.', floorId: 'F2', zoneId: 'Z-LAB', x: 9, y: 12.7, updatedAt: '2026-10-14T08:00:00.000Z' },
-    { id: 'AST-LAB-0002', name: 'Analytical Balance BAL-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (fictional)', model: 'MX-220A', serial: 'SN-MX220-1145', status: 'ACTIVE', lastInspection: '2026-11-04', remarks: '0.1 mg readability. DEMO RECORD.', floorId: 'F2', zoneId: 'Z-LAB', x: 18, y: 29.5, updatedAt: '2026-11-04T10:00:00.000Z' },
-    { id: 'AST-LAB-0003', name: 'Analytical Balance BAL-02', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (fictional)', model: 'MX-220A', serial: 'SN-MX220-1146', status: 'INSP', lastInspection: '2026-05-04', remarks: 'External calibration due. DEMO RECORD.', floorId: 'F2', zoneId: 'Z-LAB', x: 26, y: 29.5, updatedAt: '2026-11-15T09:20:00.000Z' },
-    { id: 'AST-LAB-0004', name: 'Moisture Analyzer MA-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (fictional)', model: 'MX-MA50', serial: 'SN-MXMA-0420', status: 'ACTIVE', lastInspection: '2026-09-12', remarks: 'DEMO RECORD.', floorId: 'F2', zoneId: 'Z-LAB', x: 32.5, y: 12.7, updatedAt: '2026-09-12T08:00:00.000Z' },
-    { id: 'AST-LAB-0005', name: 'Laminar Flow Cabinet LF-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Labthermo Instruments (fictional)', model: 'LT-LFC4', serial: 'SN-LTL-0877', status: 'OOS', lastInspection: '2026-01-28', remarks: 'HEPA filter replacement pending. DEMO RECORD.', floorId: 'F2', zoneId: 'Z-LAB', x: 9.5, y: 46.3, updatedAt: '2026-11-08T14:00:00.000Z' },
-    { id: 'AST-FUR-0003', name: 'Lab Bench LB-01', categoryId: 'FUR', departmentId: 'QA', manufacturer: 'Generic (fictional)', model: 'EP-2400', serial: 'SN-LB-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: 'Epoxy resin top. DEMO RECORD.', floorId: 'F2', zoneId: 'Z-LAB', x: 24.5, y: 47.8, updatedAt: '2026-06-01T08:00:00.000Z' },
+    { id: 'AST-LAB-0001', name: 'Tủ ấm vi sinh INC-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Labthermo Instruments (giả định)', model: 'LT-INC150', serial: 'SN-LTI-150-2290', status: 'ACTIVE', lastInspection: '2026-10-14', remarks: 'Ủ TPC ở 30 °C. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 9, y: 12.7, updatedAt: '2026-10-14T08:00:00.000Z' },
+    { id: 'AST-LAB-0002', name: 'Cân phân tích BAL-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (giả định)', model: 'MX-220A', serial: 'SN-MX220-1145', status: 'ACTIVE', lastInspection: '2026-11-04', remarks: 'Độ đọc 0,1 mg. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 18, y: 29.5, updatedAt: '2026-11-04T10:00:00.000Z' },
+    { id: 'AST-LAB-0003', name: 'Cân phân tích BAL-02', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (giả định)', model: 'MX-220A', serial: 'SN-MX220-1146', status: 'INSP', lastInspection: '2026-05-04', remarks: 'Đến hạn hiệu chuẩn bên ngoài. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 26, y: 29.5, updatedAt: '2026-11-15T09:20:00.000Z' },
+    { id: 'AST-LAB-0004', name: 'Máy đo độ ẩm MA-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Metrix Scales (giả định)', model: 'MX-MA50', serial: 'SN-MXMA-0420', status: 'ACTIVE', lastInspection: '2026-09-12', remarks: 'DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 32.5, y: 12.7, updatedAt: '2026-09-12T08:00:00.000Z' },
+    { id: 'AST-LAB-0005', name: 'Tủ cấy vô trùng LF-01', categoryId: 'LAB', departmentId: 'QA', manufacturer: 'Labthermo Instruments (giả định)', model: 'LT-LFC4', serial: 'SN-LTL-0877', status: 'OOS', lastInspection: '2026-01-28', remarks: 'Chờ thay lọc HEPA. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 9.5, y: 46.3, updatedAt: '2026-11-08T14:00:00.000Z' },
+    { id: 'AST-FUR-0003', name: 'Bàn thí nghiệm LB-01', categoryId: 'FUR', departmentId: 'QA', manufacturer: 'Hàng phổ thông (giả định)', model: 'EP-2400', serial: 'SN-LB-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: 'Mặt bàn epoxy. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-LAB', x: 24.5, y: 47.8, updatedAt: '2026-06-01T08:00:00.000Z' },
 
     // ---- Floor 2 · Office / Spare parts
-    { id: 'AST-FUR-0004', name: 'Office Workstation Cluster OW-01', categoryId: 'FUR', departmentId: 'AD', manufacturer: 'Generic (fictional)', model: 'WS-4P', serial: 'SN-OW-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: '4-person cluster. DEMO RECORD.', floorId: 'F2', zoneId: 'Z-OFF', x: 50, y: 20, updatedAt: '2026-06-01T08:00:00.000Z' },
-    { id: 'AST-FUR-0005', name: 'Spare Parts Shelving SP-01', categoryId: 'FUR', departmentId: 'EN', manufacturer: 'StoreRack (fictional)', model: 'SR-SH5', serial: 'SN-SP-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: 'Critical spares for production. DEMO RECORD.', floorId: 'F2', zoneId: 'Z-SPS', x: 87, y: 30, updatedAt: '2026-06-01T08:00:00.000Z' },
+    { id: 'AST-FUR-0004', name: 'Cụm bàn làm việc OW-01', categoryId: 'FUR', departmentId: 'AD', manufacturer: 'Hàng phổ thông (giả định)', model: 'WS-4P', serial: 'SN-OW-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: 'Cụm 4 chỗ ngồi. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-OFF', x: 50, y: 20, updatedAt: '2026-06-01T08:00:00.000Z' },
+    { id: 'AST-FUR-0005', name: 'Kệ phụ tùng SP-01', categoryId: 'FUR', departmentId: 'EN', manufacturer: 'StoreRack (giả định)', model: 'SR-SH5', serial: 'SN-SP-0001', status: 'ACTIVE', lastInspection: '2026-06-01', remarks: 'Phụ tùng quan trọng cho sản xuất. DỮ LIỆU DEMO.', floorId: 'F2', zoneId: 'Z-SPS', x: 87, y: 30, updatedAt: '2026-06-01T08:00:00.000Z' },
   ],
 
   // Location moves (illustrative). `from` = previous location; the asset's
   // current location above is the final destination of the last move.
   moves: [
-    { assetId: 'AST-EQP-0019', at: '2026-08-14T08:30:00.000Z', by: 'Warehouse Supervisor', reason: 'Reassigned from packing to warehouse fleet', from: { floorId: 'F1', zoneId: 'Z-PCK', x: 30, y: 62 } },
-    { assetId: 'AST-EQP-0021', at: '2026-10-30T09:40:00.000Z', by: 'Warehouse Supervisor', reason: 'Tagged out — parked in quarantine corner', from: { floorId: 'F1', zoneId: 'Z-WHS', x: 56, y: 88 } },
-    { assetId: 'AST-LAB-0003', at: '2026-11-15T09:15:00.000Z', by: 'QA Officer', reason: 'Moved to weighing bench (vibration issue at old position)', from: { floorId: 'F2', zoneId: 'Z-LAB', x: 33, y: 46 } },
-    { assetId: 'AST-EQP-0020', at: '2026-11-16T10:55:00.000Z', by: 'Warehouse Supervisor', reason: 'Returned from packing area after shift', from: { floorId: 'F1', zoneId: 'Z-PCK', x: 22, y: 76 } },
-    { assetId: 'AST-EQP-0016', at: '2026-11-19T08:50:00.000Z', by: 'Maintenance Planner', reason: 'Line re-layout: metal detector moved after FL-01 conveyor extension', from: { floorId: 'F1', zoneId: 'Z-PCK', x: 28, y: 68 } },
-    { assetId: 'AST-EQP-0019', at: '2026-11-20T16:05:00.000Z', by: 'Warehouse Supervisor', reason: 'Parked at charging station for inspection', from: { floorId: 'F1', zoneId: 'Z-WHS', x: 74, y: 70 } },
+    { assetId: 'AST-EQP-0019', at: '2026-08-14T08:30:00.000Z', by: 'Giám sát kho', reason: 'Điều chuyển từ khu đóng gói về đội xe kho', from: { floorId: 'F1', zoneId: 'Z-PCK', x: 30, y: 62 } },
+    { assetId: 'AST-EQP-0021', at: '2026-10-30T09:40:00.000Z', by: 'Giám sát kho', reason: 'Treo thẻ khoá — đưa vào góc cách ly', from: { floorId: 'F1', zoneId: 'Z-WHS', x: 56, y: 88 } },
+    { assetId: 'AST-LAB-0003', at: '2026-11-15T09:15:00.000Z', by: 'Nhân viên QA', reason: 'Chuyển sang bàn cân (vị trí cũ bị rung)', from: { floorId: 'F2', zoneId: 'Z-LAB', x: 33, y: 46 } },
+    { assetId: 'AST-EQP-0020', at: '2026-11-16T10:55:00.000Z', by: 'Giám sát kho', reason: 'Trả về từ khu đóng gói sau ca làm việc', from: { floorId: 'F1', zoneId: 'Z-PCK', x: 22, y: 76 } },
+    { assetId: 'AST-EQP-0016', at: '2026-11-19T08:50:00.000Z', by: 'Kế hoạch bảo trì', reason: 'Bố trí lại dây chuyền: dời máy dò kim loại sau khi nối dài băng tải FL-01', from: { floorId: 'F1', zoneId: 'Z-PCK', x: 28, y: 68 } },
+    { assetId: 'AST-EQP-0019', at: '2026-11-20T16:05:00.000Z', by: 'Giám sát kho', reason: 'Đỗ tại trạm sạc chờ kiểm định', from: { floorId: 'F1', zoneId: 'Z-WHS', x: 74, y: 70 } },
   ],
 };

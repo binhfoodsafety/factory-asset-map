@@ -54,7 +54,7 @@ export default {
       }
       if (url.pathname === '/api/changes' && req.method === 'POST') return json(await applyChanges(await readBody(req), env), 200, h);
       if (url.pathname === '/api/replace' && req.method === 'POST') {
-        if (env.ADMIN_KEY && req.headers.get('X-Admin-Key') !== env.ADMIN_KEY) return json({ error: 'Admin key required for this operation.' }, 403, h);
+        if (env.ADMIN_KEY && req.headers.get('X-Admin-Key') !== env.ADMIN_KEY) return json({ error: 'Sai hoặc thiếu admin key.' }, 403, h);
         return json(await replaceAll(await readBody(req), env), 200, h);
       }
       if (url.pathname === '/' || url.pathname === '/api') return json({ app: 'Factory Asset Map API', endpoints: ['/api/health', '/api/changes', '/api/replace'] }, 200, h);
@@ -78,7 +78,7 @@ function checkRecord(c, id, data) {
   if (typeof id !== 'string' || !id || id.length > 120) return 'Invalid id';
   if (data !== undefined) {
     const s = JSON.stringify(data);
-    if (s.length > MAX_RECORD) return 'Record too large (max ~1.9 MB) — use a smaller photo / floor plan';
+    if (s.length > MAX_RECORD) return 'Bản ghi quá lớn (tối đa ~1,9 MB) — hãy dùng ảnh / bản vẽ nhỏ hơn';
   }
   return null;
 }
@@ -102,7 +102,7 @@ async function applyChanges(body, env) {
     if (o.c === 'history' && o.data && rejectedAssets.has(o.data.assetId) && o.data.action === 'REGISTER') { rejected.push({ c: o.c, id: o.id, reason: 'Asset rejected' }); continue; }
 
     if (o.op === 'del') {
-      if (o.c === 'history') { rejected.push({ c: o.c, id: o.id, reason: 'Location history is append-only' }); continue; }
+      if (o.c === 'history') { rejected.push({ c: o.c, id: o.id, reason: 'Lịch sử vị trí chỉ được ghi thêm, không được xoá' }); continue; }
       await env.DB.prepare('UPDATE records SET deleted = 1, data = NULL, updated_at = ?3 WHERE c = ?1 AND id = ?2').bind(o.c, o.id, ts).run();
       applied++;
       continue;
@@ -115,7 +115,7 @@ async function applyChanges(body, env) {
       if (!r.meta.changes) {
         if (o.c === 'assets') {
           rejectedAssets.add(o.id);
-          rejected.push({ c: o.c, id: o.id, reason: `Asset ID ${o.id} already exists or was used before` });
+          rejected.push({ c: o.c, id: o.id, reason: `Asset ID ${o.id} đã tồn tại hoặc đã từng được dùng` });
         } // existing history entries are left unchanged (append-only)
         continue;
       }

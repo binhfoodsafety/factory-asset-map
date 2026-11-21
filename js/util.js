@@ -24,12 +24,12 @@ window.FAM = window.FAM || {};
   };
   U.fmtDateTime = (iso) =>
     iso
-      ? new Date(iso).toLocaleString(undefined, { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+      ? new Date(iso).toLocaleString('vi-VN', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })
       : '—';
   U.fmtDate = (d) => {
     if (!d) return '—';
     const dt = new Date(d.length === 10 ? d + 'T00:00:00' : d);
-    return isNaN(dt) ? U.esc(d) : dt.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
+    return isNaN(dt) ? U.esc(d) : dt.toLocaleDateString('vi-VN', { year: 'numeric', month: 'short', day: '2-digit' });
   };
   U.isoDate = (v) => {
     // Normalise dates from CSV/Excel to YYYY-MM-DD ('' when empty/invalid)

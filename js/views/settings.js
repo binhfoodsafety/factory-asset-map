@@ -1,15 +1,16 @@
-/* Factory Asset Map — TAB 07 Settings, configuration, data management and user guide. */
+/* Factory Asset Map — TAB 07 Cài đặt, cấu hình, quản lý dữ liệu và hướng dẫn sử dụng. */
 window.FAM = window.FAM || {};
 (function (F) {
   'use strict';
   const U = F.util, S = F.store, UI = F.ui, IO = F.io;
   F.views = F.views || {};
   const ST = (F.views.settings = {});
-  const SHAPES = ['circle', 'square', 'diamond', 'triangle'];
+  const SHAPES = [['circle', 'Tròn'], ['square', 'Vuông'], ['diamond', 'Thoi'], ['triangle', 'Tam giác']];
+  const shapeName = (s) => (SHAPES.find((x) => x[0] === s) || [s, s])[1];
   const SECTIONS = [
-    ['general', 'General'], ['users', 'Users'], ['categories', 'Asset categories'], ['statuses', 'Statuses'],
-    ['coding', 'Location coding'], ['data', 'Data & backup'], ['importexport', 'Import / export'],
-    ['floorplans', 'Floor plans (SVG/CAD)'], ['guide', 'User guide'], ['future', 'Future integrations'],
+    ['general', 'Thông tin chung'], ['users', 'Người dùng'], ['categories', 'Nhóm tài sản'], ['statuses', 'Trạng thái'],
+    ['coding', 'Quy tắc mã vị trí'], ['data', 'Dữ liệu & sao lưu'], ['importexport', 'Nhập / xuất dữ liệu'],
+    ['floorplans', 'Bản vẽ (SVG/CAD)'], ['guide', 'Hướng dẫn sử dụng'], ['future', 'Tích hợp trong tương lai'],
   ];
 
   function card(id, title, body, head = '') {
@@ -24,60 +25,60 @@ window.FAM = window.FAM || {};
     const sample = S.views()[0];
 
     root.innerHTML = `
-      <div class="view-head"><h2>Settings &amp; User Guide</h2></div>
+      <div class="view-head"><h2>Cài đặt &amp; Hướng dẫn</h2></div>
       <div class="settings-layout">
         <nav class="card settings-nav">${SECTIONS.map(([k, t]) => `<a href="#" data-sec="${k}">${t}</a>`).join('')}</nav>
         <div class="settings-sections">
 
-        ${card('general', 'General settings', `
+        ${card('general', 'Thông tin chung', `
           <form class="form-grid" id="setGeneral">
-            <div class="field"><label>Factory name</label><input name="factoryName" value="${U.esc(fac.name)}"></div>
-            <div class="field"><label>Factory code</label><input name="factoryCode" value="${U.esc(fac.code || '')}" maxlength="10"></div>
+            <div class="field"><label>Tên nhà máy</label><input name="factoryName" value="${U.esc(fac.name)}"></div>
+            <div class="field"><label>Mã nhà máy</label><input name="factoryCode" value="${U.esc(fac.code || '')}" maxlength="10"></div>
             <div class="field full"><label>QR base URL</label><input name="qrBaseUrl" value="${U.esc(s.qrBaseUrl || '')}" placeholder="${U.esc(location.href.split('#')[0])}">
-              <div class="hint">Address encoded in QR labels (e.g. https://assets.example-factory.com/). Leave empty to use the current address.</div></div>
-            <div class="field"><label>Marker size</label><select name="markerScale">${[0.8, 1, 1.25, 1.5].map((v) => `<option value="${v}" ${Number(s.markerScale || 1) === v ? 'selected' : ''}>${v === 1 ? 'Normal' : v < 1 ? 'Small' : v === 1.25 ? 'Large' : 'Extra large (tablet)'}</option>`).join('')}</select></div>
-            <div class="field"><span class="lbl">Map options</span>
-              <label class="check"><input type="checkbox" name="autoDetectZone" ${s.autoDetectZone !== false ? 'checked' : ''}> Auto-detect zone from X/Y</label>
-              <label class="check"><input type="checkbox" name="showZones" ${s.showZones !== false ? 'checked' : ''}> Show zone boundaries</label>
-              <label class="check"><input type="checkbox" name="showLabels" ${s.showLabels !== false ? 'checked' : ''}> Show Asset ID labels when zoomed</label></div>
-            <div class="full"><button class="btn btn-primary" type="submit">${U.icon('check', 16)}Save settings</button></div>
+              <div class="hint">Địa chỉ web được mã hoá trong nhãn QR (VD: https://taisan.nhamay.vn/). Để trống để dùng địa chỉ hiện tại.</div></div>
+            <div class="field"><label>Kích thước điểm đánh dấu</label><select name="markerScale">${[[0.8, 'Nhỏ'], [1, 'Bình thường'], [1.25, 'Lớn'], [1.5, 'Rất lớn (máy tính bảng)']].map(([v, t]) => `<option value="${v}" ${Number(s.markerScale || 1) === v ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+            <div class="field"><span class="lbl">Tuỳ chọn sơ đồ</span>
+              <label class="check"><input type="checkbox" name="autoDetectZone" ${s.autoDetectZone !== false ? 'checked' : ''}> Tự nhận khu vực theo X/Y</label>
+              <label class="check"><input type="checkbox" name="showZones" ${s.showZones !== false ? 'checked' : ''}> Hiện ranh giới khu vực</label>
+              <label class="check"><input type="checkbox" name="showLabels" ${s.showLabels !== false ? 'checked' : ''}> Hiện nhãn Asset ID khi phóng to</label></div>
+            <div class="full"><button class="btn btn-primary" type="submit">${U.icon('check', 16)}Lưu cài đặt</button></div>
           </form>`)}
 
-        ${card('users', 'Users', `
-          <p class="small muted">Names available in "Acting as" (top bar) and recorded as <b>Updated By</b> in location history. This demo has no login. <span class="future-tag">FUTURE INTEGRATION</span> authentication &amp; roles with a backend.</p>
-          <table class="tbl"><thead><tr><th>Name</th><th>Role</th><th class="actions"></th></tr></thead><tbody>
-            ${S.users().map((u) => `<tr data-id="${U.esc(u.id)}"><td>${U.esc(u.name)}</td><td class="muted">${U.esc(u.role)}</td><td class="actions"><button class="icon-btn" data-uact="edit">${U.icon('edit', 16)}</button><button class="icon-btn" data-uact="del" style="color:var(--red)">${U.icon('trash', 16)}</button></td></tr>`).join('')}
-          </tbody></table>`, `<button class="btn btn-sm" id="usrAdd">${U.icon('plus', 14)}Add user</button>`)}
+        ${card('users', 'Người dùng', `
+          <p class="small muted">Danh sách tên trong ô "Người thao tác" (thanh trên cùng), được ghi là <b>Người cập nhật</b> trong lịch sử vị trí. Ứng dụng không yêu cầu đăng nhập. <span class="future-tag">TÍCH HỢP SAU</span> đăng nhập &amp; phân quyền.</p>
+          <table class="tbl"><thead><tr><th>Họ tên</th><th>Vai trò</th><th class="actions"></th></tr></thead><tbody>
+            ${S.users().map((u) => `<tr data-id="${U.esc(u.id)}"><td>${U.esc(u.name)}</td><td class="muted">${U.esc(u.role)}</td><td class="actions"><button class="icon-btn" data-uact="edit" title="Sửa">${U.icon('edit', 16)}</button><button class="icon-btn" data-uact="del" title="Xoá" style="color:var(--red)">${U.icon('trash', 16)}</button></td></tr>`).join('')}
+          </tbody></table>`, `<button class="btn btn-sm" id="usrAdd">${U.icon('plus', 14)}Thêm người dùng</button>`)}
 
-        ${card('categories', 'Asset categories', `
-          <p class="small muted">The category code is used in new Asset IDs (AST-<b>EQP</b>-0001) and cannot be changed once created. Marker shape identifies the category on the map.</p>
-          <table class="tbl"><thead><tr><th>Code</th><th>Name</th><th>Marker</th><th class="num">Assets</th><th class="actions"></th></tr></thead><tbody>
-            ${S.categories().map((c) => `<tr data-id="${U.esc(c.id)}"><td class="mono"><b>${U.esc(c.code)}</b></td><td>${U.esc(c.name)}</td><td>${U.shapeSvg(c.shape, '#64748b')} <span class="small muted">${c.shape}</span></td><td class="num">${S.assets().filter((a) => a.categoryId === c.id).length}</td>
-              <td class="actions"><button class="icon-btn" data-cact="edit">${U.icon('edit', 16)}</button><button class="icon-btn" data-cact="del" style="color:var(--red)">${U.icon('trash', 16)}</button></td></tr>`).join('')}
-          </tbody></table>`, `<button class="btn btn-sm" id="catAdd">${U.icon('plus', 14)}Add category</button>`)}
+        ${card('categories', 'Nhóm tài sản', `
+          <p class="small muted">Mã nhóm được dùng trong Asset ID mới (AST-<b>EQP</b>-0001) và không đổi được sau khi tạo. Hình dạng điểm đánh dấu giúp nhận biết nhóm trên sơ đồ.</p>
+          <table class="tbl"><thead><tr><th>Mã</th><th>Tên nhóm</th><th>Ký hiệu</th><th class="num">Tài sản</th><th class="actions"></th></tr></thead><tbody>
+            ${S.categories().map((c) => `<tr data-id="${U.esc(c.id)}"><td class="mono"><b>${U.esc(c.code)}</b></td><td>${U.esc(c.name)}</td><td>${U.shapeSvg(c.shape, '#64748b')} <span class="small muted">${shapeName(c.shape)}</span></td><td class="num">${S.assets().filter((a) => a.categoryId === c.id).length}</td>
+              <td class="actions"><button class="icon-btn" data-cact="edit" title="Sửa">${U.icon('edit', 16)}</button><button class="icon-btn" data-cact="del" title="Xoá" style="color:var(--red)">${U.icon('trash', 16)}</button></td></tr>`).join('')}
+          </tbody></table>`, `<button class="btn btn-sm" id="catAdd">${U.icon('plus', 14)}Thêm nhóm</button>`)}
 
-        ${card('statuses', 'Statuses', `
-          <p class="small muted">Status sets the marker colour. The three core statuses (Active, Inspection Due, Out of Service) drive the dashboard and can be renamed/recoloured but not deleted.</p>
-          <table class="tbl"><thead><tr><th>Status</th><th>Colour</th><th>Type</th><th class="num">Assets</th><th class="actions"></th></tr></thead><tbody>
-            ${S.statuses().map((x) => `<tr data-id="${U.esc(x.id)}"><td>${UI.statusBadge(x.id)}</td><td class="mono small">${x.color}</td><td class="small muted">${x.core ? 'Core' : 'Custom'}</td><td class="num">${S.assets().filter((a) => a.status === x.id).length}</td>
-              <td class="actions"><button class="icon-btn" data-sact="edit">${U.icon('edit', 16)}</button>${x.core ? '' : `<button class="icon-btn" data-sact="del" style="color:var(--red)">${U.icon('trash', 16)}</button>`}</td></tr>`).join('')}
-          </tbody></table>`, `<button class="btn btn-sm" id="stAdd">${U.icon('plus', 14)}Add status</button>`)}
+        ${card('statuses', 'Trạng thái', `
+          <p class="small muted">Trạng thái quyết định màu điểm đánh dấu. Ba trạng thái gốc (Đang hoạt động, Đến hạn kiểm định, Ngừng hoạt động) dùng cho Dashboard: có thể đổi tên/màu nhưng không xoá được.</p>
+          <table class="tbl"><thead><tr><th>Trạng thái</th><th>Màu</th><th>Loại</th><th class="num">Tài sản</th><th class="actions"></th></tr></thead><tbody>
+            ${S.statuses().map((x) => `<tr data-id="${U.esc(x.id)}"><td>${UI.statusBadge(x.id)}</td><td class="mono small">${x.color}</td><td class="small muted">${x.core ? 'Gốc' : 'Tuỳ chỉnh'}</td><td class="num">${S.assets().filter((a) => a.status === x.id).length}</td>
+              <td class="actions"><button class="icon-btn" data-sact="edit" title="Sửa">${U.icon('edit', 16)}</button>${x.core ? '' : `<button class="icon-btn" data-sact="del" title="Xoá" style="color:var(--red)">${U.icon('trash', 16)}</button>`}</td></tr>`).join('')}
+          </tbody></table>`, `<button class="btn btn-sm" id="stAdd">${U.icon('plus', 14)}Thêm trạng thái</button>`)}
 
-        ${card('coding', 'Location coding rules', `<div class="guide">
-          <p>The system uses <b>two independent identifiers</b>:</p>
-          <table><tr><th>Identifier</th><th>Example</th><th>Behaviour</th></tr>
-            <tr><td><b>Asset ID</b></td><td class="mono">AST-EQP-0001</td><td>Permanent for the asset's whole lifecycle. Never changes when the asset moves, and is never reused after deletion. Format AST-&lt;category code&gt;-&lt;4-digit sequence&gt;.</td></tr>
-            <tr><td><b>Location Code</b></td><td class="mono">F1-PR-EXT-X025-Y040</td><td>Describes where the asset is now. Recalculated automatically on every move (and when floor/department/zone codes are edited).</td></tr></table>
-          <h4>Location Code structure</h4>
-          <table><tr><th>Part</th><th>Example</th><th>Meaning</th></tr>
-            <tr><td>Floor code</td><td class="mono">F1</td><td>Floor 1</td></tr>
-            <tr><td>Department code</td><td class="mono">PR</td><td>Department that owns the <i>zone</i> (area), e.g. Production</td></tr>
-            <tr><td>Zone code</td><td class="mono">EXT</td><td>Extraction zone</td></tr>
-            <tr><td>X</td><td class="mono">X025</td><td>X coordinate, rounded to whole %, 3 digits</td></tr>
-            <tr><td>Y</td><td class="mono">Y040</td><td>Y coordinate, rounded to whole %, 3 digits</td></tr></table>
-          <h4>Coordinate system</h4>
+        ${card('coding', 'Quy tắc mã vị trí', `<div class="guide">
+          <p>Hệ thống dùng <b>hai mã độc lập</b>:</p>
+          <table><tr><th>Mã</th><th>Ví dụ</th><th>Đặc điểm</th></tr>
+            <tr><td><b>Asset ID</b></td><td class="mono">AST-EQP-0001</td><td>Cố định trong suốt vòng đời tài sản. Không đổi khi di chuyển và không được dùng lại sau khi xoá. Định dạng AST-&lt;mã nhóm&gt;-&lt;số thứ tự 4 chữ số&gt;.</td></tr>
+            <tr><td><b>Location Code</b></td><td class="mono">F1-PR-EXT-X025-Y040</td><td>Mô tả vị trí hiện tại. Tự tính lại mỗi lần di chuyển (và khi sửa mã tầng/bộ phận/khu vực).</td></tr></table>
+          <h4>Cấu trúc Location Code</h4>
+          <table><tr><th>Thành phần</th><th>Ví dụ</th><th>Ý nghĩa</th></tr>
+            <tr><td>Mã tầng</td><td class="mono">F1</td><td>Tầng 1</td></tr>
+            <tr><td>Mã bộ phận</td><td class="mono">PR</td><td>Bộ phận phụ trách <i>khu vực</i>, VD: Sản xuất</td></tr>
+            <tr><td>Mã khu vực</td><td class="mono">EXT</td><td>Khu trích ly</td></tr>
+            <tr><td>X</td><td class="mono">X025</td><td>Tọa độ X, làm tròn %, 3 chữ số</td></tr>
+            <tr><td>Y</td><td class="mono">Y040</td><td>Tọa độ Y, làm tròn %, 3 chữ số</td></tr></table>
+          <h4>Hệ tọa độ</h4>
           <div class="coord-fig">
-            <svg width="230" height="150" viewBox="0 0 230 150" role="img" aria-label="Coordinate system diagram">
+            <svg width="230" height="150" viewBox="0 0 230 150" role="img" aria-label="Sơ đồ hệ tọa độ">
               <rect x="30" y="20" width="180" height="108" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
               <circle cx="30" cy="20" r="4" fill="#dc2626"/><text x="4" y="14" font-size="10" fill="#dc2626">0,0</text>
               <path d="M30 20h70" stroke="#1d63d8" stroke-width="2" marker-end="url(#ar)"/><text x="104" y="16" font-size="11" fill="#1d63d8">X →</text>
@@ -87,103 +88,102 @@ window.FAM = window.FAM || {};
               <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6z" fill="#1d63d8"/></marker><marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6z" fill="#0d9488"/></marker></defs>
             </svg>
             <ul style="flex:1;min-width:220px">
-              <li>Coordinates are <b>normalized percentages 0–100</b> of the floor drawing's width (X) and height (Y).</li>
-              <li><b>Origin</b> = top-left corner of the drawing. <b>X</b> increases to the right, <b>Y</b> increases downward (same as SVG and most CAD exports viewed on screen).</li>
-              <li>Stored with 0.1 % precision, independent of screen size, zoom or device. On a 100 m wide building, 0.1 % ≈ 10 cm.</li>
-              <li>If you replace a drawing, keep the same extents/margins so existing coordinates stay valid.</li>
+              <li>Tọa độ là <b>phần trăm chuẩn hoá 0–100</b> theo chiều rộng (X) và chiều cao (Y) của bản vẽ.</li>
+              <li><b>Gốc tọa độ</b> = góc trên bên trái bản vẽ. <b>X</b> tăng sang phải, <b>Y</b> tăng xuống dưới (giống SVG và hầu hết bản vẽ CAD khi xuất ra).</li>
+              <li>Lưu với độ chính xác 0,1 %, không phụ thuộc màn hình, mức phóng hay thiết bị. Với nhà xưởng rộng 100 m, 0,1 % ≈ 10 cm.</li>
+              <li>Khi thay bản vẽ, giữ nguyên phạm vi/lề để tọa độ cũ vẫn đúng.</li>
             </ul></div>
-          ${sample ? `<p>Example from current data: <span class="asset-id">${U.esc(sample.id)}</span> → <span class="loc-code">${U.esc(sample.locationCode)}</span></p>` : ''}
+          ${sample ? `<p>Ví dụ từ dữ liệu hiện tại: <span class="asset-id">${U.esc(sample.id)}</span> → <span class="loc-code">${U.esc(sample.locationCode)}</span></p>` : ''}
         </div>`)}
 
-        ${card('data', 'Data management &amp; backup', `
+        ${card('data', 'Quản lý dữ liệu &amp; sao lưu', `
           <div class="callout ${S.isDemo() ? 'warn' : ''}" style="margin-bottom:12px">${U.icon('database', 16)}<div>${F.remote.enabled()
-            ? `Data is shared through the server (<span class="mono">${U.esc(F.remote.base())}</span>, Cloudflare D1) and cached in this browser (${kb} KB). Changes by other users appear within ~20 s. Reset / restore / clear replace data for <b>all users</b> and need the admin key.`
-            : `Data is stored in this browser's LocalStorage (${kb} KB used, typical limit ≈ 5 MB). It is <b>not shared</b> between browsers or computers.`} Export a JSON backup regularly. ${S.isDemo() ? '<br><b>Current data is the illustrative demo dataset.</b>' : ''}</div></div>
+            ? `Dữ liệu được dùng chung qua máy chủ (<span class="mono">${U.esc(F.remote.base())}</span>, Cloudflare D1) và lưu đệm trên trình duyệt này (${kb} KB). Thay đổi của người khác hiển thị sau khoảng 20 giây. Khôi phục demo / khôi phục bản sao lưu / xoá toàn bộ sẽ thay dữ liệu cho <b>tất cả người dùng</b> và cần admin key.`
+            : `Dữ liệu lưu trong LocalStorage của trình duyệt này (đã dùng ${kb} KB, giới hạn khoảng 5 MB) và <b>không dùng chung</b> giữa các máy.`} Hãy tải bản sao lưu JSON định kỳ. ${S.isDemo() ? '<br><b>Dữ liệu hiện tại là bộ dữ liệu demo minh họa.</b>' : ''}</div></div>
           <div class="grid grid-2">
-            <div><h4>Backup &amp; restore</h4><p class="small muted">Full backup of all data (assets, locations, history, zones, floor plans, settings) as JSON.</p>
-              <div class="btn-row"><button class="btn btn-primary" id="dmBackup">${U.icon('download', 16)}Download JSON backup</button><button class="btn" id="dmRestore">${U.icon('upload', 16)}Restore from backup</button></div></div>
-            <div><h4>Spreadsheets</h4><p class="small muted">Asset register as CSV/Excel, or bulk import.</p>
-              <div class="btn-row"><button class="btn" id="dmCsv">${U.icon('download', 16)}Assets CSV</button><button class="btn" id="dmXlsx">${U.icon('download', 16)}Workbook (.xlsx)</button><button class="btn" id="dmImport">${U.icon('upload', 16)}Import…</button></div></div>
-            <div><h4>Reset demo data</h4><p class="small muted">Replace everything with the original illustrative demo dataset.</p>
-              <button class="btn btn-danger" id="dmReset">${U.icon('history', 16)}Reset demo data</button></div>
-            <div><h4>Start with empty data</h4><p class="small muted">Remove demo assets, zones, history and floor plans; keeps categories, statuses, departments and users.</p>
-              <button class="btn btn-danger" id="dmClear">${U.icon('trash', 16)}Clear all data</button></div>
+            <div><h4>Sao lưu &amp; khôi phục</h4><p class="small muted">Sao lưu toàn bộ (tài sản, vị trí, lịch sử, khu vực, bản vẽ, cài đặt) dạng JSON.</p>
+              <div class="btn-row"><button class="btn btn-primary" id="dmBackup">${U.icon('download', 16)}Tải bản sao lưu JSON</button><button class="btn" id="dmRestore">${U.icon('upload', 16)}Khôi phục từ bản sao lưu</button></div></div>
+            <div><h4>Bảng tính</h4><p class="small muted">Xuất sổ tài sản ra CSV/Excel hoặc nhập hàng loạt.</p>
+              <div class="btn-row"><button class="btn" id="dmCsv">${U.icon('download', 16)}Tài sản CSV</button><button class="btn" id="dmXlsx">${U.icon('download', 16)}Workbook (.xlsx)</button><button class="btn" id="dmImport">${U.icon('upload', 16)}Nhập…</button></div></div>
+            <div><h4>Khôi phục dữ liệu demo</h4><p class="small muted">Thay toàn bộ dữ liệu bằng bộ dữ liệu demo ban đầu.</p>
+              <button class="btn btn-danger" id="dmReset">${U.icon('history', 16)}Khôi phục dữ liệu demo</button></div>
+            <div><h4>Bắt đầu với dữ liệu trống</h4><p class="small muted">Xoá tài sản, khu vực, lịch sử và bản vẽ demo; giữ nhóm tài sản, trạng thái, bộ phận và người dùng.</p>
+              <button class="btn btn-danger" id="dmClear">${U.icon('trash', 16)}Xoá toàn bộ dữ liệu</button></div>
           </div>`)}
 
-        ${card('importexport', 'Import / export instructions', `<div class="guide">
-          <h4>Exporting</h4>
-          <ul><li><b>Asset Register → Export CSV / Excel</b> exports the rows currently shown (respects search and filters).</li>
-            <li>The Excel workbook contains sheets <i>Assets</i>, <i>Zones</i>, <i>Location History</i> and <i>About</i>.</li>
-            <li><b>Location History → Export</b> exports the filtered history.</li></ul>
-          <h4>Importing assets (CSV / Excel)</h4>
-          <ol><li>Download the template (<a href="#" id="tplCsv">CSV</a> · <a href="#" id="tplXlsx">Excel</a>) or use an exported file.</li>
-            <li>Fill one row per asset. Required: Asset ID, Asset Name, Category, Department, Floor, Zone, X, Y, Status.</li>
-            <li>Category, Department, Floor, Zone and Status can be given as <b>code or name</b> (e.g. <span class="mono">EQP</span> or <span class="mono">Equipment</span>). Zones must already exist on that floor.</li>
-            <li>X / Y are percentages 0–100. Decimal comma is accepted. Dates: YYYY-MM-DD or DD/MM/YYYY.</li>
-            <li>Asset Register → <b>Import CSV / Excel</b>, choose the file and mode. A preview lists new rows, updates and errors <i>before</i> anything is saved.</li>
-            <li>Rows with errors are skipped; valid rows are imported. Location changes on updated assets are written to Location History with reason "Bulk import: &lt;file&gt;".</li></ol>
-          <p>Validation: duplicate Asset IDs (in the file and against existing assets), missing required fields, unknown codes, coordinates outside 0–100, zone not on the given floor, and Asset IDs of deleted assets.</p>
-          <p>CSV files are written as UTF-8 with BOM so Excel opens Vietnamese/accented text correctly.</p></div>`)}
+        ${card('importexport', 'Hướng dẫn nhập / xuất dữ liệu', `<div class="guide">
+          <h4>Xuất dữ liệu</h4>
+          <ul><li><b>Sổ tài sản → Xuất CSV / Excel</b> xuất các dòng đang hiển thị (theo tìm kiếm và bộ lọc).</li>
+            <li>File Excel gồm các sheet <i>Tài sản</i>, <i>Khu vực</i>, <i>Lịch sử vị trí</i> và <i>Thông tin</i>.</li>
+            <li><b>Lịch sử vị trí → Xuất</b> xuất lịch sử theo bộ lọc.</li></ul>
+          <h4>Nhập tài sản (CSV / Excel)</h4>
+          <ol><li>Tải file mẫu (<a href="#" id="tplCsv">CSV</a> · <a href="#" id="tplXlsx">Excel</a>) hoặc dùng file đã xuất.</li>
+            <li>Mỗi dòng một tài sản. Bắt buộc: Asset ID, Tên tài sản, Nhóm, Bộ phận, Tầng, Khu vực, X, Y, Trạng thái. Tiêu đề cột tiếng Việt hoặc tiếng Anh đều được.</li>
+            <li>Nhóm, Bộ phận, Tầng, Khu vực và Trạng thái có thể ghi theo <b>mã hoặc tên</b> (VD: <span class="mono">EQP</span> hoặc <span class="mono">Thiết bị</span>). Khu vực phải có sẵn trên tầng đó.</li>
+            <li>X / Y là phần trăm 0–100, chấp nhận dấu phẩy thập phân. Ngày: YYYY-MM-DD hoặc DD/MM/YYYY.</li>
+            <li>Sổ tài sản → <b>Nhập CSV / Excel</b>, chọn tệp và chế độ. Màn hình xem trước liệt kê dòng mới, dòng cập nhật và lỗi <i>trước khi</i> lưu.</li>
+            <li>Dòng lỗi được bỏ qua; dòng hợp lệ được nhập. Thay đổi vị trí của tài sản đã có được ghi vào Lịch sử vị trí với lý do "Nhập hàng loạt: &lt;tên tệp&gt;".</li></ol>
+          <p>Kiểm tra: Asset ID trùng (trong file và với dữ liệu hiện có), thiếu trường bắt buộc, mã không tồn tại, tọa độ ngoài 0–100, khu vực không thuộc tầng, Asset ID của tài sản đã xoá.</p>
+          <p>File CSV được ghi UTF-8 có BOM nên Excel hiển thị đúng tiếng Việt.</p></div>`)}
 
-        ${card('floorplans', 'Floor plans: SVG import and CAD / PDF conversion', `<div class="guide">
-          <p>Each floor has its own drawing. <b>SVG is the preferred format</b> (vector, sharp at every zoom, small). PNG/JPG/WEBP images are accepted as a fallback. Import via <a href="#/zones">Factory Zones</a> → Floors → <b>Import plan</b>.</p>
-          <h4>Recommended workflow</h4>
-          <ol><li><b>From AutoCAD (DWG/DXF):</b> freeze unnecessary layers (dimensions, hatch, furniture text), set the plot area to the building outline, then <i>Plot → "DWG to PDF"</i> or export SVG (AutoCAD Web / third-party plotters). Alternatively open the DXF in <b>Inkscape</b> or <b>LibreCAD</b> and save as SVG.</li>
-            <li><b>From PDF:</b> open the PDF page in Inkscape (<i>File → Open</i>, choose "Import via Poppler/Cairo"), crop to the building outline (<i>Edit → Resize Page to Selection</i>) and <i>Save As → Optimized SVG</i>. Command line: <span class="mono">pdftocairo -svg plan.pdf plan.svg</span> or <span class="mono">inkscape plan.pdf --export-type=svg</span>.</li>
-            <li><b>From a scanned drawing / image:</b> crop to the building outline and save as PNG (≤ 3000 px wide). Larger images are automatically downscaled.</li>
-            <li>Keep file size small (ideally &lt; 1 MB): remove hidden layers, text styles, embedded fonts and raster images. LocalStorage holds about 5 MB in total.</li>
-            <li>After import, define zones with <b>Draw boundary on map</b>, then place assets with <b>Move on map</b> or by entering X/Y.</li></ol>
-          <h4>Important</h4>
-          <ul><li>The whole drawing area maps to 0–100 %. Crop the drawing to a consistent outline (e.g. outside walls + small margin); replacing it later with a different crop would shift all positions.</li>
-            <li>Imported SVGs are rendered as images: scripts and event handlers are removed for safety.</li>
-            <li>Do not use real coordinates from survey data without verifying them on site. The sample drawings and coordinates provided are <b>demo data only</b>.</li></ul></div>`)}
+        ${card('floorplans', 'Bản vẽ: nhập SVG và chuyển đổi từ CAD / PDF', `<div class="guide">
+          <p>Mỗi tầng có một bản vẽ riêng. <b>Khuyến nghị dùng SVG</b> (dạng vector, sắc nét ở mọi mức phóng, dung lượng nhỏ). Chấp nhận PNG/JPG/WEBP. Nhập tại <a href="#/zones">Khu vực nhà máy</a> → Tầng → <b>Nhập bản vẽ</b>.</p>
+          <h4>Quy trình khuyến nghị</h4>
+          <ol><li><b>Từ AutoCAD (DWG/DXF):</b> tắt các layer không cần (kích thước, hatch, chữ nội thất), đặt vùng in theo tường bao nhà xưởng, rồi <i>Plot → "DWG to PDF"</i> hoặc xuất SVG. Có thể mở DXF bằng <b>Inkscape</b> hoặc <b>LibreCAD</b> rồi lưu SVG.</li>
+            <li><b>Từ PDF:</b> mở trang PDF bằng Inkscape (<i>File → Open</i>, chọn "Import via Poppler/Cairo"), cắt theo tường bao (<i>Edit → Resize Page to Selection</i>) rồi <i>Save As → Optimized SVG</i>. Dòng lệnh: <span class="mono">pdftocairo -svg plan.pdf plan.svg</span> hoặc <span class="mono">inkscape plan.pdf --export-type=svg</span>.</li>
+            <li><b>Từ bản vẽ scan / ảnh chụp:</b> cắt theo tường bao, nắn thẳng và lưu PNG (≤ 2400 px). Ảnh lớn hơn sẽ tự thu nhỏ.</li>
+            <li>Giữ dung lượng nhỏ (tốt nhất &lt; 1 MB, tối đa 1,8 MB): bỏ layer ẩn, kiểu chữ, font nhúng và ảnh raster.</li>
+            <li>Sau khi nhập, tạo khu vực bằng <b>Vẽ ranh giới trên sơ đồ</b>, rồi đặt tài sản bằng <b>Di chuyển</b> hoặc nhập X/Y.</li></ol>
+          <h4>Lưu ý</h4>
+          <ul><li>Toàn bộ vùng bản vẽ tương ứng 0–100 %. Cắt bản vẽ theo một khung cố định (tường bao + lề nhỏ); nếu sau này thay bản vẽ với khung khác, mọi vị trí sẽ bị lệch.</li>
+            <li>SVG được hiển thị dưới dạng ảnh: script và mã sự kiện bị loại bỏ để đảm bảo an toàn.</li>
+            <li>Không dùng tọa độ thực khi chưa kiểm tra tại hiện trường. Bản vẽ và tọa độ mẫu kèm theo chỉ là <b>dữ liệu demo</b>.</li></ul></div>`)}
 
-        ${card('guide', 'User guide', `<div class="guide">
-          <h4>Find an asset</h4>
-          <ul><li>Type an Asset ID or name in the top search bar (or the map search) and press Enter — the map switches to the correct floor, zooms to the asset and opens its details.</li>
-            <li>Or scan its QR label: phone camera opens the link; handheld scanners work in <i>QR Codes → Scan / look up</i>.</li></ul>
-          <h4>Use the map</h4>
-          <ul><li>Mouse wheel / pinch to zoom, drag to pan, <i>Fit</i> button to reset. Floor tabs switch floors.</li>
-            <li>Marker <b>colour = status</b>, marker <b>shape = category</b> (see legend). Click a marker for details.</li>
-            <li>Filters: zone, responsible department, categories (show/hide) and statuses. The cursor position is shown bottom-left in %.</li></ul>
-          <h4>Add / edit / delete assets</h4>
-          <ul><li>Asset Register → <b>Add asset</b>. The Asset ID is suggested from the category; the Location Code is generated automatically.</li>
-            <li>Edit from the register or map panel. Changing floor/zone/X/Y requires a reason and creates a history record.</li>
-            <li>Delete asks for confirmation; history is retained and the ID is never reused.</li></ul>
-          <h4>Move an asset</h4>
-          <ol><li>Select the asset on the map → <b>Move on map</b>.</li><li>(Optional) switch floor, then click the new position. The zone is detected automatically.</li><li>Check the new Location Code, enter <b>Reason for change</b> and save. A Location History record is appended.</li></ol>
-          <h4>Manage zones</h4>
-          <ul><li>Factory Zones → Add zone → <b>Draw boundary on map</b> (drag a rectangle). Zones are assigned to a floor and a department.</li>
-            <li>Click a zone in the structure tree or "Map" to view it on the map.</li></ul>
-          <h4>Print QR labels</h4>
-          <ul><li>QR Codes → tick assets → choose label size → <b>Print labels</b>. Use "Actual size" / 100 % scale in the print dialog. Download single PNGs from the preview.</li>
-            <li>Set the <b>QR base URL</b> (General settings) to the hosted address first, so labels open the app from any phone.</li></ul></div>`)}
+        ${card('guide', 'Hướng dẫn sử dụng', `<div class="guide">
+          <h4>Tìm tài sản</h4>
+          <ul><li>Nhập Asset ID hoặc tên vào ô tìm kiếm trên cùng (hoặc ô tìm trên sơ đồ) và nhấn Enter — sơ đồ chuyển đúng tầng, phóng tới tài sản và mở thông tin chi tiết.</li>
+            <li>Hoặc quét nhãn QR: camera điện thoại mở đường dẫn; máy quét cầm tay dùng ở <i>Mã QR → Quét / tra cứu</i>.</li></ul>
+          <h4>Sử dụng sơ đồ</h4>
+          <ul><li>Lăn chuột / chụm hai ngón để phóng to–thu nhỏ, kéo để di chuyển, nút <i>Vừa màn hình</i> để đặt lại. Các nút tầng để đổi tầng.</li>
+            <li><b>Màu = trạng thái</b>, <b>hình dạng = nhóm tài sản</b> (xem chú giải). Bấm điểm đánh dấu để xem chi tiết.</li>
+            <li>Bộ lọc: khu vực, bộ phận quản lý, nhóm (ẩn/hiện) và trạng thái. Góc dưới bên phải hiển thị tọa độ con trỏ theo %.</li></ul>
+          <h4>Thêm / sửa / xoá tài sản</h4>
+          <ul><li>Sổ tài sản → <b>Thêm tài sản</b>. Asset ID được đề xuất theo nhóm; Location Code được tạo tự động.</li>
+            <li>Sửa từ sổ tài sản hoặc bảng chi tiết trên sơ đồ. Đổi tầng/khu vực/X/Y phải nhập lý do và hệ thống ghi lịch sử.</li>
+            <li>Xoá cần xác nhận; lịch sử được giữ lại và Asset ID không được dùng lại.</li></ul>
+          <h4>Di chuyển tài sản</h4>
+          <ol><li>Chọn tài sản trên sơ đồ → <b>Di chuyển</b>.</li><li>(Tuỳ chọn) đổi tầng, rồi bấm vào vị trí mới. Khu vực được nhận tự động.</li><li>Kiểm tra Location Code mới, nhập <b>Lý do thay đổi</b> và lưu. Một dòng Lịch sử vị trí được thêm vào.</li></ol>
+          <h4>Quản lý khu vực</h4>
+          <ul><li>Khu vực nhà máy → Thêm khu vực → <b>Vẽ ranh giới trên sơ đồ</b> (kéo hình chữ nhật). Mỗi khu vực thuộc một tầng và một bộ phận.</li>
+            <li>Bấm khu vực trong cây cơ cấu hoặc nút "Sơ đồ" để xem trên sơ đồ.</li></ul>
+          <h4>In nhãn QR</h4>
+          <ul><li>Mã QR → đánh dấu tài sản → chọn khổ nhãn → <b>In nhãn</b>. Trong hộp thoại in chọn tỉ lệ 100 % / "Actual size". Tải từng ảnh PNG ở phần xem trước.</li>
+            <li>Đặt <b>QR base URL</b> (Thông tin chung) thành địa chỉ web trước, để mọi điện thoại quét nhãn đều mở được ứng dụng.</li></ul></div>`)}
 
-        ${card('future', 'Future integrations (not available in this local version)', `<div class="future-list">
+        ${card('future', 'Tích hợp trong tương lai (chưa có ở phiên bản này)', `<div class="future-list">
           ${[
-            ['Multi-user database & sync', 'Shared central database (Cloudflare D1, Supabase/PostgreSQL) instead of per-browser LocalStorage. See docs/DATABASE_MIGRATION.md.'],
-            ['Authentication & roles', 'Login, viewer/editor/admin permissions; "Updated By" taken from the signed-in user.'],
-            ['Real-time location tracking', 'RTLS / BLE / UWB tags or GPS for mobile equipment. QR codes only identify assets; they do not track them.'],
-            ['Cross-browser camera scanning', 'Bundled QR decoder for iOS/Firefox. Currently uses the browser BarcodeDetector API where available.'],
-            ['CMMS / ERP link', 'Work orders, inspection schedules and maintenance history from the maintenance system (e.g. SAP PM, Maximo).'],
-            ['Polygon zones', 'Non-rectangular zone boundaries traced from the drawing.'],
-          ].map(([t, d]) => `<div class="it"><span class="future-tag">FUTURE</span><div><b>${t}</b><div class="small muted">${d}</div></div></div>`).join('')}
+            ['Đăng nhập & phân quyền', 'Đăng nhập, quyền xem/sửa/quản trị; "Người cập nhật" lấy từ tài khoản đăng nhập (VD: Cloudflare Access).'],
+            ['Định vị thời gian thực', 'Thẻ RTLS / BLE / UWB hoặc GPS cho thiết bị di động như xe nâng. Mã QR chỉ nhận dạng, không theo dõi vị trí.'],
+            ['Quét camera trên mọi trình duyệt', 'Thư viện giải mã QR đi kèm cho iOS/Firefox. Hiện dùng BarcodeDetector API nếu trình duyệt hỗ trợ.'],
+            ['Kết nối CMMS / ERP', 'Lệnh công việc, lịch kiểm định, lịch sử bảo trì từ hệ thống bảo trì (VD: SAP PM, Maximo).'],
+            ['Khu vực dạng đa giác', 'Ranh giới khu vực không phải hình chữ nhật, vẽ theo bản vẽ.'],
+            ['Lưu ảnh và bản vẽ trên R2', 'Lưu ảnh tài sản và bản vẽ lớn trên Cloudflare R2 thay vì trong cơ sở dữ liệu.'],
+          ].map(([t, d]) => `<div class="it"><span class="future-tag">TƯƠNG LAI</span><div><b>${t}</b><div class="small muted">${d}</div></div></div>`).join('')}
         </div>`)}
         </div>
       </div>`;
 
-    // navigation inside settings
     U.$$('[data-sec]', root).forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); ST.scrollTo(a.dataset.sec); }));
     if (params.section) setTimeout(() => ST.scrollTo(params.section), 30);
 
     U.$('#setGeneral').addEventListener('submit', (e) => {
       e.preventDefault();
       const d = UI.formData(e.target);
-      if (d.qrBaseUrl && !/^https?:\/\//i.test(d.qrBaseUrl.trim())) return UI.toast('QR base URL must start with http:// or https://', 'error');
-      if (!d.factoryName.trim()) return UI.toast('Factory name is required', 'error');
+      if (d.qrBaseUrl && !/^https?:\/\//i.test(d.qrBaseUrl.trim())) return UI.toast('QR base URL phải bắt đầu bằng http:// hoặc https://', 'error');
+      if (!d.factoryName.trim()) return UI.toast('Bắt buộc nhập tên nhà máy', 'error');
       S.updateFactory({ name: d.factoryName.trim(), code: d.factoryCode.trim() });
       S.updateSettings({ qrBaseUrl: d.qrBaseUrl.trim(), markerScale: Number(d.markerScale), autoDetectZone: d.autoDetectZone, showZones: d.showZones, showLabels: d.showLabels });
-      UI.toast('Settings saved.', 'success');
+      UI.toast('Đã lưu cài đặt.', 'success');
     });
 
     // users
@@ -192,8 +192,8 @@ window.FAM = window.FAM || {};
       const b = e.target.closest('[data-uact]'); if (!b) return;
       const id = b.closest('tr').dataset.id;
       if (b.dataset.uact === 'edit') userForm(S.users().find((u) => u.id === id));
-      else if (S.users().length <= 1) UI.toast('At least one user is required.', 'error');
-      else if (await UI.confirm('Remove this user from the list? Existing history records keep the name.', { danger: true, okLabel: 'Remove' })) S.deleteUser(id);
+      else if (S.users().length <= 1) UI.toast('Cần ít nhất một người dùng.', 'error');
+      else if (await UI.confirm('Xoá người dùng này khỏi danh sách? Các dòng lịch sử đã ghi vẫn giữ tên.', { danger: true, okLabel: 'Xoá' })) S.deleteUser(id);
     });
     // categories
     U.$('#catAdd').addEventListener('click', () => categoryForm());
@@ -201,7 +201,7 @@ window.FAM = window.FAM || {};
       const b = e.target.closest('[data-cact]'); if (!b) return;
       const id = b.closest('tr').dataset.id;
       if (b.dataset.cact === 'edit') categoryForm(S.category(id));
-      else if (await UI.confirm(`Delete category <b>${U.esc(id)}</b>?`, { danger: true, okLabel: 'Delete' })) try { S.deleteCategory(id); UI.toast('Category deleted.', 'success'); } catch (err) { UI.toast(err.message, 'error'); }
+      else if (await UI.confirm(`Xoá nhóm <b>${U.esc(id)}</b>?`, { danger: true, okLabel: 'Xoá' })) try { S.deleteCategory(id); UI.toast('Đã xoá nhóm.', 'success'); } catch (err) { UI.toast(err.message, 'error'); }
     });
     // statuses
     U.$('#stAdd').addEventListener('click', () => statusForm());
@@ -209,7 +209,7 @@ window.FAM = window.FAM || {};
       const b = e.target.closest('[data-sact]'); if (!b) return;
       const id = b.closest('tr').dataset.id;
       if (b.dataset.sact === 'edit') statusForm(S.status(id));
-      else if (await UI.confirm(`Delete status <b>${U.esc(S.status(id).name)}</b>?`, { danger: true, okLabel: 'Delete' })) try { S.deleteStatus(id); UI.toast('Status deleted.', 'success'); } catch (err) { UI.toast(err.message, 'error'); }
+      else if (await UI.confirm(`Xoá trạng thái <b>${U.esc(S.status(id).name)}</b>?`, { danger: true, okLabel: 'Xoá' })) try { S.deleteStatus(id); UI.toast('Đã xoá trạng thái.', 'success'); } catch (err) { UI.toast(err.message, 'error'); }
     });
     // data
     U.$('#dmBackup').addEventListener('click', IO.backup);
@@ -220,10 +220,10 @@ window.FAM = window.FAM || {};
     U.$('#tplCsv').addEventListener('click', (e) => { e.preventDefault(); IO.downloadTemplate('csv'); });
     U.$('#tplXlsx').addEventListener('click', (e) => { e.preventDefault(); IO.downloadTemplate('xlsx'); });
     U.$('#dmReset').addEventListener('click', async () => {
-      if (await UI.confirm('Replace <b>all</b> current data with the original demo dataset? Download a backup first if you want to keep your changes.', { title: 'Reset demo data', danger: true, okLabel: 'Reset to demo' })) { S.reset(); UI.toast('Demo data restored.', 'success'); }
+      if (await UI.confirm('Thay <b>toàn bộ</b> dữ liệu hiện tại bằng bộ dữ liệu demo ban đầu? Hãy tải bản sao lưu trước nếu muốn giữ các thay đổi.', { title: 'Khôi phục dữ liệu demo', danger: true, okLabel: 'Khôi phục demo' })) { S.reset(); if (!F.remote.enabled()) UI.toast('Đã khôi phục dữ liệu demo.', 'success'); }
     });
     U.$('#dmClear').addEventListener('click', async () => {
-      if (await UI.confirm('Delete all assets, zones, floor plans and history from this browser? This cannot be undone (except by restoring a backup).', { title: 'Clear all data', danger: true, okLabel: 'Clear all data' })) { S.clearAll(); UI.toast('All data cleared. Start by importing a floor plan in Factory Zones.', 'success', 5000); }
+      if (await UI.confirm('Xoá toàn bộ tài sản, khu vực, bản vẽ và lịch sử? Không thể hoàn tác (trừ khi khôi phục từ bản sao lưu).', { title: 'Xoá toàn bộ dữ liệu', danger: true, okLabel: 'Xoá toàn bộ' })) { S.clearAll(); if (!F.remote.enabled()) UI.toast('Đã xoá toàn bộ dữ liệu. Hãy bắt đầu bằng việc nhập bản vẽ ở Khu vực nhà máy.', 'success', 5000); }
     });
   };
   ST.refresh = () => ST.show();
@@ -235,8 +235,8 @@ window.FAM = window.FAM || {};
   };
 
   function userForm(u) {
-    const form = U.h(`<form class="form-grid"><div class="field"><label>Name <span class="req">*</span></label><input name="name" value="${U.esc(u ? u.name : '')}"></div><div class="field"><label>Role</label><input name="role" value="${U.esc(u ? u.role : '')}"></div></form>`);
-    UI.modal({ title: u ? 'Edit user' : 'Add user', body: form, actions: [{ label: 'Cancel' }, { label: 'Save', primary: true, onClick: () => {
+    const form = U.h(`<form class="form-grid"><div class="field"><label>Họ tên <span class="req">*</span></label><input name="name" value="${U.esc(u ? u.name : '')}"></div><div class="field"><label>Vai trò</label><input name="role" value="${U.esc(u ? u.role : '')}"></div></form>`);
+    UI.modal({ title: u ? 'Sửa người dùng' : 'Thêm người dùng', body: form, actions: [{ label: 'Hủy' }, { label: 'Lưu', primary: true, onClick: () => {
       const d = UI.formData(form);
       try {
         const wasCurrent = u && S.currentUser() === u.name;
@@ -247,21 +247,21 @@ window.FAM = window.FAM || {};
   }
   function categoryForm(c) {
     const form = U.h(`<form class="form-grid">
-      <div class="field"><label>Code <span class="req">*</span></label><input name="code" maxlength="6" value="${U.esc(c ? c.code : '')}" ${c ? 'readonly' : ''} style="text-transform:uppercase;font-family:var(--mono)"><div class="hint">Used in Asset IDs, e.g. AST-<b>MHE</b>-0001</div></div>
-      <div class="field"><label>Name <span class="req">*</span></label><input name="name" value="${U.esc(c ? c.name : '')}"></div>
-      <div class="field"><label>Marker shape</label><select name="shape">${SHAPES.map((s) => `<option ${c && c.shape === s ? 'selected' : ''}>${s}</option>`).join('')}</select></div></form>`);
-    UI.modal({ title: c ? 'Edit category' : 'Add category', body: form, actions: [{ label: 'Cancel' }, { label: 'Save', primary: true, onClick: () => {
+      <div class="field"><label>Mã <span class="req">*</span></label><input name="code" maxlength="6" value="${U.esc(c ? c.code : '')}" ${c ? 'readonly' : ''} style="text-transform:uppercase;font-family:var(--mono)"><div class="hint">Dùng trong Asset ID, VD: AST-<b>MHE</b>-0001</div></div>
+      <div class="field"><label>Tên nhóm <span class="req">*</span></label><input name="name" value="${U.esc(c ? c.name : '')}"></div>
+      <div class="field"><label>Ký hiệu trên sơ đồ</label><select name="shape">${SHAPES.map(([v, t]) => `<option value="${v}" ${c && c.shape === v ? 'selected' : ''}>${t}</option>`).join('')}</select></div></form>`);
+    UI.modal({ title: c ? 'Sửa nhóm tài sản' : 'Thêm nhóm tài sản', body: form, actions: [{ label: 'Hủy' }, { label: 'Lưu', primary: true, onClick: () => {
       const d = UI.formData(form);
-      try { S.saveCategory({ id: c && c.id, code: d.code.trim().toUpperCase(), name: d.name.trim(), shape: d.shape }); UI.toast('Category saved.', 'success'); } catch (e) { UI.toast(e.message, 'error'); return false; }
+      try { S.saveCategory({ id: c && c.id, code: d.code.trim().toUpperCase(), name: d.name.trim(), shape: d.shape }); UI.toast('Đã lưu nhóm.', 'success'); } catch (e) { UI.toast(e.message, 'error'); return false; }
     } }] });
   }
   function statusForm(x) {
     const form = U.h(`<form class="form-grid">
-      <div class="field"><label>Name <span class="req">*</span></label><input name="name" value="${U.esc(x ? x.name : '')}"></div>
-      <div class="field"><label>Colour</label><input type="color" name="color" value="${U.esc(x ? x.color : '#64748b')}"></div></form>`);
-    UI.modal({ title: x ? 'Edit status' : 'Add status', body: form, actions: [{ label: 'Cancel' }, { label: 'Save', primary: true, onClick: () => {
+      <div class="field"><label>Tên trạng thái <span class="req">*</span></label><input name="name" value="${U.esc(x ? x.name : '')}"></div>
+      <div class="field"><label>Màu</label><input type="color" name="color" value="${U.esc(x ? x.color : '#64748b')}"></div></form>`);
+    UI.modal({ title: x ? 'Sửa trạng thái' : 'Thêm trạng thái', body: form, actions: [{ label: 'Hủy' }, { label: 'Lưu', primary: true, onClick: () => {
       const d = UI.formData(form);
-      try { S.saveStatus({ id: x && x.id, name: d.name.trim(), color: d.color }); UI.toast('Status saved.', 'success'); } catch (e) { UI.toast(e.message, 'error'); return false; }
+      try { S.saveStatus({ id: x && x.id, name: d.name.trim(), color: d.color }); UI.toast('Đã lưu trạng thái.', 'success'); } catch (e) { UI.toast(e.message, 'error'); return false; }
     } }] });
   }
 })(window.FAM);
