@@ -183,7 +183,7 @@ window.FAM = window.FAM || {};
       ${act ? `<div class="callout" style="margin-bottom:14px">${U.icon('qr', 16)}<div>Đợt đang quét trên máy này: <b>${U.esc(act.code)} – ${U.esc(act.name)}</b>. Quét nhãn QR bằng camera điện thoại sẽ ghi nhận thẳng vào đợt này.</div></div>` : ''}
       <div class="card"><div class="table-wrap">${list.length ? `<table class="tbl"><thead><tr><th>Mã đợt</th><th>Tên đợt kiểm kê</th><th>Ngày</th><th>Phạm vi</th><th style="min-width:180px">Tiến độ</th><th class="num">Không thấy</th><th class="num">Sai vị trí</th><th class="num">Hỏng</th><th class="num">Thừa</th><th>Trạng thái</th><th class="actions"></th></tr></thead><tbody>
         ${list.map((c) => { const s = INV.summary(c); const pct = s.expected ? Math.round((s.checkedInScope / s.expected) * 100) : 0; return `<tr data-id="${c.id}" style="cursor:pointer">
-          <td class="mono"><b>${U.esc(c.code)}</b></td><td>${U.esc(c.name)}</td><td class="nowrap">${U.fmtDate(c.date)}</td><td class="small">${U.esc(scopeText(c))}</td>
+          <td class="mono nowrap"><b>${U.esc(c.code)}</b></td><td>${U.esc(c.name)}</td><td class="nowrap">${U.fmtDate(c.date)}</td><td class="small">${U.esc(scopeText(c))}</td>
           <td><div class="progress"><span style="width:${pct}%;--c:var(--teal)"></span></div><div class="small muted">${s.checkedInScope}/${s.expected} (${pct}%)</div></td>
           <td class="num">${s.by.MISSING || (c.status === 'OPEN' ? '–' : 0)}</td><td class="num">${s.by.WRONG_LOC}</td><td class="num">${s.by.DAMAGED}</td><td class="num">${s.by.EXTRA}</td>
           <td>${c.status === 'OPEN' ? '<span class="badge" style="--c:#2563eb"><i></i>Đang kiểm</span>' : '<span class="badge" style="--c:#64748b"><i></i>Đã kết thúc</span>'}</td>
