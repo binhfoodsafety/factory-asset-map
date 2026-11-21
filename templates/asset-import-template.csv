@@ -1,0 +1,3 @@
+﻿Asset ID,Asset Name,Category,Department,Floor,Zone,X,Y,Manufacturer,Model,Serial Number,Status,Last Inspection,Photo URL,Remarks
+AST-EQP-9001,EXAMPLE - Coffee Extractor EX-09,Equipment,Production,F1,EXT,12.5,20,Example Maker,MOD-100,SN-0000-0001,Active,2026-01-31,,EXAMPLE ROW - delete before importing
+AST-UTL-9001,EXAMPLE - Air Compressor AC-09,Utility,EN,F1,Utility,88,20,Example Maker,AC-50,SN-0000-0002,Inspection Due,,,EXAMPLE ROW - delete before importing

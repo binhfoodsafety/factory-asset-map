@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Factory Asset Map</title>
+  <meta name="description" content="Interactive factory floor plan for locating, searching and managing physical assets.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230f2747'/%3E%3Cpath d='M12 19s5-4.4 5-8.5a5 5 0 1 0-10 0C7 14.6 12 19 12 19z' fill='%2338bdf8'/%3E%3Ccircle cx='12' cy='10.5' r='1.8' fill='%230f2747'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/app.css?v=1.0.1">
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 21s6-5.3 6-10.2a6 6 0 1 0-12 0C6 15.7 12 21 12 21z" fill="#38bdf8"/><circle cx="12" cy="10.8" r="2.2" fill="#0f2747"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">Factory Asset Map</div>
+          <div class="brand-sub" id="factoryName">—</div>
+        </div>
+      </div>
+      <nav class="nav" id="nav">
+        <a href="#/dashboard" data-route="dashboard"><span class="nav-ic" data-icon="dashboard"></span><span>Dashboard</span></a>
+        <a href="#/map" data-route="map"><span class="nav-ic" data-icon="map"></span><span>Factory Map</span></a>
+        <a href="#/register" data-route="register"><span class="nav-ic" data-icon="list"></span><span>Asset Register</span></a>
+        <a href="#/zones" data-route="zones"><span class="nav-ic" data-icon="layers"></span><span>Factory Zones</span></a>
+        <a href="#/history" data-route="history"><span class="nav-ic" data-icon="history"></span><span>Location History</span></a>
+        <a href="#/qr" data-route="qr"><span class="nav-ic" data-icon="qr"></span><span>QR Codes</span></a>
+        <a href="#/settings" data-route="settings"><span class="nav-ic" data-icon="settings"></span><span>Settings &amp; Guide</span></a>
+      </nav>
+      <div class="sidebar-foot">
+        <div id="syncInfo" class="sync-info small"></div>
+        <div id="storageInfo" class="muted small"></div>
+        <div class="muted small">v1.0</div>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" id="sidebarScrim"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" title="Menu" aria-label="Open menu"></button>
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+        <form class="global-search" id="globalSearch" autocomplete="off">
+          <span class="gs-ic" data-icon="search"></span>
+          <input id="globalSearchInput" type="search" list="assetIdList" placeholder="Find asset ID or name → show on map" aria-label="Find asset">
+          <datalist id="assetIdList"></datalist>
+        </form>
+        <label class="user-select" title="Name recorded as 'Updated By' in location history (no authentication in this demo)">
+          <span class="muted small">Acting as</span>
+          <select id="userSelect"></select>
+        </label>
+      </header>
+      <div class="demo-banner" id="demoBanner" hidden>
+        <strong>DEMO DATA</strong> — the factory, floor plans, coordinates and assets shown are illustrative only and are not actual factory records.
+        <a href="#/settings" data-goto="data">Replace with your own data</a>
+      </div>
+      <main id="views">
+        <section class="view" id="view-dashboard" hidden></section>
+        <section class="view view-map" id="view-map" hidden></section>
+        <section class="view" id="view-register" hidden></section>
+        <section class="view" id="view-zones" hidden></section>
+        <section class="view" id="view-history" hidden></section>
+        <section class="view" id="view-qr" hidden></section>
+        <section class="view" id="view-settings" hidden></section>
+      </main>
+    </div>
+  </div>
+
+  <div id="printArea" aria-hidden="true"></div>
+
+  <!-- Third-party libraries (CDN). For fully offline use, see README → "Offline / intranet use". -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" defer></script>
+
+  <!-- Application (classic scripts so index.html also works when opened directly from disk) -->
+  <script src="js/config.js?v=1.0.1" defer></script>
+  <script src="js/util.js?v=1.0.1" defer></script>
+  <script src="js/data/demo-data.js?v=1.0.1" defer></script>
+  <script src="js/data/floorplans.js?v=1.0.1" defer></script>
+  <script src="js/store.js?v=1.0.1" defer></script>
+  <script src="js/ui.js?v=1.0.1" defer></script>
+  <script src="js/remote.js?v=1.0.1" defer></script>
+  <script src="js/io.js?v=1.0.1" defer></script>
+  <script src="js/views/dashboard.js?v=1.0.1" defer></script>
+  <script src="js/views/map.js?v=1.0.1" defer></script>
+  <script src="js/views/asset-form.js?v=1.0.1" defer></script>
+  <script src="js/views/register.js?v=1.0.1" defer></script>
+  <script src="js/views/zones.js?v=1.0.1" defer></script>
+  <script src="js/views/history.js?v=1.0.1" defer></script>
+  <script src="js/views/qr.js?v=1.0.1" defer></script>
+  <script src="js/views/settings.js?v=1.0.1" defer></script>
+  <script src="js/app.js?v=1.0.1" defer></script>
+</body>
+</html>
